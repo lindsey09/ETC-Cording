@@ -1,3 +1,10 @@
+:root{
+    --text-color:#f8f4f5;
+    --background-color:#263343;
+    --accent-color:pink;
+}
+
+
 /*reset*/
 .clearfix::after{
     content:"";
@@ -13,7 +20,8 @@ ul, li, ol{
 
 a{
     text-decoration: none;
-    color:#fff;
+    color:var(--test-color); 
+     /* 위처럼 root로 색상을 지정해 두면 나중에 관리하기 용이하다 */
 }
 body{
     font-family: 'DynaPuff', cursive;
