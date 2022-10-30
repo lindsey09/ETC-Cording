@@ -1,0 +1,17 @@
+일러스트에서 이미지 그리고, layer(path의 경우 레이어 그룹 열어서 개별로 이름 적용해주기) 이름을 css의 아이디값으로 변경해 준다.
+다른이름으로 저장 시 svg로 저장하고 More option에서 css properties 값을 style Elements 로 선택하고 저장해준다.
+그러면 각각 layer에 설정한 값이 svg파일의 아이디값으로 넘어온다. 
+
+웹페이지에 구현하는 방법 3가지 
+1. svg파일의 모든 코드를 복사하여 붙여넣기 - 코드가 짧을경우 괜찮지만 길면........No 
+2. <img src="/svg_icon.svg" alt="loading"> - 이미지 불러오듯 이미지 태그를 이용하기
+3. <object data="/svg_icon.svg" type="image/svg+xml"></object> - object로 이미지처럼 불러오기
+object는 종료태그가 있음. data svg를 지원하지 않을 경우 내용에 다른 대체 태그를 넣을 수 있음
+3-1 callback 안되는 경우 다른내용으로 대체하기 =====  <object  data="/svg_icon.svg" type="image/svg+xml">
+ <img src="/svg_icon.jpg" alt="loading"> 
+</object>  - svg가 지원이 안 될 경우 jpg 파일을 불러와주세요
+3-2 <object>
+<embed src="/svg_icon.svg" >
+</object - 임베디드로 불러오는 방법
+
+1번 혹은 3-1의 방법으로 많이 사용함.
