@@ -13,4 +13,5 @@ CSS
         margin:0 -30px 0 30px;
     }
 }
-키프레임 애니메이션을 통하여 Typing 느낌을 줌
+키프레임 애니메이션을 통하여 Typing 느낌을 줌 - 한줄 Typing에만 적용이 되어보임.
+혹은 span으로 해당부분만 Typing 느낌을 줄 수 있음
