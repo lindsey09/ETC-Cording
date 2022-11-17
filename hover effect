@@ -1,0 +1,51 @@
+ 1. 이미지 배경에 mouse hover 라인 줄 나타내기
+ html 
+ <div class="line-effect">
+      <div></div>
+  </div>
+
+<style>
+.line-effect{width:600px; height:255px; position:relative; padding:0px; box-sizing: border-box; overflow: hidden; background:url(http://www.yangsanu.com/images/con01_01.jpg); margin-bottom:50px;}
+.line-effect div{width:100%; height:100%; background:rgba(000,000,000,0)} 
+.line-effect:after{content:""; width:0%; height:0%; border-left:3px solid transparent; border-bottom:3px solid transparent; position:absolute; bottom:0px; left:0px; transition:.5s; margin:10px;}
+.line-effect:before{content:""; width:0%; height:0%; border-top:3px solid transparent; border-right:3px solid transparent; position:absolute; top:0px; right:0px; transition:.5s; margin:10px;}
+
+.line-effect:hover div{background:rgba(000,000,000,0.4)}
+.line-effect:hover:after{ width:100%; height:100%; border-color:#fff; }
+.line-effect:hover:before{ width:100%; height:100%; border-color:#fff;}
+</style>
+
+
+
+2. 버튼에 mouse hover 라인 줄 나타내기
+html
+<button class="btn">
+  BUTTON
+</button>
+<style>
+.btn{width:400px; height:100px; position:relative; padding:10px 60px; background:transparent; outline:none; border:none; color:blue; font-size:40px; margin-bottom: 20px;;}
+.btn:before{ content: ''; width:0%; height:0%; border:8px solid transparent; position:absolute; bottom:0; left:0; box-sizing: border-box;}
+.btn:after{ content: ''; width:0%; height:0%; border:8px solid transparent; position:absolute; top:0; right:0; box-sizing: border-box;}
+.btn:hover:before{content:""; width:100%; height:100%; border:8px solid #222; border-right:none; border-bottom:none; transition: height 0.5s linear, width 0.5s linear 0.5s;} 
+.btn:hover:after{content:""; width:100%; height:100%; border:8px solid #222; border-left:none; border-top:none; transition: height 0.5s linear,
+width 0.5s linear 0.5s;}    
+</style>
+
+
+
+3. line hover 시 형광펜 효과
+html
+<div class="content"> 
+    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, <span class="highlight"> when an unknown printer took a galley of type and scrambled it to make a type specimen book.</span> It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+</div>
+
+<style> 
+  /* hightlight */ 
+.highlight{display: inline-table; position:relative; overflow: hidden;}
+.highlight:before{content:""; display: block; width:100%; height:100%; background:rgba(255,200,0,1); position: absolute; top:0; left:-100%; transition: .34s; z-index: -1;}
+.content:hover .highlight:before{left:0;}
+</style> 
+
+         
+        
+         
