@@ -1,0 +1,70 @@
+html
+<div class="accordion">
+    <input type="radio" name="accordian" id="answer01">
+    <label for="answer01">컨텐츠 제목 부문 <em></em></label>
+    <div>
+        <p>여기에 추가되는 부분이 자주묻는 질문의 대한 답변이 이영역에 들어갑니다 이 곳에서 자연스럽게 나오는 효과를 불 수 있습니다. 이 기능으로 자주묻는 질문 컨텐츠를 만들 수 있습니다.</p>
+    </div>
+    <input type="radio" name="accordian"  id="answer02">
+    <label for="answer02">컨텐츠 제목 부문 <em></em></label>
+    <div>
+        <p>여기에 추가되는 부분이 자주묻는 질문의 대한 답변이 이영역에 들어갑니다 이 곳에서 자연스럽게 나오는 효과를 불 수 있습니다. 이 기능으로 자주묻는 질문 컨텐츠를 만들 수 있습니다.</p>
+    </div>
+    <input type="radio"  name="accordian" id="answer03">
+    <label for="answer03">컨텐츠 제목 부문 <em></em></label>
+    <div>
+        <p>여기에 추가되는 부분이 자주묻는 질문의 대한 답변이 이영역에 들어갑니다 이 곳에서 자연스럽게 나오는 효과를 불 수 있습니다. 이 기능으로 자주묻는 질문 컨텐츠를 만들 수 있습니다.</p>
+    </div>
+    <input type="radio" name="accordian" id="answer04">
+    <label for="answer04">컨텐츠 제목 부문 <em></em></label>
+    <div>
+        <p>여기에 추가되는 부분이 자주묻는 질문의 대한 답변이 이영역에 들어갑니다 이 곳에서 자연스럽게 나오는 효과를 불 수 있습니다. 이 기능으로 자주묻는 질문 컨텐츠를 만들 수 있습니다.</p>
+    </div>
+</div>
+
+
+<style>
+*{margin:0; padding:0; text-decoration: none; box-sizing: border-box; list-style: none;}
+input[id*="answer"]{display:none;}
+input[id*="answer"]+label{
+    display:block;
+    padding:15px; 
+    border:1px solid #444;
+    border-bottom:0;
+    color:#fff;
+    background:#3634a5;
+    font-weight:bold;
+    cursor: pointer;
+    position:relative;
+}
+input[id*="answer"]+label em{
+    position:absolute;
+    top:50%;
+    right:10px;
+    width:30px;
+    height:30px;
+    margin-top:-15px;
+    display: inline-block;
+    background:url(./img/arrow.jpg) 0 0 no-repeat;
+}
+input[id*="answer"]+label + div{
+    max-height:0;
+    transition:all .34s;
+    overflow: hidden;
+    background:#ebf8ff;
+    font-size:14px;
+}
+input[id*="answer"]+label + div p{
+    display:inline-block;
+    padding:20px;
+}
+
+input[id*="answer"]:checked+label + div{
+    max-height:100px;
+}
+input[id*="answer"]:checked+label em{
+    background-position:0 -30px;
+}
+</style>
+
+
