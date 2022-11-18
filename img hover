@@ -1,0 +1,61 @@
+html
+<div class="galllist">
+        <ul>
+            <li>
+                <a href="">
+                    <div class="screen">
+                        <div class="top">Cording</div>
+                        <div class="bottom">mouse hover effect</div>
+                        <img src="https://mblogthumb-phinf.pstatic.net/20120708_233/titanic17_1341736817691gzeoH_JPEG/21.jpg?type=w2" alt="">
+                    </div>
+                    <div>
+                        <h3>이미지 위에 오브젝트가 나타나는 효과</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <div class="screen">
+                        <div class="top">Cording</div>
+                        <div class="bottom">mouse hover effect</div>
+                        <img src="https://mblogthumb-phinf.pstatic.net/20120708_233/titanic17_1341736817691gzeoH_JPEG/21.jpg?type=w2" alt="">
+                    </div>
+                    <div>
+                        <h3>이미지 위에 오브젝트가 나타나는 효과</h3>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <div class="screen">
+                        <div class="top">Cording</div>
+                        <div class="bottom">mouse hover effect</div>
+                        <img src="https://mblogthumb-phinf.pstatic.net/20120708_233/titanic17_1341736817691gzeoH_JPEG/21.jpg?type=w2" alt="">
+                    </div>
+                    <div>
+                        <h3>이미지 위에 오브젝트가 나타나는 효과</h3>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+<style>
+.galllist{width:1000px; margin:0 auto; }
+.galllist ul{display:flex; flex-wrap:wrap; gap:20px;}
+.galllist ul li{width:32%;  vertical-align: top;}
+
+.galllist ul li a{display:block; width:auto; text-decoration: none; }
+.galllist ul li a .screen{position:relative; overflow: hidden;}
+.galllist ul li a .screen:after{content:""; width:100%; height:100%; background:rgba(000,000,000,0.5); display:block; position:absolute; top:0; left:0; z-index:1; opacity: 0; transition:.34s;}
+.galllist ul li a .screen .top{position:absolute; top:150%; left:30px; z-index: 2; color:#fff; font-size:25px; font-weight:bold; transition:.34s}
+.galllist ul li a .screen .bottom{position:absolute; bottom:150%; left:30px; z-index:2; color:#fff; font-size:18px; transition:.34s}
+.galllist ul li a .screen img{width:100%;}
+.galllist ul li a h3{font-size:14px; text-align: center; padding:10px; color:#555; display:block; background:#f5f5f5}
+
+
+.galllist ul li a:hover .top{top:30%;}
+.galllist ul li a:hover .bottom{bottom:35%;}
+.galllist ul li a:hover .screen:after{opacity: 1;}
+
+</style>
