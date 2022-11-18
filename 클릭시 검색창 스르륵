@@ -8,99 +8,17 @@ html
     </div>
 
 <style>
-        *{margin:0; padding:0; text-decoration: none; box-sizing: border-box;}
-        body{height:100vh; background:#222; display: flex; justify-content: center; align-items: center;;}
+         body{padding:50px;}
+        .search__box{ width:250px; height:60px; position:relative;}
+        .search__box .search{ position:absolute;  margin:auto; top:0; left:0; right:0; bottom:0; width:50px; height:50px; border-radius: 50%; box-shadow: 0 0 0 .3;transition:1s; border:1px solid #ddd; background:#fff; z-index:1;}
+        .search__box .search:before{content:""; width:10px; height:2px; background:#222; transform:rotate(45deg); position:absolute; top:32px; left:28px; }
+        .search__box .search:after{content:""; width:15px; height:15px; border-radius: 50%; border:2px solid #222; position:absolute; top:13px; left:13px; }
 
-        .search__box{
-            width:300px;
-            height:70px;
-            bord er:1px solid #fff;
-            position:relative;
-        }
-        .search__box .search{
-            width:50px;
-            height:50px;
-            background:blue;
-            border-radius: 50%;
-            position:absolute;
-            top:0; left:0; right:0; bottom:0;
-            margin:auto;
-            z-index: 1;
-            transition:1s;
-        }
-        .search__box .search:before{
-            content:"";
-            width:20px; 
-            height:20px;
-            border:1px solid #fff;
-            border-radius: 50%;;
-            position:absolute;
-            top:10px;
-            left:13px;
-        }
-        .search__box .search::after{
-            content:"";
-            width:12px;
-            height:1px;
-            background:#fff;
-            position:absolute;
-            top:33px;
-            left:30px;
-            transform: rotate(45deg);
-        }
+        .search__box input{width:50px; height:30px; border:none; outline: none; border-radius:45px; background:#f9f9f9; position:absolute; margin: auto; top:0px; left:0; right:0; bottom:0; z-index:2; text-indent: 20px; transition:1s; opacity: 0;; transition:1s;}
+        .search__box input:focus{width:200px; opacity: 1; z-index:3;}
+        .search__box input:focus ~ .search{right:-200px; z-index:4; transition:1s;}
+        .search__box input:focus ~ .search:before{width:20px; top:24px;left:15px;}
+        .search__box input:focus ~ .search:after{width:20px; height:2px; background:#222; border-radius: 0%; border:0; top:24px; left:15px; transform: rotate(-45deg);}
 
-        
-        .search__box input{
-            position:absolute;
-            top:0; left:0; right:0; bottom:0;
-            width:50px;
-            height:40px;
-            border-radius: 45px;
-            margin:14px auto 0;
-            background:blue;
-            box-shadow: 0 0 45px blue;
-            outline: none;
-            border:none;
-            padding-left:10px;
-            color:#fff;
-            display:flex;
-            opacity: 0;
-            z-index:2;
-            transition:1s;
-        }
-        .search__box input::placeholder{
-            color:#fff;
-        }
-
-        .search__box input:focus{
-            color:#fff;
-            width:180px;
-            opacity: 1;
-        }
-        .search__box input:focus ~ .search{
-            right:-200px;
-        }
-
-        .search__box input:focus ~ .search:before{
-            width:20px;
-            height:1px;
-            background:#fff;
-            top:25px;
-            left:15px;
-            transform: rotate(45deg);
-            z-index:4;
-            border-radius: 0%;
-        }
-        .search__box input:focus ~ .search:after{
-            width:20px;
-            height:2px;
-            background:#fff;
-            top:25px;
-            left:15px;
-            transform: rotate(-45deg);
-            z-index:4;
-        }
-
-        
 
     </style>
