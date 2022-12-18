@@ -1,0 +1,27 @@
+탭 클릭 시 하단의 내용 영역이 스크롤 업,다운되면서 노출
+
+html
+<section id="contianer">
+    <ul class="tab-wrap">
+        <li class="active" data-tab="tab01">1번 탭</li>
+        <li data-tab="tab02">2번 탭</li>
+    </ul>
+    <div class="tab-conwrap">
+        <div class="active" id="tab01">1번 보이게</div>
+        <div id="tab02">2번 보이게</div>
+    </div>
+</section>
+
+script
+
+//클릭 시 해당영역으로 부드럽게 이동
+$('.con05_link').click(function(e){
+    e.preventDefault();
+    $('html,body').animate({scrollTop:$(this.hash).offset().top},500);
+});
+
+//클릭 시 사이트의 Top으로 부드럽게 이동
+$('.top').click(function(e){
+    e.preventDefault();
+    $('html,body').animate({scrollTop:0}, 1000);
+});
