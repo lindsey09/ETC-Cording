@@ -14,14 +14,18 @@ html
 
 script
 
-//클릭 시 해당영역으로 부드럽게 이동
-$('.con05_link').click(function(e){
-    e.preventDefault();
-    $('html,body').animate({scrollTop:$(this.hash).offset().top},500);
+ $('.tab-wrap li').click(function(e){
+    $('.tab-wrap li').removeClass('active');
+    $(this).addClass('active');
+
+    let datatab = $(this).attr('data-tab');
+    $('#'+datatab).removeClass('active');
+    $('.tab-conwrap div').slideUp();
+    $('#'+datatab).slideDown();
+    $('#'+datatab).addClass('active');
 });
 
-//클릭 시 사이트의 Top으로 부드럽게 이동
-$('.top').click(function(e){
-    e.preventDefault();
-    $('html,body').animate({scrollTop:0}, 1000);
-});
+*----------------------------------------------------------------------------------------*
+
+
+
