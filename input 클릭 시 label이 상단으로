@@ -1,0 +1,20 @@
+html
+<div class="wrapper">
+    <div class="input-data">
+      <input type="text" id="name" class="input__box" required />
+      <label for="name" class="input__label">Name</label>
+  </div>
+</div>
+
+
+style
+.wrapper{width:100%; height:200px; margin-bottom:30px; border:1px solid #ddd; padding:20px;}
+.input-data{width:300px; position: relative; border-bottom:1px solid #ddd;}
+.input-data .input__box{width:100%; height:35px; line-height:35px; position:relative; border:none; 
+                        border-bottom:2px solid #ddd; outline: none; transition:1s;}
+.input-data .input__label{font-size:25px; padding-left:10px; position:absolute; left:0px; top:5px; 
+                         transition: 0.7s; color:#666; cursor: text;}
+.input__box:focus{border-color:blue;}
+.input__box:valid ~ .input__label,
+.input__box:focus ~ .input__label{top:-8px; left:-5px; font-size:16px; line-height:16px; background:#fff;}
+
