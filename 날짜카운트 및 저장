@@ -1,0 +1,180 @@
+<div id="meal_day" class="modal">
+	<div class="black_bg"></div>
+
+	<div class="modal_cont">
+		<h3>날짜 저장<button type="button" class="close"></button></h3>
+
+		<form name='meal_form' id='meal_form' method='post' onsubmit="return save_meal()">
+			<div class="box">
+				<p>날짜</p>
+				<div class="check">
+					<input type="checkbox" name="save" id="save">
+					<label for="save">저장안함</label>
+				</div>
+
+				<!-- 팝업뜨는 시점의 날짜와 시간이 디폴트로 뜸 -->
+				<div class="date clear">
+					<div class="meal_year fl">
+						<div class="stock">
+                            <button type="button" class="plus"></button>
+                            <div class="gray_bg">
+                            	<input type="text" value="2022" name="meal_year">
+                            </div>
+                            <button type="button" class="minus"></button>
+                        </div>
+					</div>
+					<div class="meal_month fl">
+						<div class="stock">
+                            <button type="button" class="plus"></button>
+                            <div class="gray_bg">
+                            	<input type="text" value="09" name="meal_month">
+                            </div>
+                            <button type="button" class="minus"></button>
+                        </div>
+					</div>
+					<div class="meal_day fl">
+						<div class="stock">
+                            <button type="button" class="plus"></button>
+                            <div class="gray_bg">
+                            	<input type="text" value="01" name="meal_day">
+                            </div>
+                            <button type="button" class="minus"></button>
+                        </div>
+					</div>
+					<div class="meal_time fr">
+						<div class="stock">
+                            <button type="button" class="plus"></button>
+                            <!-- 1시간 단위로 움직임 -->
+                            <div class="gray_bg">
+                            	<input type="text" value="14" name="meal_time_h">
+                            	<span>:00</span>
+                            </div>
+                            <!-- -->
+                            <button type="button" class="minus"></button>
+                        </div>
+					</div>
+				</div>
+			</div>
+
+			<button type="submit">확인</button>
+		</form>
+	</div>
+</div>
+
+<script>
+	$("select").change(function() {
+		$(this).addClass("on");
+	});
+
+	$("#meal_day .close, #meal_day .black_bg").click(function() {
+		$("#meal_day").hide();
+		$("body").removeClass("notScroll");
+	});
+
+	$("button.plus").click(function() {
+        var count = $(this).parent().find("input[type=text]").val();
+        count++;
+        $(this).parent().find("input[type=text]").val(count);
+        if(count < 10) {
+        	$(this).parent().find("input[type=text]").val('0'+count);
+        }
+
+        var meal_month = $("input[name=meal_month]").val();
+        var meal_day = $("input[name=meal_day]").val();
+        var meal_time_h = $("input[name=meal_time_h]").val();
+
+        if(meal_month > 12) {
+        	$("input[name=meal_month]").val('12');
+        }
+        if(meal_day > 31) {
+        	$("input[name=meal_day]").val('31');
+        }
+        if(meal_time_h > 24) {
+        	$("input[name=meal_time_h]").val('24');
+        }
+    })
+    $("button.minus").click(function() {
+        var count = $(this).parent().find("input[type=text]").val();
+        count--;
+        if (count < 1) {
+            count++;
+        } else if (count >= 1) {
+            $(this).parent().find("input[type=text]").val(count);
+        }
+        if(count < 10) {
+        	$(this).parent().find("input[type=text]").val('0'+count);
+        }
+
+        var meal_month = $("input[name=meal_month]").val();
+        var meal_day = $("input[name=meal_day]").val();
+        var meal_time_h = $("input[name=meal_time_h]").val();
+
+        if(meal_month > 12) {
+        	$("input[name=meal_month]").val('12');
+        }
+        if(meal_day > 31) {
+        	$("input[name=meal_day]").val('31');
+        }
+        if(meal_time_h > 24) {
+        	$("input[name=meal_time_h]").val('24');
+        }
+    });
+
+    $("#meal_day input[type=text]").on("input",function() {
+    	var meal_month = $("input[name=meal_month]").val();
+        var meal_day = $("input[name=meal_day]").val();
+        var meal_time_h = $("input[name=meal_time_h]").val();
+
+        if(meal_month > 12) {
+        	$("input[name=meal_month]").val('12');
+        }
+        if(meal_day > 31) {
+        	$("input[name=meal_day]").val('31');
+        }
+        if(meal_time_h > 24) {
+        	$("input[name=meal_time_h]").val('24');
+        }
+    });
+
+    $("#save").change(function() {
+    	if($(this).is(":checked") == true) {
+    		$("#meal_day .date").addClass("disabled");
+    	} else {
+    		$("#meal_day .date").removeClass("disabled");
+    	}
+    });
+
+    $(document).on("click","#meal_day .date.disabled",function() {
+    	$("#meal_day .date").removeClass("disabled");
+    	$("#save").prop("checked",false);
+    });
+
+	function save_meal() {
+        event.preventDefault();
+
+        var meal_form = $('#meal_form')['0'];
+        var data = new FormData(meal_form);
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: "./_ajax.action.php",
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function(res_data) {
+                if (res_data == 'S') {
+		            $(".eat_alarm").fadeIn(300);
+		            setTimeout(function() { 
+		                $(".eat_alarm").fadeOut(300); 
+		            }, 2000);
+                } else {
+                    alert('저장에 실패하였습니다.');
+                }
+            }
+
+        });
+        return false;
+    }
+</script>
