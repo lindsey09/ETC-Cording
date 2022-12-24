@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding TEST</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    
+
+
+    <style>
+        *{box-sizing: border-box;}
+        
+        button.pop_btn{
+            all:unset; background:steelblue; color:#fff; padding:5px 20px; border-radius: 5px; cursor: pointer;;
+        }
+        .modal{position:fixed; top:50%; left:50%; transform: translate(-50%, -100%); z-index:10; opacity: 0; transition:.5s; }
+        .modal.active{opacity: 1; transform: translate(-50%, -50%); }
+        .modal-content{ width:600px; border-radius: 5px; background:#fff; box-shadow: 0 0 10px rgba(0,0,0,0.15); display:flex;overflow: hidden;}
+        .modal-content > div{padding:20px;}
+        .modal-content .photo{flex:1; background:url(https://d2v80xjmx68n4w.cloudfront.net/gigs/Z35Um1609732385.jpg) 50% no-repeat; background-size:cover; }
+        .modal-content .desc{flex:2;text-align: center;}
+       
+        .desc-content input[type=email]{display:block; width:100%; padding:7px; margin-bottom:7px;; text-align:center; border:1px solid #ddd; border-radius: 5px; outline:0;}
+        .desc-content input[type=email]::placeholder{color:#bbb; transition:.5s}
+        .desc-content input[type=email]:focus::placeholder{visibility: hidden; opacity: 0;}
+        .desc-content button{display:block; width:100%; padding:8px; background:red; text-align: center; color:#fff; cursor: pointer; border:0;outline:0;}
+        .overlay{position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9 ; opacity: 0; transition:.5s; /*pointer-events: none;*/ visibility: hidden;}
+        .overlay.active{opacity: 1; /*pointer-events: all;*/ visibility: visible;}
+        .btn_close{position:absolute; top:10px; right:10px;background:#fff; border:0; font-size:25px; color:#999; cursor: pointer; outline:0;}        
+        .btn_close:hover{color:#222;}
+
+        @media all and (max-width:768px) {
+            .modal-content{flex-direction: column; width:100%;}
+            .modal-content > div{width:340px;}
+            .modal-content .photo{flex-basis: 250px;}
+        }
+    </style>
+
+
+   
+</head>
+<body>
+    <!--  -->
+
+    <button type="button" class="pop_btn"> Open Modal</button>
+
+    <div class="modal">
+        <div class="modal-content">
+            <div class="photo"></div>
+            <div class="desc">
+                <div class="desc-header">
+                    <h2>다양한 혜택을 받아보세요.</h2>
+                    <button class="btn_close" type="button">&times;</button>
+                </div>
+                <div class="desc-content">
+                    <input type="email" placeholder="이메일 주소를 입력하세요">
+                    <button type="button">뉴스레터 구독하기</button>
+                    <p>스타트 업데이트 어쩌고저쩌고 블라블라 신속하고 정확하게 전합니다.스타트 업데이트 어쩌고저쩌고 블라블라 신속하고 정확하게 전합니다.업데이트 어쩌고저쩌고 블라블라 신속하고 정확하게 전합니다.스타트 업데이트 어쩌 블라블라 신속하고 정확하게 전합블라블라하게 전합니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="overlay"></div>
+
+
+    <script>
+    
+        $(document).ready(function(){
+           $('.pop_btn').click(function(){
+             $('.modal, .overlay').addClass('active');
+
+           });
+           $('.btn_close, .overlay').click(function(){    
+                $('.modal, .overlay').removeClass('active');
+           })
+
+        });
+
+    </script>
+    
+</body>
+</htmlv>
