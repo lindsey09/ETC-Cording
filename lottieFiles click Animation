@@ -73,7 +73,6 @@
     <script>
 
         const play = document.querySelector('button');
-        const like = document.querySelector('like');
 
         const svgContainer = document.getElementById('svg');
         //google bodymovin js 검색 후 github 찾아서 링크 확인하기 
