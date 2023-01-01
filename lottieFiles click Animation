@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" ></script>
+    <title>lottie files animation</title>
+    <style>
+        body{
+            height:100vh;
+            display:grid;
+            place-content: center;
+            background:rgba(27,27,27,1);
+            color:#fff;
+        }
+        .contianer{
+            position:relative;
+            width:60%;
+            margin:0 auto;
+            background:#232323;
+            padding:2em;
+        }
+        .contianer h1{
+            margin:0;
+        }
+        .contianer p{
+            color:#ddd;
+        }
+        button{
+            background:url(https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Heart_icon_red_hollow.svg/1083px-Heart_icon_red_hollow.svg.png) no-repeat center center/19px ;
+            margin-top:2em;
+            border:none;
+            padding:1em;
+            font-weight: bold;
+            color:#fff;
+            text-transform: uppercase;
+            outline:0;
+            cursor: pointer;;
+        }
+        .svg{
+            width:30px;
+            position:absolute;
+            bottom:12px;
+            left:15px;
+        }
+        .svg svg{
+            width:60px !important;
+            height:60px !important;
+        }
+        .hide{
+           display:none;
+        }
+        
+    </style>
+</head>
+<body>
+    
+
+    <div class="contianer">
+        <div class="svg hide" id="svg"></div>
+
+        <h1>Lottie Files Click Animation </h1>
+
+        <button> </button>
+
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.1/lottie.min.js" integrity="sha512-H6aKTjvYAazW0iNuGj1f2dZvSWlt1HGZGEDsXRPETo2IB4H6v36Vl2qiZNlCRxOp0kT7iBf+7USNPavNscZGAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- bodymovin cdn  -->
+
+    <script>
+
+        const play = document.querySelector('button');
+        const like = document.querySelector('like');
+
+        const svgContainer = document.getElementById('svg');
+        //google bodymovin js 검색 후 github 찾아서 링크 확인하기 
+        const animItem = bodymovin.loadAnimation({
+            wrapper: svgContainer,
+            animType: 'svg',
+            loop: false,
+            autoplay: false,
+            path:'https://assets10.lottiefiles.com/packages/lf20_4VYPxJ.json'
+        });
+
+        //클릭하면 hide클래스 지워지고 play 시작됨    
+        play.addEventListener('click', () => {
+            svgContainer.classList.remove('hide'); 
+            animItem.goToAndPlay(0, true);
+        })
+
+        //클릭하면 나왔다가 hide 클래스 다시 추가됨
+        // animItem.addEventListener('complete', () => {
+        //     svgContainer.classList.add('hide'); 
+        //     svgContainer.classList.add('like'); 
+            
+        // });
+  
+        //클릭하면 다시 사라지게 하는 것 
+        $('.svg').click(function(){
+            $('.svg').addClass('hide');
+        })
+    </script>
+
+</body>
+</html>
