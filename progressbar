@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- jQuery  -->
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <style>
+    html,body{margin:0; padding:0; }
+    body{width:100%;}
+
+    header, section, footer{width: 100%; height: 100vh; padding:calc((100vh - 106px) / 2) 0; text-align: center; box-sizing: border-box;}
+    .hi{font-size:80px; font-weight: bold;}
+    header{background:#dfc}
+    section{background:#fcc}
+    footer{background:#dcc}
+    section .hi{transition:1s; transform: translateX(-400%); display:block; opacity: 0;}
+    section .hi.active{transform: translateX(0); opacity: 1;}
+
+    .scroll-progess{width: 0; height:7px; background:#f1c40f; position:fixed; top:0; left:0;}
+    
+
+    </style>
+</head>
+<body>
+
+
+    <div class="scroll-progess" id="scroll-progess">
+    </div>
+  
+
+    <header>
+        <span class="hi">hello</span>
+    </header>
+    <section>
+      <span class="hi">hello</span>
+    </section>
+    <footer>
+        <span class="hi">hello</span>
+    </footer>
+
+
+<script>
+
+// IE, firefox
+// document.documentElement.scrollLeft : x 축 방향으로 스크롤한 거리
+// document.documentElement.scrollTop : y 축 방향으로 스크롤한 거리
+//   크롬, 사파리, 오페라에도 같은 프로퍼티가 있지만 값이 항상 0
+
+// Chrome, safari, opera, edge, Quirks Mode
+// document.body.scrollLeft : x 축 방향으로 스크롤한 거리
+// document.body.scrollTop : y 축 방향으로 스크롤한 거리
+
+// Firefox, chrome, safari, opera, edge, IE>=9
+// window.pageXOffset : x 축 방향으로 스크롤한 거리
+// window.pageYOffset : y 축 방향으로 스크롤한 거리
+
+
+$(document).ready(function(){
+       
+       const scrollProgess = document.querySelector('#scroll-progess');
+
+       function scrollBar(){
+            const totalHeight = document.body.scrollHeight;
+            const offset = document.documentElement.scrollTop;
+            const windowHeight = document.documentElement.clientHeight;
+
+            const Percentage = (offset / (totalHeight-windowHeight))*100;
+
+            scrollProgess.style.width = Math.round(Percentage)+'%'
+       }
+       
+       document.addEventListener('scroll', scrollBar);
+ });
+
+    
+
+// $('html,body').animate({scrollTop:$(this.hash).offset().top},5000);
+    
+
+
+</script>
+
+</body>
+</html>
