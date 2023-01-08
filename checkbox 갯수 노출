@@ -1,0 +1,25 @@
+    <div class="checkbox">
+        <input type="checkbox" id="ck1" name="menu_check"><label for="ck1">가나다라1</label>
+        <input type="checkbox" id="ck2" name="menu_check"><label for="ck2">가나다라1</label>
+        <input type="checkbox" id="ck3" name="menu_check"><label for="ck3">가나다라1</label>
+        <input type="checkbox" id="ck4" name="menu_check"><label for="ck4">가나다라1</label>
+
+        <input type="checkbox" id="ck5" name="menu_check2"><label for="ck5">가나다라2</label>
+        <input type="checkbox" id="ck6" name="menu_check2"><label for="ck6">가나다라2</label>
+        <input type="checkbox" id="ck7" name="menu_check2"><label for="ck7">가나다라2</label>
+        <input type="checkbox" id="ck8" name="menu_check2"><label for="ck8">가나다라2</label>
+
+        <p><span class="s_count"></span>개가 선택되었습니다.</p>
+    </div>
+    
+    
+    <script>
+        $(function(){
+            $(".checkbox").change(function() {
+              
+                var count = $(this).find("input:checked").length;
+                console.log(count);
+                $(this).find(".s_count").text(count);
+            });
+        });
+    </script>
