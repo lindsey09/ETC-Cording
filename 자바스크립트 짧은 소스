@@ -1,0 +1,11 @@
+자바스크립트 짧은 소스
+
+링크 새창크기조절 window.open
+<a href="#" onclick='window.open("http://pf.kakao.com/_YxgYxhxj","kakao","width=600, height=800")'></a>
+
+button onclick
+ onclick="location.href='riew.php'"
+뒤로가기
+<a href="javascript:history.back();" >
+table tr에 클릭 적용
+<tr onclick="javascript:location.href='riew.php'">
