@@ -1,0 +1,237 @@
+*----------------------------------------------------------------------------------------------------------*
+
+// 외부영역 클릭 시 팝업 닫기
+        $(document).mouseup(function (e){
+            var LayerPopup = $(".calendar__popup");
+            if(LayerPopup.has(e.target).length === 0){
+                LayerPopup.removeClass("active");
+            }
+        });
+
+*----------------------------------------------------------------------------------------------------------*
+
+//말줄임
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+overflow: hidden;
+
+
+//input값에 아무것도 없다면 노출 비노출, 있을 경우 닫기 노출
+ $(document).ready(function(){
+                                            if($('.search__box input').val()=='')
+                                                $('.search__box__close').css('display','none');
+                                                else
+                                            $('.search__box__close').css('display','inline-block');
+                                           
+                                        });
+
+*----------------------------------------------------------------------------------------------------------*
+
+// 다국어 설명추가
+
+    $('#detail_lang').change(function(){
+        if($(this).val()=='detail_lang01'){
+            $('.lang_selec').addClass('hidden');
+            $(".lang_en").removeClass("hidden");
+        }else if($(this).val()=='detail_lang02')
+        {
+            $('.lang_selec').addClass('hidden');
+            $(".lang_jp").removeClass("hidden");    
+        }else if($(this).val()=='detail_lang03')
+        {
+            $('.lang_selec').addClass('hidden');
+            $(".lang_cn2").removeClass("hidden");  
+        }else if($(this).val()=='detail_lang04')
+        {
+            $('.lang_selec').addClass('hidden');
+            $(".lang_cn").removeClass("hidden"); 
+        }else if($(this).val()=='detail_lang05')
+        {
+            $('.lang_selec').addClass('hidden');
+            $(".lang_ta").removeClass("hidden"); 
+        }else if($(this).val()=='detail_lang')
+        {
+            $('.lang_selec').addClass('hidden');
+            $(".lang_kr").removeClass("hidden"); 
+        }
+
+    });
+
+*----------------------------------------------------------------------------------------------------------*
+
+//메뉴 위 아래 변경 
+$('.menu_up').click(function(){
+                var $menu_move = $(this).parent().parent(); // 클릭한 버튼이 속한 this 요소
+                $menu_move.prev().before($menu_move); // 현재 this 의 이전 this 앞에 선택한 this 넣기
+            })
+                
+            $('.menu_down').click(function(){
+                var $menu_move = $(this).parent().parent(); // 클릭한 버튼이 속한 this 요소
+                $menu_move.next().after($menu_move); // 현재 this 의 다음 this 뒤에 선택한 this 넣기
+            
+            })
+
+*----------------------------------------------------------------------------------------------------------*
+
+[jquery] select  box 선택값 가져오기
+// Select box ID 로 접근하여 선택된 값 읽기
+$('#Select box ID option:selected').val();
+
+// Select box Name 으로 접근하여 선택된 값 읽기
+$('select[name=Select box Name]').val();
+
+// span 과 같은 다른 태그 접근하기
+$('span[name=Name값]').text();
+
+// 선택된 값의 index 불러오기
+var index = $('#Select box ID option').index($('#Select box ID option:selected'));
+
+// Select box에 option 값 추가하기
+$('#Select box ID').append('<option value='1'>1번</option>');
+
+// Select box option 의 맨 앞에 추가 하기
+$('#Select box ID').prepend('<option value='0'>0번</option>');
+
+// Select box의 html 전체를 변경하기
+$('#Select box ID').html('<option value='1'>1차</option><option value='2'>2차</option>');
+
+// Select box의 index 별 replace 하기
+// 해당 객체를 가져오게 되면, option이 다수가 되므로 배열 객체가 되어 eq에 index를 넣어, 개별 개체를 선택할 수 있다.
+$('#Select box ID option:eq(1)').replaceWith('<option value='1'>1차</option>');
+
+// 직접 index 값을 주어 selected 속성 주기
+$('#셀렉트ID option:eq(1)').attr('selected', 'selected');
+
+// text 값으로 selected 속성 주기(첫 번째 방법)
+$('#Select box ID')val('1번').attr('selected', 'selected');
+
+// text 값으로 selected 속성 주기(두 번째 방법)
+$('#Select box ID').text('1번').attr('selected', 'selected');
+
+// value 값으로 selected 속성 주기(첫 번째 방법)
+$('#Select box ID').val('1');
+
+// value 값으로 selected 속성 주기(두 번째 방법)
+$('#id').val('1').prop('selected', true);
+
+// 해당 index item 삭제하기
+$('#Select box ID option:eq(0)').remove();
+
+// 첫번째, 마지막 item 삭제하기
+$('#Select box ID option:first').remove();
+$('#Select box ID option:last').remove();
+
+// 선택된 옵션의 text, value 구하기
+$('#Select box ID option:selected').text();
+$('#Select box ID option:selected').val();
+
+// 선택된 옵션의 index 구하기
+$('#Select box ID option').index($('#Select box ID option:selected'));
+
+// Select box 의 아이템 갯수 구하기
+$('#Select box ID option').size();
+
+// 선택된 옵션 전 까지의 item 갯수 구하기
+$('#Select box ID option:selected').prevAll().size();
+
+// 선택된 옵션 후의 item 갯수 구하기
+$('#Select box ID option:selected').nextAll().size();
+
+// 해당 index item 이후에 option item 추가 하기
+$('#Select box ID option:eq(0)').after('<option value='3'>3번</option>');
+
+// 해당 index item 전에 option item 추가하기
+$('#Select box ID option:eq(3)').before('<option value='2'>2번</option>');
+
+// 해당 Select box 에 change event binding 하기
+$('#Select box ID').change(function() {
+  alert($(this).val());
+  alert($(this).children('option:selected').text());
+});
+*----------------------------------------------------------------------------------------------------------*
+모바일 웹에서 마켓 이동하기
+플레이스토어 혹은 앱스토어
+var userAgent = navigator.userAgent;
+if(userAgent.match(".*Android.*")){
+	location.href = "https://play.google.com/store/apps/details?id=com.xxxxxx.m";
+}else if(userAgent.match(".*iPhone.*") || userAgent.match(".*iPad.*")){
+	location.href = "https://itunes.apple.com/app/id1234567890";
+}
+ 
+
+*---------------------------------------------------------------------------------------------------------*
+
+//체크박스 하나만 선택
+function checkOnlyOne(element) {
+    const checkboxes 
+      = document.getElementsByName("chef_img");
+    checkboxes.forEach((cb) => {
+    cb.checked = false;
+  })
+    element.checked = true;
+}
+
+해당 태그에  onclick='checkOnlyOne(this)'  설정
+
+
+*---------------------------------------------------------------------------------------------------------*
+input 박스 콤마
+해당 태그에  onkeyup="inputNumberFormat(this)"  설정
+//입력값 자동 콤마사용
+function inputNumberFormat(obj) {
+     obj.value = comma(uncomma(obj.value));
+ }
+
+ function comma(str) {
+     str = String(str);
+     return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+ }
+
+ function uncomma(str) {
+     str = String(str);
+     return str.replace(/[^\d]+/g, '');
+ }
+
+*---------------------------------------------------------------------------------------------------------*
+
+*---------------------------------------------------------------------------------------------------------*
+
+숫자 키패드
+ inputmode="numeric" pattern="[0-9]*" 
+    /*숫자만 입력*/                               
+해당 input에 oninput="onlyNumber();" 삽입 
+     function onlyNumber(){
+        console.log(event.type, event.target.value);
+        const regexp = /\D/g;
+        event.target.value = event.target.value.replace(regexp, "");
+     }      
+
+숫자 천단위 콤마
+1. toLocaleString() 함수이용
+$(".price").on("keyup", function(){
+    $(this).val($(this).val().toLocaleString("ko-KR"));
+});
+2. 정규식 방법
+$(".price").on("keyup", function(){
+    $(this).val($(this).val().replace(/\,/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,'));
+});
+
+/--------------------------------------------------------------------------------/
+
+    //모바일 탭 내렸을 때 식당 이름 표시 
+    $(window).scroll(function(){
+        console.log('스크롤탑' + $(window).scrollTop());
+        console.log('오프셋탑' + $('.store_detail .tit').offset().top);
+
+        if (window.innerWidth < 1024) { 
+
+            if ($(window).scrollTop() > $('.store_detail .tit').offset().top){
+                $('#titleArea.m_title').addClass('active');
+            }else{
+                $('#titleArea.m_title').removeClass('active');
+            }
+
+        }
+    });
