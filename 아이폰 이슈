@@ -1,0 +1,4 @@
+ios 때문이라도 앞으로 overflow:scroll 사용시 overflow-scrolling : touch
+-webkit-overflow-scrolling: touch 를 꼭 사용해야겠다
+
+
