@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <!-- jQuery  -->
+     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+     <script src="tablesort.min.js"></script>
+     <script src="tablesort.number.min.js"></script>
+     <script src="tablesort.date.min.js"></script>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+<style>
+    body{
+        padding:50px;
+    }
+.table{
+    width:100%;
+    font-size:14px;
+}
+.table tr:nth-child(even){
+    background: #f1f1f1;;
+}
+.table th{
+    background:#222;
+    border-bottom:1px solid #ddd;
+    padding:5px;
+    color:#fff;
+    cursor: pointer;
+}
+.table th i.active{
+    transform:rotate(180deg);
+}
+.table th:not(:last-child),
+.table td:not(:last-child){
+    border-right:1px solid #ddd;
+}
+.table td{
+    border-bottom:1px solid #ddd;
+    text-align: center;
+    padding:5px;
+}
+.pagenation{
+    width:100%;
+    text-align: center;
+}
+#numbers{
+    text-align: center;
+    list-style: none;
+    border-top:1px solid #ddd;
+    padding-top:10px;
+}
+#numbers li{
+    width:20px;height:20px;
+    text-align: center;
+    display: inline-block;
+}
+#numbers li a{
+    text-decoration: none;
+    color:#222;
+    display: block;
+}
+#numbers li a.active{
+    background:#222;
+    color:#fff;
+}
+</style>
+<body>
+
+	<table id="myTable" class="table table-sortable">
+		<thead>
+			<tr>
+				<th>Account # <i class="xi-caret-down-min"></i></th>
+				<th>First Name <i class="xi-caret-down-min"></i></th>
+				<th>Last Name <i class="xi-caret-down-min"></i></th>
+				<th>Age <i class="xi-caret-down-min"></i></th>
+				<th>Total <i class="xi-caret-down-min"></i></th>
+				<th>Discount <i class="xi-caret-down-min"></i></th>
+				<th>Difference <i class="xi-caret-down-min"></i></th>
+				<th>Date <i class="xi-caret-down-min"></i></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>A42b</td>
+				<td>Peter</td>
+				<td>Parker</td>
+				<td>28</td>
+				<td>$9.99</td>
+				<td>20.9%</td>
+				<td>+12.1</td>
+				<td>Jul 6, 2006 8:14 AM</td>
+			</tr>
+			<tr>
+				<td>A255</td>
+				<td>Bruce</td>
+				<td>Jones</td>
+				<td>33</td>
+				<td>$13.19</td>
+				<td>25%</td>
+				<td>+12</td>
+				<td>Dec 10, 2002 5:14 AM</td>
+			</tr>
+			<tr>
+				<td>A255</td>
+				<td>Bruce</td>
+				<td>Jones</td>
+				<td>33</td>
+				<td>$13.19</td>
+				<td>25%</td>
+				<td>+12</td>
+				<td>Dec 10, 2002 5:14 AM</td>
+			</tr>
+			<tr>
+				<td>A33</td>
+				<td>Clark</td>
+				<td>Evans</td>
+				<td>18</td>
+				<td>$15.89</td>
+				<td>44%</td>
+				<td>-26</td>
+				<td>Jan 12, 2003 11:14 AM</td>
+			</tr>
+			<tr>
+				<td>A1</td>
+				<td>Bruce</td>
+				<td>Almighty</td>
+				<td>45</td>
+				<td>$153.19</td>
+				<td>44.7%</td>
+				<td>+77</td>
+				<td>Jan 18, 2001 9:12 AM</td>
+			</tr>
+			<tr>
+				<td>A102</td>
+				<td>Bruce</td>
+				<td>Evans</td>
+				<td>22</td>
+				<td>$13.19</td>
+				<td>11%</td>
+				<td>-100.9</td>
+				<td>Jan 18, 2007 9:12 AM</td>
+			</tr>
+			<tr>
+				<td>A42a</td>
+				<td>Bruce</td>
+				<td>Evans</td>
+				<td>22</td>
+				<td>$13.19</td>
+				<td>11%</td>
+				<td>0</td>
+				<td>Jan 18, 2007 9:12 AM</td>
+			</tr>
+            <tr>
+				<td>A42b</td>
+				<td>Peter</td>
+				<td>Parker</td>
+				<td>28</td>
+				<td>$9.99</td>
+				<td>20.9%</td>
+				<td>+12.1</td>
+				<td>Jul 6, 2006 8:14 AM</td>
+			</tr>
+			<tr>
+				<td>A255</td>
+				<td>Bruce</td>
+				<td>Jones</td>
+				<td>33</td>
+				<td>$13.19</td>
+				<td>25%</td>
+				<td>+12</td>
+				<td>Dec 10, 2002 5:14 AM</td>
+			</tr>
+			<tr>
+				<td>A33</td>
+				<td>Clark</td>
+				<td>Evans</td>
+				<td>18</td>
+				<td>$15.89</td>
+				<td>44%</td>
+				<td>-26</td>
+				<td>Jan 12, 2003 11:14 AM</td>
+			</tr>
+			<tr>
+				<td>A1</td>
+				<td>Bruce</td>
+				<td>Almighty</td>
+				<td>45</td>
+				<td>$153.19</td>
+				<td>44.7%</td>
+				<td>+77</td>
+				<td>Jan 18, 2001 9:12 AM</td>
+			</tr>
+            <tr>
+				<td>A255</td>
+				<td>Bruce</td>
+				<td>Jones</td>
+				<td>33</td>
+				<td>$13.19</td>
+				<td>25%</td>
+				<td>+12</td>
+				<td>Dec 10, 2002 5:14 AM</td>
+			</tr>
+			<tr>
+				<td>A33</td>
+				<td>Clark</td>
+				<td>Evans</td>
+				<td>18</td>
+				<td>$15.89</td>
+				<td>44%</td>
+				<td>-26</td>
+				<td>Jan 12, 2003 11:14 AM</td>
+			</tr>
+			<tr>
+				<td>A1</td>
+				<td>Bruce</td>
+				<td>Almighty</td>
+				<td>45</td>
+				<td>$153.19</td>
+				<td>44.7%</td>
+				<td>+77</td>
+				<td>Jan 18, 2001 9:12 AM</td>
+			</tr>
+		
+			<tr>
+				<td>A425a</td>
+				<td>Bruce</td>
+				<td>Evans</td>
+				<td>45</td>
+				<td>$13.19</td>
+				<td>23%</td>
+				<td>0</td>
+				<td>Jan 18, 2007 9:12 AM</td>
+			</tr>
+		</tbody>
+	</table>
+    <div class="pagenation">
+        <ol id="numbers">
+            <!-- <li><a href="">1</a></li>
+            <li><a href="">2</a></li>
+            <li><a href="">3</a></li> -->
+        </ol>
+    </div>
+<script>
+//pagenation 
+/*
+변수생성
+- rowPerPage 페이지당 보여질 개수 7
+- rows 가로행의 tr
+- rowCount 가로행의 tr 개수 100
+- pageCount 페이지네이션 개수 = 100/20
+소수점단위로 나오는 값을 pageCount을 수학 연산식 Math.ceil을 이용하여 반올림해주기 
+console.log(pageCount); 확인
+- numbers
+*/
+let rowPerPage = 20,
+    rows = $('#myTable tbody tr'),
+    rowCount = rows.length,
+    pageCount = Math.ceil(rowCount/rowPerPage),
+    numbers = $('#numbers');
+
+    console.log(pageCount);
+
+/*pagenation li 생성반복문*/
+for(let i=1; i<=pageCount; i++){
+    numbers.append('<li><a href="">' + i + '</a></li>');
+}
+
+//#numbers li:first-child a
+numbers.find('li:first-child a').addClass('active');
+
+
+//pagenation function
+
+function displayRows(idx){
+    let start = (idx-1) * rowPerPage,
+        end = start + rowPerPage;
+
+        rows.hide();
+        rows.slice(start, end).show();
+}
+displayRows(1);
+
+//paganation 클릭 시 보여주기
+
+/*
+클릭한 그 a tag에 active 추가, 클릭한 그 요소의 숫자를 함수 displayRows()의 값으로 넣어주기
+*/
+//선택자 다르게 이렇게 해서 index 추출하여 할 수도 있고,
+// numbers.find('li').click(function(e){
+//     e.preventDefault();
+//     let index = $(this).index()+1;
+//     numbers.find('li a').removeClass('active');
+//     $(this).find('a').addClass('active');
+//     console.log(index);
+//     displayRows(index);
+// });
+
+//a링크로 설정하여 처리 할 수도 있음.
+numbers.find('li a').click(function(e){
+    e.preventDefault();
+    numbers.find('li a').removeClass('active');
+    let index = $(this).text();
+    $(this).addClass('active');
+    displayRows(index);
+});
+
+
+new Tablesort(document.getElementById('myTable'));
+$('.table th').click(function(){
+    // alert();
+    $('.table th i').toggleClass('active');
+});
+</script>   
+</body>
+</html>
+
+
+/********************************************************************************************************/
+<script src="tablesort.min.js"></script>
+
+/*!
+ * tablesort v5.4.0 (2022-04-27)
+ * http://tristen.ca/tablesort/demo/
+ * Copyright (c) 2022 ; Licensed MIT
+*/
+!function(){function r(t,e){if(!(this instanceof r))return new r(t,e);if(!t||"TABLE"!==t.tagName)throw new Error("Element must be a table");this.init(t,e||{})}function m(t){var e;return window.CustomEvent&&"function"==typeof window.CustomEvent?e=new CustomEvent(t):(e=document.createEvent("CustomEvent")).initCustomEvent(t,!1,!1,void 0),e}function p(t,e){return t.getAttribute(e.sortAttribute||"data-sort")||t.textContent||t.innerText||""}function v(t,e){return(t=t.trim().toLowerCase())===(e=e.trim().toLowerCase())?0:t<e?1:-1}function A(t,e){return[].slice.call(t).find(function(t){return t.getAttribute("data-sort-column-key")===e})}function E(n,o){return function(t,e){var r=n(t.td,e.td);return 0===r?o?e.index-t.index:t.index-e.index:r}}var x=[];r.extend=function(t,e,r){if("function"!=typeof e||"function"!=typeof r)throw new Error("Pattern and sort must be a function");x.push({name:t,pattern:e,sort:r})},r.prototype={init:function(t,e){var r,n,o,i=this;if(i.table=t,i.thead=!1,i.options=e,t.rows&&0<t.rows.length)if(t.tHead&&0<t.tHead.rows.length){for(a=0;a<t.tHead.rows.length;a++)if("thead"===t.tHead.rows[a].getAttribute("data-sort-method")){r=t.tHead.rows[a];break}r=r||t.tHead.rows[t.tHead.rows.length-1],i.thead=!0}else r=t.rows[0];if(r){function s(){i.current&&i.current!==this&&i.current.removeAttribute("aria-sort"),i.current=this,i.sortTable(this)}for(var a=0;a<r.cells.length;a++)(o=r.cells[a]).setAttribute("role","columnheader"),"none"!==o.getAttribute("data-sort-method")&&(o.tabindex=0,o.addEventListener("click",s,!1),null!==o.getAttribute("data-sort-default")&&(n=o));n&&(i.current=n,i.sortTable(n))}},sortTable:function(t,e){var r=this,n=t.getAttribute("data-sort-column-key"),o=t.cellIndex,i=v,s="",a=[],d=r.thead?0:1,u=t.getAttribute("data-sort-method"),l=t.getAttribute("aria-sort");if(r.table.dispatchEvent(m("beforeSort")),e||(l="ascending"===l||"descending"!==l&&r.options.descending?"descending":"ascending",t.setAttribute("aria-sort",l)),!(r.table.rows.length<2)){if(!u){for(;a.length<3&&d<r.table.tBodies[0].rows.length;)0<(s=(s=(f=n?A(r.table.tBodies[0].rows[d].cells,n):r.table.tBodies[0].rows[d].cells[o])?p(f,r.options):"").trim()).length&&a.push(s),d++;if(!a)return}for(d=0;d<x.length;d++)if(s=x[d],u){if(s.name===u){i=s.sort;break}}else if(a.every(s.pattern)){i=s.sort;break}for(r.col=o,d=0;d<r.table.tBodies.length;d++){var c,f,h=[],b={},w=0,g=0;if(!(r.table.tBodies[d].rows.length<2)){for(c=0;c<r.table.tBodies[d].rows.length;c++)"none"===(s=r.table.tBodies[d].rows[c]).getAttribute("data-sort-method")?b[w]=s:(f=n?A(s.cells,n):s.cells[r.col],h.push({tr:s,td:f?p(f,r.options):"",index:w})),w++;for("descending"===l?h.sort(E(i,!0)):(h.sort(E(i,!1)),h.reverse()),c=0;c<w;c++)b[c]?(s=b[c],g++):s=h[c-g].tr,r.table.tBodies[d].appendChild(s)}}r.table.dispatchEvent(m("afterSort"))}},refresh:function(){void 0!==this.current&&this.sortTable(this.current,!0)}},"undefined"!=typeof module&&module.exports?module.exports=r:window.Tablesort=r}();
+
+
+
+/********************************************************************************************************/
+<script src="tablesort.date.min.js"></script>
+
+/*!
+ * tablesort v5.4.0 (2022-04-27)
+ * http://tristen.ca/tablesort/demo/
+ * Copyright (c) 2022 ; Licensed MIT
+*/
+!function(){function r(e){return e=(e=e.replace(/\-/g,"/")).replace(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/,"$3-$2-$1"),new Date(e).getTime()||-1}Tablesort.extend("date",function(e){return(-1!==e.search(/(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\.?\,?\s*/i)||-1!==e.search(/\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}/)||-1!==e.search(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)/i))&&!isNaN(r(e))},function(e,n){return e=e.toLowerCase(),n=n.toLowerCase(),r(n)-r(e)})}();
+
+
+
+/********************************************************************************************************/
+<script src="tablesort.number.min.js"></script>
+
+/*!
+ * tablesort v5.4.0 (2022-04-27)
+ * http://tristen.ca/tablesort/demo/
+ * Copyright (c) 2022 ; Licensed MIT
+*/
+!function(){function e(t){return t.replace(/[^\-?0-9.]/g,"")}Tablesort.extend("number",function(t){return t.match(/^[-+]?[£\x24Û¢´€]?\d+\s*([,\.]\d{0,2})/)||t.match(/^[-+]?\d+\s*([,\.]\d{0,2})?[£\x24Û¢´€]/)||t.match(/^[-+]?(\d)*-?([,\.]){0,1}-?(\d)+([E,e][\-+][\d]+)?%?$/)},function(t,n){return t=e(t),n=e(n),n=n,t=t,n=parseFloat(n),t=parseFloat(t),(n=isNaN(n)?0:n)-(t=isNaN(t)?0:t)})}();
+
+
+
+
+
+
+
