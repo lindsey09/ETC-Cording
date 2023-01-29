@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> 오늘하루안보기 팝업 </title>
+     <!-- jQuery  -->
+     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+    
+<style>
+    .popup{
+        position: fixed;
+        top:100px; left:100px;
+        border:1px solid #ddd;
+        padding:40px 60px;
+        /* display: none;  */
+    }
+</style>
+<body>
+  
+    <h1>cookie</h1>
+
+    <div class="popup">
+        <h2>hello</h2>
+        <input type="checkbox" id="popup">
+        <label for="popup">오늘하루안보기</label>
+        <button class="close">닫기</button>
+    </div>
+
+
+
+    <script>
+        let myPopup = document.querySelector('.popup'),
+            checkbox = document.querySelector('#popup'),
+            popupClose = document.querySelector('.close');
+
+            //쿠키생성
+            function setCookie(name, value, day){
+                let date = new Date(); //현재날짜지정
+                date.setDate(date.getDate() + day);
+
+                let myCookie="";
+                myCookie += name + '=' + value + ';';
+                myCookie += 'Expires=' + date.toUTCString();
+
+                document.cookie = myCookie; //쿠키 설정, 생성
+            }
+            // setCookie('oooomakase','main',7); 사용자가 닫기버튼 누를때 쿠키생성함.
+
+            //쿠키삭제
+            function delCookie(name){
+                let date = new Date(); 
+
+                date.setDate(date.getDate()-1);
+
+                let setCookie="";
+                setCookie += name + '= main;';
+                setCookie += 'Expires=' + date.toUTCString();
+
+                document.cookie = setCookie;
+            }
+
+            //쿠키확인
+            function checkCookie(name){
+                let cookies = document.cookie.split(';');
+                console.log(cookies);
+                let visited = false; // 방문 거짓
+
+                for(let i in cookies){
+                    if(cookies[i].indexOf(name) > -1){
+                        // alert(cookies[i]);
+                        visited = true;
+                        console.log(visited);
+                    }
+                }
+                console.log(visited);
+
+                //visited가 true라고 한다면
+                if(visited){
+                    //재방문
+                    myPopup.style.display = 'none';
+                }else{
+                    //신규방문
+                    myPopup.style.display = 'block';
+                }
+
+            };
+            checkCookie('oooomakase'); //사이트에 방문한 이력이 있는지 확인
+
+            //닫기 클릭
+            popupClose.addEventListener('click', function(){
+                //a.checked true false
+
+                if(checkbox.checked){
+                    //팝업 다시 안본다. 쿠키 닫고, 쿠키 생성
+                    setCookie('oooomakase','main',1); // 숫자가 1이면 하루안보기, 7이면 7일 안보기
+                    myPopup.style.display = 'none';
+                }else{
+                    //팝업을 계속 본다. 팝업 닫고, 쿠키 제거
+                    myPopup.style.display = 'none';
+                    delCookie('oooomakase');
+                }
+            });
+    </script> 
+</body>
+</html>
