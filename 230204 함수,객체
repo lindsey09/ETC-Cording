@@ -80,9 +80,59 @@ function print({ name, alias, actor }) {
 const {name} = iconMan;
 console.log(name); 할 경우 "토니스타크" 출력
 
-
-
-
 print(ironMan);
 print(captainAmerica);
+
+
+
+*-------------------------------------------------------------------------------------------------------------------------------*
+
+const dog = {
+  name: "만두",
+  sound: "멍멍",
+  say: function say() {
+    console.log(this.sound); //여기서 this는 dog
+  }
+};
+dog.say(); //멍멍
+const dog1 = {
+  name: "만두",
+  sound: "멍멍",
+  say: function () {
+    console.log(this.sound); //여기서 this는 dog
+  }
+};
+dog1.say(); //멍멍
+const dog2 = {
+  name: "만두",
+  sound: "멍멍",
+  say() {
+    console.log(this.sound); //여기서 this는 dog
+  }
+};
+dog2.say(); //멍멍
+
+// const dog3 = {
+//   name: "만두",
+//   sound: "멍멍",
+//   say() => {
+//     console.log(this.sound); //여기서 this는 몰라서 안됨. 
+//                                function은 자신이 속해있는곳으로 연결하나 화살표함수는 자신이 속해있는 곳으로 연결하지 않음
+//   }
+// };
+// dog3.say();
+
+const cat = {
+  name: "냐옹이",
+  sound: "야옹"
+};
+cat.say = dog.say;
+dog.say(); //멍멍
+cat.say(); //야옹
+
+const catSay = cat.say;
+catSay(); // error 함수를 꺼내면 this와의 관계가 사라짐
+
+
+
 
