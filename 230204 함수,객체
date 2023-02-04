@@ -134,5 +134,3 @@ const catSay = cat.say;
 catSay(); // error 함수를 꺼내면 this와의 관계가 사라짐
 
 
-
-
