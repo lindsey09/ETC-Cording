@@ -1,0 +1,67 @@
+const rowsPerPage = 10;
+        const rows = document.querySelectorAll('.ex_tb tbody tr');
+        const rowsCount = rows.length // nodelist의 length구하기 
+        // console.log(rows); //112
+        const pageCount = Math.ceil(rowsCount/rowsPerPage); //122/10 / 12.2 소수점 아래는 무조건 올림 Math.ceil();
+        // console.log(pageCount); //12
+        const numbers = document.querySelector('#numbers');
+        
+        //페이지네이션 생성
+        /*
+        let c =대상.innerHTML
+        대상.innerHTML =  <li><a href="">1</a></li>  
+        for(초기값; 조건; 증감){
+
+        }
+        */
+
+        for(let i = 1; i<=pageCount; i++){
+            // numbers.innerHTML = '<li><a href="">' + i + '</a></li>';
+            // numbers.innerHTML = `<li><a href="">${i}</a></li>`; // 이렇게 하면 끝자리 숫자만 노출됨. 기존에 html에 계속 더해주어야 함으로 ...아래와 같이 써야함.
+            // numbers.innerHTML = numbers.innerHTML + `<li><a href="">${i}</a></li>`;
+            numbers.innerHTML += `<li><a href="">${i}</a></li>`;
+        }
+        const numberBtn = numbers.querySelectorAll('a');
+        // console.log(numberBtn) //nodelist 12
+        // numberBtn.forEach(function(item,idx){});
+
+            numberBtn.forEach((item,idx) => {
+                item.addEventListener('click', (e)=>{ 
+                    e.preventDefault()
+                    for(nb of numberBtn){
+                        nb.ClassList.remove('active');
+                    }
+                    e.target.ClassList.add('active'); //여기서 e는 function을 사용했을 경우 this로 가능하나 ES6 문법을 사용했기에 e 로 설정함.
+
+                    console.log(idx)
+                })    
+            });
+   //상단의idx와 달라도되고 같아도 됨. function안에 idx는 지역번수임
+            function displayRow(idx){
+                /* idx 0 / 112개 목록 
+                인덱스번호 0~9 slice(start, end) slice(0,10)
+                배열로 만드는 법은 두가지가 있다.
+                1. Array.form(대상)  2. [...대상] */
+                // let newrows - rows.slice(0,9)로 하면 안된다. rows는 배열이 아니라 nodeList 이기에
+
+                let start = idx * rowsPerPage;
+                let end = start + rowsPerPage;
+                let rowsArray = [...rows];
+                // console.log(rowsArray);
+
+                for(ra of rowsArray){
+                    ra.style.display='none';
+                }
+
+                let newRows = rowsArray.slice(start, end);
+                for(nr of newRows){
+                    nr.style.display='';
+                }
+                for(nb of numberBtn){
+                    // nb.ClassList.remove('active');
+                    nb.classList.remove("active");
+                }
+                numberBtn(idx).target.classList.add('active');
+
+            } //displayRow
+            displayRow(0); //처음 화면 표시가 idx가 0일때부터 나와라
