@@ -1,11 +1,115 @@
-const rowsPerPage = 10;
+       <style>
+        .pagination{
+            display: flex;
+            gap:20px;
+            align-items: center;
+        }
+        #numbers{
+            display: flex;
+            gap:5px;
+            list-style:none;
+        }
+        #numbers a{
+            font-size:14px;
+        }
+        #numbers a.active{
+            background:#222;
+            color:#fff;
+        }  
+
+    </style>
+      
+      <div class="table">
+        <div class="pagination">
+            <i class="xi-arrow-left"></i>
+            <ul id="numbers">
+                <!-- <li><a href="">1</a></li>     -->
+            </ul>
+            <i class="xi-arrow-right"></i>
+        </div>
+        <table border="0" class="ex_tb">
+            <colgroup>
+                <col width="10%">
+                <col width="20%">
+                <col width="30%">
+                <col width="20%">
+                <col width="20%">
+            </colgroup>
+            <thead>
+                <th>No</th>
+                <th>날짜</th>
+                <th>제목</th>
+                <th>글쓴이</th>
+                <th>비고</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>2023.02.02</td>
+                    <td>스티커멤메모메모</td>
+                    <td>댜러아니</td>
+                    <td>무</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>2023.02.02</td>
+                    <td>스티커멤메모메모</td>
+                    <td>댜러아니</td>
+                    <td>무</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>2023.02.02</td>
+                    <td>스티커멤메모메모</td>
+                    <td>댜러아니</td>
+                    <td>무</td>
+                </tr>
+               
+               ...
+               
+               
+                <tr>
+                    <td>120</td>
+                    <td>2023.02.02</td>
+                    <td>스티커멤메모메모</td>
+                    <td>댜러아니</td>
+                    <td>무</td>
+                </tr>
+                <tr>
+                    <td>121</td>
+                    <td>2023.02.02</td>
+                    <td>스티커멤메모메모</td>
+                    <td>댜러아니</td>
+                    <td>무</td>
+                </tr>
+                <tr>
+                    <td>122</td>
+                    <td>2023.02.02</td>
+                    <td>스티커멤메모메모</td>
+                    <td>댜러아니</td>
+                    <td>무</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+      
+      
+      <script>
+       const rowsPerPage = 10;
         const rows = document.querySelectorAll('.ex_tb tbody tr');
-        const rowsCount = rows.length // nodelist의 length구하기 
+        const rowsCount = rows.length 
         // console.log(rows); //112
-        const pageCount = Math.ceil(rowsCount/rowsPerPage); //122/10 / 12.2 소수점 아래는 무조건 올림 Math.ceil();
+        const pageCount = Math.ceil(rowsCount/rowsPerPage); 
         // console.log(pageCount); //12
         const numbers = document.querySelector('#numbers');
-        
+        //이전 다음 버튼
+        const prevPageBtn = document.querySelector('.pagination .xi-arrow-left');
+        const nextPageBtn = document.querySelector('.pagination .xi-arrow-right');
+        let pageActiveIdx = 0 //현재 보고있는 페이지 그룹 번호
+        let currentPageNum = 0 //현재 보고있는 페이지네이션 번호       
+        let maxPageNum = 5; //페이지 그룹의 최대 개수
+
         //페이지네이션 생성
         /*
         let c =대상.innerHTML
@@ -24,19 +128,25 @@ const rowsPerPage = 10;
         const numberBtn = numbers.querySelectorAll('a');
         // console.log(numberBtn) //nodelist 12
         // numberBtn.forEach(function(item,idx){});
+        
+        
+        
+        //페이지네이션 번호 감추기
+        for(nb of numberBtn){
+            nb.style.display='none'
+        }
 
-            numberBtn.forEach((item,idx) => {
+
+
+        numberBtn.forEach((item,idx) => {
                 item.addEventListener('click', (e)=>{ 
                     e.preventDefault()
-                    for(nb of numberBtn){
-                        nb.ClassList.remove('active');
-                    }
-                    e.target.ClassList.add('active'); //여기서 e는 function을 사용했을 경우 this로 가능하나 ES6 문법을 사용했기에 e 로 설정함.
-
-                    console.log(idx)
+                    
+                    // console.log(idx)
+                    displayRow(idx);
                 })    
             });
-   //상단의idx와 달라도되고 같아도 됨. function안에 idx는 지역번수임
+            //상단의idx와 달라도되고 같아도 됨. function안에 idx는 지역번수임
             function displayRow(idx){
                 /* idx 0 / 112개 목록 
                 인덱스번호 0~9 slice(start, end) slice(0,10)
@@ -46,9 +156,11 @@ const rowsPerPage = 10;
 
                 let start = idx * rowsPerPage;
                 let end = start + rowsPerPage;
+
                 let rowsArray = [...rows];
                 // console.log(rowsArray);
 
+               
                 for(ra of rowsArray){
                     ra.style.display='none';
                 }   //모든 tr을 display:none해라
@@ -67,6 +179,57 @@ const rowsPerPage = 10;
             } //displayRow
             displayRow(0); //처음 화면 표시가 idx가 0일때부터 나와라   
 
+            //페이지네이션 그룹 표시 함수
+            function displayPage(num){
+                 //페이지 네이션 번호 감추기
+                for(nb of numberBtn){
+                    nb.style.display="none"
+                }
+                let totalPageCount = Math.ceil(pageCount/maxPageNum);
 
-            } //displayRow
-            displayRow(0); //처음 화면 표시가 idx가 0일때부터 나와라
+                let pageArr = [...numberBtn];
+                let start = num * maxPageNum;
+                let end = start + maxPageNum;
+                let pageListArr = pageArr.slice(start, end);
+
+                for(let item of pageListArr){
+                    item.style.display='block';
+                }
+
+                if(pageActiveIdx === 0){
+                    prevPageBtn.style.display='none'
+                }else{
+                    prevPageBtn.style.display='block'
+                }
+
+                if(pageActiveIdx === totalPageCount - 1){
+                    nextPageBtn.style.display='none'
+                }else{
+                    nextPageBtn.style.display='block'
+                }
+
+            }
+            displayPage(0);
+
+            nextPageBtn.addEventListener('click', () => {
+                let nextPageNum = pageActiveIdx * maxPageNum + maxPageNum;
+                displayRow(nextPageNum);
+                ++pageActiveIdx;
+                displayPage(pageActiveIdx);
+            });
+            /* 12345  pageActiveIdx 0
+                        displayrow(5) 0*5 +5
+                      pageActiveIdx 1
+                        displayrow(10) 1*5+5
+                      pageActiveIdx 2
+                        displayrow(15) 2*5+5
+                        이렇게 보여져야 하니까 변수값 nextPageNum 로 설정해줌. 
+
+              */    
+              prevPageBtn.addEventListener('click', () => {
+                let prevPageNum = pageActiveIdx * maxPageNum - maxPageNum;
+                displayRow(prevPageNum);
+                --pageActiveIdx;
+                displayPage(pageActiveIdx);
+            });  
+            </script>
