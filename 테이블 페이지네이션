@@ -51,17 +51,22 @@ const rowsPerPage = 10;
 
                 for(ra of rowsArray){
                     ra.style.display='none';
-                }
+                }   //모든 tr을 display:none해라
 
                 let newRows = rowsArray.slice(start, end);
                 for(nr of newRows){
                     nr.style.display='';
-                }
+                } //해당되는 스타일에 display:none을 없애라
+
                 for(nb of numberBtn){
                     // nb.ClassList.remove('active');
                     nb.classList.remove("active");
                 }
-                numberBtn(idx).target.classList.add('active');
+                numberBtn[idx].classList.add('active'); //해당 번호에 active
+
+            } //displayRow
+            displayRow(0); //처음 화면 표시가 idx가 0일때부터 나와라   
+
 
             } //displayRow
             displayRow(0); //처음 화면 표시가 idx가 0일때부터 나와라
