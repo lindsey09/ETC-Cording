@@ -35,3 +35,22 @@
         $(this).val($(this).val().replace(/\,/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,'));
     });
    
+
+
+   ------------------------------------------------------------------------
+
+
+//인풋박스 두자리까지만  입력 
+$(document).on("keyup", "input[name^=wr_1]", function() {
+    var val= $(this).val();
+
+    if(val.replace(/[0-9]/g, "").length > 0) {
+        alert("숫자만 입력해 주십시오.");
+        $(this).val('');
+    }
+
+    if(val < 1 || val > 100) {
+        alert("1~100 범위로 입력해 주십시오.");
+        $(this).val('');
+    }
+});
