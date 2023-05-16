@@ -1,0 +1,50 @@
+<html>
+<div class="textwrap">
+  <div class="desc"><?=implode("<br>",$_desc)?></div>
+</div>
+
+</html>
+<script>
+
+//글씨더보기
+$(document).ready(function(){
+
+
+        $('.textwrap').each(function(){
+            var content = $(this).children('.desc');
+            var content_txt = content.text();
+            console.log(content.text());
+            var content_txt_short = content_txt.substring(0,100)+"...";
+            var btn_more = $('<a href="javascript:void(0)" class="readmore"><?=$language['833'];//더보기?></a>');
+
+            $(this).append(btn_more);
+
+
+                if(content_txt.length >= 100){
+                    content.html(content_txt_short)
+                }else{
+                    btn_more.hide()
+                }
+
+                btn_more.click(toggle_content);
+
+            // 아래 bind가 안 되는 이유는??
+            // btn_more.bind('click',toggle_content);
+
+            function toggle_content(){
+                if($(this).hasClass('short')){
+                    // 접기 상태
+                    $(this).html('<?=$language['833'];//더보기?>');
+                    content.html(content_txt_short)
+                    $(this).removeClass('short');
+                }else{
+                    // 더보기 상태
+                    $(this).html('<?=$language['1502'];//접기?>');
+                    content.html(content_txt);
+                    $(this).addClass('short');
+                }
+            }
+        });
+
+});
+</script>
