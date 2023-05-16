@@ -1,0 +1,28 @@
+<html>
+<div class="scroll_top"></div>
+</html>
+
+<script>
+//스크롤 탑 이벤트
+    $(window).scroll(function(){
+
+        if (window.innerWidth < 1024) { 
+
+            if ($(window).scrollTop() > 100){
+                $('.scroll_top').addClass('on');
+            }else{
+                $('.scroll_top').removeClass('on');
+            }
+
+        }
+    });
+
+
+    $(function() {
+      $(".scroll_top").on("click", function() {
+          $("html, body").animate({scrollTop:0}, '500');
+          return false;
+      });
+    });
+
+</script>
