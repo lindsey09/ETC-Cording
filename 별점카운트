@@ -1,0 +1,59 @@
+<html>
+<ul>
+    <li>
+        <input type="checkbox" id="star11" value='1'  onclick="setPyungJum_diary('1','1','','')">
+        <label for="star11"></label>
+    </li>
+    <li>
+        <input type="checkbox" id="star12" value='2'  onclick="setPyungJum_diary('2','1','','')">
+        <label for="star12"></label>
+    </li>
+    <li>
+        <input type="checkbox" id="star13" value='3'  onclick="setPyungJum_diary('3','1','','')">
+        <label for="star13"></label>
+    </li>
+    <li>
+        <input type="checkbox" id="star14" value='4'  onclick="setPyungJum_diary('4','1','','')">
+        <label for="star14"></label>
+    </li>
+    <li>
+        <input type="checkbox" id="star15" value='5'  onclick="setPyungJum_diary('5','1','','')">
+        <label for="star15"></label>
+    </li>
+</ul>
+</html>
+
+<script>
+function setPyungJum_diary(num,_p,_id_ , idx)
+    {
+        if(num == 5)
+        {
+            $("#star"+_p+"1").prop('checked',false);
+            $("#star"+_p+"2").prop('checked',false);
+            $("#star"+_p+"3").prop('checked',false);
+            $("#star"+_p+"4").prop('checked',false);
+            $("#star"+_p+"5").prop('checked',false);
+        }
+
+
+        for(i=1; i <= 5; i++)
+        {
+            if($("#star"+_p+i).length > 0)
+            {
+                $("#star"+_p+i).prop('checked',false);
+            }
+        }
+        for(i=1; i <= num; i++)
+        {
+            if($("#star"+_p+i).length > 0)
+            {
+                $("#star"+_p+i).prop('checked',true);
+            }
+        }
+
+           $("#result_star").val(num);
+
+
+    }
+
+</script>
