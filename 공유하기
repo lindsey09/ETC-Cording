@@ -1,0 +1,28 @@
+html=============================================================================================================
+
+<div class="sharebtn" id='shareBox'>
+    <div>
+        <p> </p>
+        <p><?=$language['746'];//공유?></p>
+    </div>
+</div>
+
+
+
+script============================================================================================================
+
+    //공유하기
+      const shareBtn = document.querySelector('.sharebtn p:last-child')
+        
+      shareBtn.addEventListener('click', async () => {
+        try {
+            await navigator.share({
+                title: '<?=$_PAGE_TITLE_?>',
+                text: currentURL,
+                url: "",
+            });
+            console.log('공유성공')
+        } catch(e){
+            console.log('공유실패')
+        }
+    })
