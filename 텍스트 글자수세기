@@ -1,0 +1,30 @@
+html
+
+<textarea id="textBox" placeholder="설명을 입력해주세요" maxlength="320"> </textarea>
+<div class="textLengthWrap">
+    <p class="textCount">0자</p>
+</div>
+
+
+script
+
+//글자표시
+$('#textBox').keyup(function(e) {
+    let content = $(this).val();
+
+    // 글자수 세기
+    if (content.length == 0 || content == '') {
+        $('.textCount').text('0자');
+    } else {
+        $('.textCount').text(content.length + '자');
+    }
+
+    // 글자수 제한
+    if (content.length > 320) {
+        // 320자 부터는 타이핑 되지 않도록
+        $(this).val($(this).val().substring(0, 320));
+        // 320자 넘으면 알림창 뜨도록
+        alert('글자수는 320자까지 입력 가능합니다.');
+    };
+});
+
