@@ -1,0 +1,20 @@
+
+//가격 추가 
+$('.price_set button.add').click(function() {
+    $('.price_setbox').append('\<div class="price_set">\
+                                <select name="" id="">\
+                                    <option value="">사이즈선택</option>\
+                                    <option value="">소</option>\
+                                    <option value="">대</option>\
+                                </select>\
+                                <input type="text" placeholder="¥ 1,350" disabled />\
+                                <button type="button" class="del"\
+                                    onclick="priceDel()"><?=$language['253'];//삭제?></button>\
+                            </div>');
+
+})
+
+//동적으로 생성된 이벤트에는 하기와 같은 function을 준다
+$(document).on("click", ".price_set button.del", function() {
+    $(this).parent().remove();
+})
