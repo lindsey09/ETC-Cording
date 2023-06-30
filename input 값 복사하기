@@ -1,0 +1,49 @@
+<div class="input_form reser_link">
+                                    <strong class="w100"><?=$language['1695'];//예약링크?></strong>
+                                    <div class="reser_link-input">
+                                        <dl>
+                                            <dt><?=$language['513'];//일본어?></dt>
+                                            <dd><input type="text" value="https://www.tablecheck.com/ja/japan" disabled class="urlInput"> 
+                                                <span class="copy_btn" onclick="linkCopy();">copy</span>
+                                            </dd>
+                                        </dl>
+                                        <dl>
+                                            <dt><?=$language['512'];//영어?></dt>
+                                            <dd><input type="text" value="https://www.tablecheck.com/en/japan" disabled class="urlInput"> 
+                                                <span class="copy_btn">copy</span>
+                                            </dd>
+                                        </dl>
+                                        <dl>
+                                            <dt><?=$language['33'];//한국어?></dt>
+                                            <dd><input type="text" value="https://www.tablecheck.com/ko/japan" disabled> </dd>
+                                        </dl>
+                                        <dl>
+                                            <dt><?=$language['514'];//중국어(간체)?></dt>
+                                            <dd><input type="text" value="https://www.tablecheck.com/zh-CN/japan" disabled> </dd>
+                                        </dl>
+                                        <dl>
+                                            <dt><?=$language['515'];//중국어(번체)?></dt>
+                                            <dd><input type="text" value="https://www.tablecheck.com/zh-TW/japan" disabled> </dd>
+                                        </dl>
+                                        <dl>
+                                            <dt><?=$language['516'];//태국어?></dt>
+                                            <dd><input type="text" value="https://www.tablecheck.com/th/japan" disabled> </dd>
+                                        </dl>
+                                    </div>
+                                 </div>
+
+<script>
+    function linkCopy() {
+        // 클릭된 copy 버튼의 부모 요소인 dd를 찾습니다.
+        var parentElement = event.target.parentNode;
+        
+        // 부모 요소(dd)의 첫 번째 자식 요소인 input을 찾습니다.
+        var inputValue = parentElement.querySelector(".urlInput").value;
+        
+        // 다른 input 요소들을 찾아서 value 값을 복사합니다.
+        var inputs = document.querySelectorAll(".reser_link-input input[type='text']");
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].value = inputValue;
+        }
+    }
+</script>
