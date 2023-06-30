@@ -1,0 +1,38 @@
+
+<html>
+<li><i class="xi-maker"></i>
+                <p class="ko_txt"><?=$krinfo['address']?>서울특별시 강남구 블라블라 </p> <span
+                    id="ko_add">COPY</span>
+            </li>
+            <?php } ?>
+            <li><i class="xi-maker"></i>
+                <p class="jp_txt"><?=$info['address']?>서울특별시 강남구 블라블라 역삼동 </p><span id="jp_add"
+                    >COPY</span>
+            </li>
+
+
+<script>
+// span 요소를 모두 가져옵니다.
+var copyButtons = document.querySelectorAll('span[id^="jp_add"], span[id^="ko_add"]');
+
+// 각 버튼에 클릭 이벤트를 추가합니다.
+copyButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+        // 해당 버튼의 이전 sibling 요소를 가져옵니다 (p 요소).
+        var pElement = button.previousElementSibling;
+
+        // p 요소의 텍스트를 선택합니다.
+        var range = document.createRange();
+        range.selectNodeContents(pElement);
+
+        // 선택한 텍스트를 클립보드에 복사합니다.
+        var selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        document.execCommand('copy');
+
+        // 복사가 완료되었음을 알리는 메시지를 표시합니다.
+        alert('<?=$language['1330'];//복사되었습니다?>');
+    });
+});
+</script>
