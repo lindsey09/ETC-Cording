@@ -1,0 +1,50 @@
+//스크롤 시 감춰졌다가 멈추면 보이게
+const targetElement = document.querySelector('.room_icon_ment');
+
+let timer;
+let isScrolling = false;
+
+function showElement() {
+    targetElement.style.bottom = '0';
+    targetElement.style.transitionDuration = '500ms';
+    isScrolling = false;
+}
+
+function hideElement() {
+    targetElement.style.bottom = '-100%';
+    targetElement.style.transitionDuration = '500ms';
+}
+
+window.addEventListener('scroll', () => {
+if (isScrolling) {
+    return; // 중복 실행 방지 스크롤 이벤트를 무시
+}
+
+isScrolling = true;
+
+clearTimeout(timer);
+    hideElement();
+    timer = setTimeout(() => {
+        showElement();
+        }, 1500);
+    });
+
+
+
+
+
+
+
+해당 코드는 스크롤 이벤트가 발생하였을 때, ".room_icon_ment"라는 클래스를 가진 요소를 보여주거나 숨겨주는 역할을 합니다. 코드의 구체적인 동작은 다음과 같습니다.
+const targetElement = document.querySelector('.room_icon_ment'); : 변수 targetElement에 클래스 이름이 "room_icon_ment"인 요소를 할당합니다.
+let timer; let isScrolling = false; : 변수 timer와 isScrolling을 선언합니다.
+timer는 함수를 지연 실행하기 위한 타이머입니다.
+isScrolling은 스크롤 이벤트가 중복 실행되지 않도록 하기 위한 변수입니다.
+function showElement() { ... } : 함수 showElement()는 targetElement 요소를 보여주는 역할을 합니다.
+function hideElement() { ... } : 함수 hideElement()는 targetElement 요소를 숨겨주는 역할을 합니다.
+window.addEventListener('scroll', () => { ... } : 윈도우 객체에 스크롤 이벤트를 등록합니다.
+if (isScrolling) { ... } : isScrolling 변수가 true일 경우 함수 실행을 멈춥니다.
+clearTimeout(timer); hideElement(); : 이전 타이머가 있으면 취소하고, hideElement() 함수를 실행하여 targetElement 요소를 숨깁니다.
+timer = setTimeout(() => { showElement(); }, 1500); : 1.5초 후에 showElement() 함수를 실행하여 targetElement 요소를 보여줍니다. 이때, timer 변수에 새로운 타이머를 할당합니다.
+isScrolling = true; : isScrolling 변수를 true로 설정하여 중복 실행 방지합니다.
+즉, 스크롤 이벤트가 발생하면 targetElement 요소를 보여주고, 1.5초간 추가 스크롤 이벤트가 발생하지 않으면 다시 숨기는 것을 반복합니다. 이를 통해 사용자가 스크롤을 멈추면 상단에 고정된 요소가 나타나고, 다시 스크롤을 시작하면 사라지는 동작을 구현할 수 있습니다.
