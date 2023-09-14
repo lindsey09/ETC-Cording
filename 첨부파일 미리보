@@ -16,7 +16,10 @@ $('#imageInput').change(function() {
         // 파일을 읽을 수 있을 때 실행되는 이벤트 핸들러
         reader.onload = function(e) {
         var imgSrc = e.target.result;
-        
+
+       // 이미지, 버튼을 감싸는 div 요소 생성
+        var containerDiv = $('<div class="imgBox swiper-slide">');
+
         // 이미지 미리보기를 위한 img 요소 생성
         var imgElement = $('<img>');
         imgElement.attr('src', imgSrc);
@@ -30,13 +33,14 @@ $('#imageInput').change(function() {
             $(this).remove(); // 클릭한 삭제 버튼을 삭제
         });
 
-        // 미리보기 컨테이너에 이미지 추가
-        $('#previewContainer').append(imgElement);
-        $('#previewContainer').append(deleteButton);
-        }
+         // 미리보기 컨테이너에 이미지 추가
+        containerDiv.append(imgElement);
+        containerDiv.append(deleteButton);
 
-        // 파일을 읽기
-        reader.readAsDataURL(file);
+         // 파일을 읽기
+            $('#previewContainer').append(containerDiv);
+        
+
     }
 });
 
