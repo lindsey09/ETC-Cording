@@ -1,0 +1,11 @@
+textarea 높이 쓴데로 계속 늘어나게 하고, 모바일에서 cousor 닿았을 때 select되도록 하는 것
+<textarea cols="10" rows="1" onclick="this.select();" onfocus="this.select();" oninput='this.style.height = ""; this.style.height = this.scrollHeight + "px"' style="resize: none; max-height: 210px;" required placeholder="음식, 서비스, 분위기, 위생상태 등의 방문 후기를 적어주세요" ></textarea>
+
+선택되게
+ onclick="this.select();" onfocus="this.select();"
+ 
+
+
+ 쓴대로 늘어나게
+ cols="10" rows="1" 
+ oninput='this.style.height = ""; this.style.height = this.scrollHeight + "px"' style="resize: none; max-height: 210px;"
