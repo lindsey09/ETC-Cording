@@ -1,0 +1,56 @@
+
+
+
+<!-- 주소복사팝업 -->
+<div class="copy_pop popup">
+    <span class="close"></span>
+    <ul>
+        <li><input type="radio" name="addr" id="addr01" checked><label for="addr01">쿄토부 쿄토시 시모교구 카라스마도리 시오코리 사가루 히가시시오코지쵸 JR 쿄토 이세탄 11F</label></li>
+        <li><input type="radio" name="addr" id="addr02"><label for="addr02">京都市下京区烏丸通塩小路下る東塩小路町901 ジェイアール京都伊勢丹 11F</label></li>
+    </ul>
+    <button type="button" class="copy_btn" onclick="copyTxt();">복사하기</button>
+
+
+
+</div>
+
+
+
+//복사팝업
+function copyPop(){
+    $('.copy_pop, .black_bg').show();
+    $('body').addClass('not_scroll');
+
+
+}
+$('.black_bg, .copy_pop .close').click(function(){
+    $('.copy_pop, .black_bg').hide();
+    $('body').removeClass('not_scroll');    
+})
+
+
+
+
+//복사하기
+function copyTxt(){
+    var selectedRadio = document.querySelector('.copy_pop input[type="radio"]:checked');
+  
+    if (selectedRadio) {
+    var textToCopy = selectedRadio.nextElementSibling.textContent;
+    
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+        // Clipboard API가 지원되는 경우
+        navigator.clipboard.writeText(textToCopy)
+            .then(function() {
+                alert('복사되었습니다.');
+            })
+            .catch(function(error) {
+                alert('오류 :', error);
+            });
+        } else {
+        // Clipboard API가 지원되지 않는 경우
+        prompt('텍스트를 복사하세요:', textToCopy);
+        }
+    }
+}
+
