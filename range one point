@@ -1,0 +1,81 @@
+html
+<div class="range">
+        <div class="slideValue">
+            <p>도쿄에서 <span class="km">1</span>Km 거리</p>
+        </div>
+        <div class="field">
+            <div class="value left">0km</div>
+            <input type="range" id="rangeInput" min="0" max="3" value="1" step="0.5">
+            <div class="value right">3km</div>
+        </div>
+    </div>
+
+
+style
+.range{
+  width:80% !important;
+  margin:60px auto 40px;
+}
+.range .slideValue{
+  position:relative;
+  width:100%;
+}
+.range .slideValue p{
+  position:absolute;
+  width:100%;
+  color:#222;
+  top:-40px;
+  left:50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index:2;
+}
+.range .field{
+  position:relative;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  height:100%;;
+}
+.range .field .value{
+  position:absolute;
+  font-size:16px;
+  font-weight: 400;
+  color:var(--surfcolor);
+}
+.range .field .value.left{
+  left:-40px;
+}
+.range .field .value.right{
+  right:-40px;
+}
+.range .field input{
+  appearance: none;
+  height:3px;
+  width:100%;
+  background:#ddd;
+  border-radius: 5px;
+  outline: none;
+  border:none
+}
+.range .field input::-webkit-slider-thumb{
+  appearance: none;
+  height:25px;
+  width:25px;
+  background:var(--surfcolor);
+  border-radius: 50%;
+  border:5px solid #f5e9e2;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+script
+//지역 Range
+const slideValue = document.querySelector("span.km");
+const inputSlider = document.querySelector("#rangeInput");
+
+inputSlider.addEventListener("input", () => {
+    let value = inputSlider.value;
+    slideValue.textContent = value;
+});
+
