@@ -1,0 +1,214 @@
+html
+
+
+    <div class="double_slider_box">
+        <div class="range_slider">
+            <span class="slider-track"></span>
+            <input type="range" name="min_val" class="min-val" min="0" max="3000" value="0" step="500" oninput="slideMin();">
+            <input type="range" name="max_val" class="max-val" min="0" max="3000" value="3000" step="500" oninput="slideMax();">
+            <div class="tooltip min-tooltip"></div>
+            <div class="tooltip max-tooltip"></div>
+        </div>
+        <div class="input-box">
+            <div class="min-box">
+                <div class="input-wrap">
+                    <span class="input-addon">$</span>
+                    <input type="text" name="min_input" class="input-field min-input" onchange="setMinInput();">
+                </div>
+            </div>
+            <div class="max-box">
+                <div class="input-wrap">
+                    <span class="input-addon">$</span>
+                    <input type="text" name="max_input" class="input-field max-input" onchange="setMaxInput();">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+style
+/* range */
+.double_slider_box{
+  width:100%;
+}
+.range_slider{
+  position:relative;
+  width:100%;
+  height:5px;
+  margin:30px 0;
+  background:#8e8e8e;
+}
+.slider-track{
+  height:100%;
+  position:absolute;
+  background:#fe696a;
+}
+.range_slider input{
+  position:absolute;
+  width:100%;
+  background:none;
+  pointer-events: none;
+  top:50%;
+  transform: translateY(-50%);
+  appearance: none;
+}
+input[type="range"]::-webkit-slider-thumb{
+  height:25px;
+  width:25px;
+  border-radius: 50%;
+  border:3px solid #fff;
+  background:#fff;
+  pointer-events: auto;
+  appearance: none;
+  cursor: pointer;
+  box-shadow: 0 .125rem .5625rem -0.125rem rgba(0,0,0,.3);
+}
+input[type="range"]::-moz-range-thumb{
+  height:25px;
+  width:25px;
+  border-radius: 50%;
+  border:3px solid #fff;
+  background:#fff;
+  pointer-events: auto;
+  -moz-appearance: none;
+  cursor: pointer;
+  box-shadow: 0 .125rem .5625rem -0.125rem rgba(0,0,0,.3);
+}
+.tooltip{
+  padding:.25rem .5rem;
+  border:0;
+  background:#373f50;
+  color:#fff;
+  font-size:.75rem;
+  line-height: 1.2;
+  border-radius: 10%;
+  display:block;
+  position:absolute;
+  text-align: center;
+  white-space: nowrap;
+}
+.min-tooltip{
+  left:50%;
+  transform: translate(-50%, -100%);
+  z-index:5;
+  top:-10px;
+}
+.max-tooltip{
+  top:-10px;
+  right:50%;
+  transform: translate(-50%, -100%);
+}
+.input-box{
+  display:flex;
+}
+.min-box,
+.max-box{
+  width:50%;
+}
+.min-box{
+  padding-left:.5rem;
+  margin-right:.5rem;
+}
+.input-wrap{
+  position:relative;
+  display:flex;
+  flex-wrap:wrap;
+  align-items: stretch;
+  width:100%;;
+}
+.input-addon{
+  display:flex;
+  align-items: center;
+  padding:.625rem 1rem;
+  font-size:.9375rem;
+  font-weight: 400;
+  line-height:1.5;
+  color:#4b5465;
+  text-align: center;
+  white-space: nowrap;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:.25rem;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;;
+}
+.input-field{
+  margin-left:-1px;
+  padding:.425rem .75rem;
+  font-size:0.8125rem;
+  border-radius: .25rem;
+  position:relative;
+  flex:1 1 auto;
+  width: 1%;
+  min-width:0;
+  color:#222;
+  border:1px solid #ddd;
+  background-clip:padding-box;
+  border-top-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.input-field:focus{
+  outline:none;
+}
+
+javascript
+ window.onload = function(){
+        slideMin();
+        slideMax();
+    };
+
+    const minVal = document.querySelector(".min-val"),
+          maxVal = document.querySelector(".max-val"),
+          priceInputMin =document.querySelector(".min-input"),
+          priceInputMax =document.querySelector(".max-input"),
+          minTooltip = document.querySelector(".min-tooltip"),
+          maxTooltip = document.querySelector(".max-tooltip"),
+          minGap = 0,
+          range = document.querySelector(".slider-track"),
+          sliderMinValue = parseInt(minVal.min),
+          sliderMaxValue = parseInt(maxVal.max);
+
+    function slideMin(){
+        let gap = parseInt(maxVal.value) - parseInt(minVal.value);
+        if(gap <= minGap){
+            minVal.value = parseInt(maxVal.value) - minGap;
+        }
+        minTooltip.innerHTML = minVal.value;
+        priceInputMin.value = minVal.value;
+        setArea();
+    }
+
+    function slideMax(){
+        let gap = parseInt(maxVal.value) - parseInt(minVal.value);
+        if(gap <= minGap){
+            maxVal.value = parseInt(minVal.value) + minGap;
+        }
+        maxTooltip.innerHTML = maxVal.value;
+        priceInputMax.value = maxVal.value;
+        setArea();
+    }
+    
+    function setArea(){
+        range.style.left = (minVal.value / sliderMaxValue) * 100 + "%";
+        minTooltip.style.left = (minVal.value / sliderMaxValue) * 100  + 2 + "%";
+        range.style.right = 100 - (maxVal.value / sliderMaxValue) * 100 + 2 +"%";
+        maxTooltip.style.right = 100 - (maxVal.value / sliderMaxValue) * 100 - 4 + "%";
+    }
+
+    function setMinInput(){
+        let minPrice = parseInt(priceInputMin.value);
+        if(minPrice < sliderMinValue){
+            priceInputMin.value = sliderMinValue;
+        }
+        minVal.value = priceInputMin.value;
+        slideMin();
+    }
+    
+    function setMaxInput(){
+        let maxPrice =parseInt(priceInputMax.value);
+        if(maxPrice > sliderMaxValue){
+            priceInputMax.value =sliderMaxValue;
+        }
+        maxVal.value =priceInputMax.value;
+        slideMax();
+    }
