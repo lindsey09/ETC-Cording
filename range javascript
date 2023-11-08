@@ -168,25 +168,33 @@ javascript
           sliderMinValue = parseInt(minVal.min),
           sliderMaxValue = parseInt(maxVal.max);
 
-    function slideMin(){
-        let gap = parseInt(maxVal.value) - parseInt(minVal.value);
-        if(gap <= minGap){
-            minVal.value = parseInt(maxVal.value) - minGap;
-        }
-        minTooltip.innerHTML = minVal.value;
-        priceInputMin.value = minVal.value;
-        setArea();
+   function slideMin(){
+    let gap = parseInt(maxVal.value) - parseInt(minVal.value);
+    if(gap <= minGap){
+        minVal.value = parseInt(maxVal.value) - minGap;
     }
+    let formatMaxVal = minVal.value;
+    let formatMaxValNumber = formatMaxVal.replace(/[^0-9]/g, '');
+    let formatMaxValNumberResult = numberWithCommas(formatMaxValNumber);
 
-    function slideMax(){
-        let gap = parseInt(maxVal.value) - parseInt(minVal.value);
-        if(gap <= minGap){
-            maxVal.value = parseInt(minVal.value) + minGap;
-        }
-        maxTooltip.innerHTML = maxVal.value;
-        priceInputMax.value = maxVal.value;
-        setArea();
+    minTooltip.innerHTML = "¥"+ formatMaxValNumberResult;
+    priceInputMin.value = formatMaxValNumberResult;
+    setArea();
+}
+
+function slideMax(){
+    let gap = parseInt(maxVal.value) - parseInt(minVal.value);
+    if(gap <= minGap){
+        maxVal.value = parseInt(minVal.value) + minGap;
     }
+    let formatMinVal = maxVal.value;
+    let formatMinValNumber = formatMinVal..replace(/[^0-9]/g, '');
+    let formatMinValNumberResult = numberWithCommas(formatMinValNumber);
+
+    maxTooltip.innerHTML = "¥"+ formatMinValNumberResult;
+    priceInputMax.value = formatMinValNumberResult;
+    setArea();
+}
     
     function setArea(){
         range.style.left = (minVal.value / sliderMaxValue) * 100 + "%";
@@ -212,3 +220,10 @@ javascript
         maxVal.value =priceInputMax.value;
         slideMax();
     }
+
+  //천의자리마다 콤마찍는 함수
+  function numberWithCommas(number){
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+
