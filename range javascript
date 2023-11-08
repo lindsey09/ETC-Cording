@@ -168,17 +168,17 @@ javascript
           sliderMinValue = parseInt(minVal.min),
           sliderMaxValue = parseInt(maxVal.max);
 
-   function slideMin(){
+function slideMin(){
     let gap = parseInt(maxVal.value) - parseInt(minVal.value);
     if(gap <= minGap){
         minVal.value = parseInt(maxVal.value) - minGap;
     }
-    let formatMaxVal = minVal.value;
-    let formatMaxValNumber = formatMaxVal.replace(/[^0-9]/g, '');
-    let formatMaxValNumberResult = numberWithCommas(formatMaxValNumber);
+    let formatMinVal = minVal.value;
+    let formatMinValNumber = formatMinVal.replace(/[^0-9]/g, '');
+    let formatMinValNumberResult = numberWithCommas(formatMinValNumber);
 
-    minTooltip.innerHTML = "¥"+ formatMaxValNumberResult;
-    priceInputMin.value = formatMaxValNumberResult;
+    minTooltip.innerHTML = "¥"+ formatMinValNumberResult;
+    priceInputMin.value = formatMinValNumberResult;
     setArea();
 }
 
@@ -187,12 +187,12 @@ function slideMax(){
     if(gap <= minGap){
         maxVal.value = parseInt(minVal.value) + minGap;
     }
-    let formatMinVal = maxVal.value;
-    let formatMinValNumber = formatMinVal..replace(/[^0-9]/g, '');
-    let formatMinValNumberResult = numberWithCommas(formatMinValNumber);
+    let formatMaxVal = maxVal.value;
+    let formatMaxValNumber = formatMaxVal.replace(/[^0-9]/g, '');
+    let formatMaxValNumberResult = numberWithCommas(formatMaxValNumber);
 
-    maxTooltip.innerHTML = "¥"+ formatMinValNumberResult;
-    priceInputMax.value = formatMinValNumberResult;
+    maxTooltip.innerHTML = "¥"+ formatMaxValNumberResult;
+    priceInputMax.value = formatMaxValNumberResult;
     setArea();
 }
     
