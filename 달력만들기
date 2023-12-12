@@ -1,0 +1,331 @@
+<script>
+  /***************** 달력 ****************/
+    $(document).ready(function() {
+        calendarInit();
+    });
+
+    function calendarInit() {
+
+        // 날짜 정보 가져오기
+        var date = new Date(); // 현재 날짜(로컬 기준) 가져오기
+        var utc = date.getTime() + (date.getTimezoneOffset() * 60 * 1000); // uct 표준시 도출
+        var kstGap = 9 * 60 * 60 * 1000; // 한국 kst 기준시간 더하기
+        var today = new Date(utc + kstGap); // 한국 시간으로 date 객체 만들기(오늘)
+      
+        var thisMonth = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        // 달력에서 표기하는 날짜 객체
+      
+        
+        var currentYear = thisMonth.getFullYear(); // 달력에서 표기하는 연
+        var currentMonth = thisMonth.getMonth(); // 달력에서 표기하는 월
+        var currentDate = thisMonth.getDate(); // 달력에서 표기하는 일
+
+        // kst 기준 현재시간
+        // console.log(thisMonth);
+
+        // 캘린더 렌더링
+        renderCalender(thisMonth);
+
+        function renderCalender(thisMonth) {
+
+            // 렌더링을 위한 데이터 정리
+            currentYear = thisMonth.getFullYear();
+            currentMonth = thisMonth.getMonth();
+            currentDate = thisMonth.getDate();
+
+            // 이전 달의 마지막 날 날짜와 요일 구하기
+            var startDay = new Date(currentYear, currentMonth, 0);
+            var prevDate = startDay.getDate();
+            var prevDay = startDay.getDay()+1;
+
+
+            // 이번 달의 마지막날 날짜와 요일 구하기
+            var endDay = new Date(currentYear, currentMonth + 1, 0);
+            var nextDate = endDay.getDate();
+            var nextDay = endDay.getDay();
+
+            // console.log(prevDate, prevDay, nextDate, nextDay);
+
+            // 현재 월 표기
+            $('.year_month').html("<p>"+currentYear + "</p><h3>" + (currentMonth + 1)+"</h3>");
+            if(currentMonth < 9) {
+                $(".year_month h3").html("0" +(currentMonth + 1));
+            } else {
+                $(".year_month h3").html((currentMonth + 1));
+            }
+
+            // 렌더링 html 요소 생성
+            calendar = document.querySelector('.days_day')
+            calendar.innerHTML = '';
+
+            var dayrates =  new Array(1, 8, 15, 22, 29, 35);
+            // 현재 날짜가 속한 주 계산
+            var currentWeekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+            var currentWeekEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 6);
+
+            console.log(currentWeekStart)
+            console.log(currentWeekEnd)
+
+
+
+            // 지난달
+            for (var i = prevDate - prevDay + 1; i <= prevDate; i++) {
+                calendar.innerHTML = calendar.innerHTML + '<div class="day prev disable"><span>' + i + '</span></div>'
+            }
+            // 이번달
+            for (var i = 1; i <= nextDate; i++) {
+                calendar.innerHTML = calendar.innerHTML + '<div class="day current"><span>' + i + '</span></div>'
+
+                /* 휴무는 rest 클래스 추가 */
+                $(".days_day div").eq(0).addClass("rest");
+                $(".days_day div").eq(7).addClass("rest");
+                $(".days_day div").eq(14).addClass("rest");
+                $(".days_day div").eq(21).addClass("rest");
+                $(".days_day div").eq(28).addClass("rest");
+                $(".days_day div").eq(35).addClass("rest");
+            }
+            // 다음달
+            for (var i = 1; i <= (7 - nextDay == 7 ? 0 : 7 - nextDay); i++) {
+                calendar.innerHTML = calendar.innerHTML + '<div class="day next disable"><span>' + i + '</span></div>'
+            }
+
+            // 오늘 날짜 표기
+            /* 오늘날짜에 휴무면 rest 클래스 추가 */
+            if (today.getMonth() == currentMonth) {
+                todayDate = today.getDate();
+                var currentMonthDate = document.querySelectorAll('.days_day .current');
+                currentMonthDate[todayDate -1].classList.add('today');
+            }
+            // 현재 날짜가 속한 주 표시
+            renderCurrentWeek(currentWeekStart, currentWeekEnd);
+        }
+
+
+        function renderCurrentWeek(start, end) {
+            // 현재 날짜가 속한 주 표시
+            $('.weekend').html('');
+            for (var i = start.getDate(); i <= end.getDate(); i++) {
+                $('.weekend').append('<div class="day current"><span>' + i + '</span></div>');
+            }
+        }
+
+
+        // 이전달로 이동
+        $('.prev').on('click', function() {
+            thisMonth = new Date(currentYear, currentMonth - 1, 1);
+            renderCalender(thisMonth);
+        });
+
+        // 다음달로 이동
+        $('.next').on('click', function() {
+            thisMonth = new Date(currentYear, currentMonth + 1, 1);
+            renderCalender(thisMonth); 
+        });
+
+
+
+
+    
+
+    }
+
+
+
+</script>
+
+
+
+html
+
+
+
+<div class="calendar_box">
+                <div class="cal_nav">
+                    <a href="#none" class="prev nav_btn">prev</a>
+                    <div class="year_month"><p>2023</p><h3>12</h3></div>
+                    <a href="#none" class="next nav_btn">next</a>
+                </div>
+
+                <div class="days">
+                    <!-- 요일 -->
+                    <div class="days week_days">
+                        <div class="day sun">S</div>
+                        <div class="day">M</div>
+                        <div class="day">T</div>
+                        <div class="day">W</div>
+                        <div class="day">T</div>
+                        <div class="day">F</div>
+                        <div class="day">S</div>
+                    </div>
+
+                    <!-- 1주 달력 -->
+                    <div class="days weekend">
+                        <!-- <div class="day sun"><span>10</span></div>
+                        <div class="day holiday"><span>11</span></div>
+                        <div class="day today"><span>12</span></div>
+                        <div class="day"><span>13</span></div>
+                        <div class="day"><span>14</span></div>
+                        <div class="day"><span>15</span></div>
+                        <div class="day"><span>16</span></div> -->
+                    </div>
+                    
+                    <!-- 1달 달력 -->
+                    <div class="days days_day">
+                    </div>
+
+
+                    
+
+                    <ul class="rest_day">
+                        <li class="today"><span></span> Today</li>
+                        <li class="holiday"><span></span> Holiday</li>
+                    </ul>
+                    <div class="arrow_down" onclick="calendarToggle();"></div>
+                </div>
+            </div>
+
+
+
+
+
+css 
+
+
+
+/* 달력 */
+.calendar_box{
+    width:100%;
+    margin:auto;
+    border-top:1px dashed #ddd;
+    border-bottom:1px dashed #ddd;
+    margin-top:20px;
+}
+.calendar_box .cal_nav{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    font-size:48px;
+    line-height:50px;
+    width:100%;
+    margin:0 auto 10px;
+}
+.calendar_box .cal_nav .nav_btn{
+    width:24px;
+    height:24px;
+    font-size:0;
+    margin-top:20px;;
+}
+.calendar_box .cal_nav .nav_btn.prev{
+    background:url(../images/ico-prev.svg?v=1) center no-repeat;
+    background-size:23px;
+}
+.calendar_box .cal_nav .nav_btn.next{
+    background:url(../images/ico-next.svg?v=1) center no-repeat;
+    background-size:23px;
+}
+.calendar_box .cal_nav .year_month{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.calendar_box .cal_nav .year_month p{
+    font-size:12px;
+    color:#494949;
+    font-weight: 500;
+    margin:17px 10px 0 0;
+}
+.calendar_box .cal_nav .year_month h3{
+    font-size:30px;
+    font-weight: 700;
+    color:#222;
+    margin-bottom:0;
+}
+
+.calendar_box .days{
+    width:100%;
+    display:flex;
+    flex-wrap:wrap;
+}
+.calendar_box .days div.day{
+    width:calc(100% / 7);
+    font-size:15px;
+    color:#222;
+    font-weight: 500;
+    text-align:center;
+    padding:10px 0;;
+}
+.calendar_box .days div.day.disable{
+    opacity: 0;
+}
+.calendar_box .days div.day.rest,
+.calendar_box .days div.day.sun{
+    color:#fc3b30!important;
+}
+
+.calendar_box .days.week_days{
+    width:100%;
+}
+
+.calendar_box .days.weekend.off{
+    display:none;
+}
+.calendar_box .days .day span{
+    width:24px;
+    height:24px;
+    border-radius: 50%;
+    line-height:24px;
+    display:block;
+    margin:auto;;
+}
+.calendar_box .days .day.today span{
+    color:#fff;
+    background:#388cff;
+}
+.calendar_box .days .day.rest span{
+    color:#fc3b30;
+    background:#fdedec;
+}
+.calendar_box .days_day{
+    display: none;;
+}
+.calendar_box .days_day.on{
+    display:flex;
+}
+.calendar_box .rest_day{
+    display:flex;
+    justify-content: flex-end;
+    gap:10px;
+    width:100%;
+    margin-top:10px;
+    padding-right:20px;
+}
+.calendar_box .rest_day li{
+    font-size:13px;
+    color:#555;
+}
+.calendar_box .rest_day li span{  
+    display:inline-block;
+    width:8px;
+    height:8px;
+    border-radius: 50%;;
+}
+.calendar_box .rest_day li.today span{
+    background:#388cff;
+}
+.calendar_box .rest_day li.holiday span{
+    background:#fc3b30;
+}
+.calendar_box .arrow_down{
+    background:url(../images/arrow-down.svg) center no-repeat;
+    background-size:20px;
+    width:24px;
+    height:24px;
+    margin:10px auto;
+}
+.calendar_box .arrow_down.on{
+    background:url(../images/arrow-up.svg?v=1) center no-repeat;
+    background-size:20px;
+}
+
+/* //달력 */
