@@ -1,0 +1,14 @@
+
+slidesOffsetBefore: 20, //ㅈ좌측여뱁ㄱ
+slidesOffsetAfter: 20, //우측여백
+slidesPerView: 1, //slide 몇개보일것인가
+spaceBetween: 30, //slide 사이간격
+loop: true, // 루프돌릴거야?
+
+breakpoints: {
+    480: {
+      slidesPerView: 1.5,
+    },
+    768: {
+      slidesPerView: 2.5,
+    },//반응형처럼 
