@@ -1,0 +1,21 @@
+
+------ 팝업창 소스 -------
+ //가격옆에 tax 적용하기
+    $('.save_btn').click(function () {
+        let tax = $('input[name="tax"]:checked').val();
+    // 부모 창으로 값 전달
+        window.opener.handleTaxValue(tax);
+        window.close();
+    });
+
+부모창으로 값을 handleTaxValue(tax) 이렇게 전달하고 창을 닫는다.
+
+------ 부모창 소스 -------
+//가격옆에 tax 적용하기
+function setTaxValue(value) {
+    $('.menu_price span').text(value);
+}      
+// 팝업에서 전달된 값 처리
+window.handleTaxValue = setTaxValue;
+
+팝업창에서 전달된 값을 부모창의 함수 값에 넣어준다.
