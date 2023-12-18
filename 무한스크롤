@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!--[if lt IE 9]>
+<script src="../common/js/html5shiv.js"></script>
+<![endif]-->
+<meta name="viewport" content="width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
+</head>
+<style>
+div{background:#f00;
+height:500px;
+margin-bottom:10px;
+width: 100%;;}
+div:nth-child(2n){
+    background:#fc0
+}
+
+</style>
+<body>
+
+    <section>
+        <div class="box"></div>
+        <div class="box"></div>
+    </section>
+
+
+<script>
+var count = 2;
+window.onscroll = function(){
+    if((window.innerHeight + window.scrollY) >= document.body.offsetHeight){
+        var toAdd = document.createElement("div");
+        toAdd.classList.add("box");
+        toAdd.classList.add("mt30");
+        toAdd.textContent = `${++count}번째 블록`;
+        document.querySelector('section').appendChild(toAdd);
+       }
+}
+</script>
+
+</body>
+</html>
