@@ -1,20 +1,69 @@
 https://talkwithcode.tistory.com/86
-
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!--[if lt IE 9]>
+<script src="../common/js/html5shiv.js"></script>
+<![endif]-->
+<meta name="viewport" content="width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
+</head>
+<style>
+li{background:#f00;
+height:20px;
+margin-bottom:10px;
+width:500px;}
+</style>
 <body>
+
     <ul>
         <li></li>
         <li></li>
         <li></li>
         <li></li>
         <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li> <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li> <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li> <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li> <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li> <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li> <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li> <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
     </ul>
     <div id="endList"></div>
-</body>
 
 
 <script>
-
-const listEnd = document.querySelector("#endList");
+ const listEnd = document.querySelector("#endList");
 const option = {
     root: null,
     rootMargin: "0px 0px 0px 0px",
@@ -38,6 +87,6 @@ const onIntersect = (entries, observer) => {
 
 const observer = new IntersectionObserver(onIntersect, option);
 observer.observe(listEnd);
-
 </script>
-
+</body>
+</html>
