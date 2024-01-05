@@ -19,3 +19,18 @@ function setTaxValue(value) {
 window.handleTaxValue = setTaxValue;
 
 팝업창에서 전달된 값을 부모창의 함수 값에 넣어준다.
+
+window.handleTaxValue = setTaxValue; 이것은 정말 값만 넣어줄 때
+
+html코드도 같이필요할때는
+
+window.handleTaxValue = function(value) {
+    $('.menu_price').html('<span>' + value + '</span><span class="close"></span>');
+}
+혹은 
+window.handleTaxValue = function(value) {
+    $('.EtcText').html( value + '<span class="close"></span>');
+}
+
+
+이렇게 해준다.
