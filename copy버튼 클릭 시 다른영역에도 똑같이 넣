@@ -1,0 +1,15 @@
+//copy en
+function copyName(){
+    let enValue = $('.en').val();
+    console.log(enValue);
+
+    $('.input_W90').each(function() {
+        $(this).val(enValue);
+    });
+    
+}
+
+
+
+해당 값을 가지고 와서, 값이 들어갈 부분의 클래스를 잡고 each문을 돌린다.
+해당 this의 val값에 evValue 값을 넣는다 
