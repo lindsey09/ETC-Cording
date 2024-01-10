@@ -253,3 +253,1559 @@ observer.observe(listEnd);
 </script>
 
 <!-- //무한스크롤링 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+recomd_rest_list_unlimit_scroll.php
+<?php
+    include_once "../_common1.php";
+    $addStyleCss = array();
+    $_PAGE_TITLE_ = '추천요리';
+    $addStyleCss[] = "common/css/recomd.css?v=1";
+    $addStyleCss[] = "/common/css/search.css?v=1";
+    $addStyleCss[] = "/common/css/main.css?v=1";
+    $addStyleCss[] = "/common/css/rest_list.css?v=1524";
+    $addStyleCss[] = "/common/css/calendar_popup.css?v=123";
+
+    
+
+    $sj = new SurfJapan();
+
+    $param = array();
+    $param['lang']        = $_base_use_lang;
+    $param['region_poi_no']   = $_region_no;
+    $param['region_no']   = $_region_no;
+    $param['search_tag_no']     = isset($_GET['search_tag_no']) && trim($_GET['search_tag_no']) ? $_GET['search_tag_no'] : "";
+    $param['search_distance']     = isset($_GET['search_distance']) && trim($_GET['search_distance']) ? $_GET['search_distance'] : "";
+    $param['search_lunch_price']     = isset($_GET['search_lunch_price']) && trim($_GET['search_lunch_price']) ? $_GET['search_lunch_price'] : "";
+    $param['search_dinner_price']     = isset($_GET['search_dinner_price']) && trim($_GET['search_dinner_price']) ? $_GET['search_dinner_price'] : "";
+    $param['sort_by']     = isset($_GET['sort_by']) && trim($_GET['sort_by']) ? $_GET['sort_by'] : "recommend";
+
+    if($param['sort_by'] == 'recommend') {
+        $sort_by_txt = $language['1118'];
+    } else {
+        $sort_by_txt = $language['802'];
+    }
+    
+    $param['pos_x'] = $pj->get_session('pos_x');
+    $param['pos_y'] = $pj->get_session('pos_y');
+    
+    $pax = isset($_GET['inwonSelect']) && trim($_GET['inwonSelect']) ? $_GET['inwonSelect'] : "";
+    $today =  isset($_GET['dateSelect']) && trim($_GET['dateSelect']) ? $_GET['dateSelect'] : date('Y-m-d',strtotime('+1 days'));
+    $timeSelect = isset($_GET['timeSelect']) && trim($_GET['timeSelect']) ? $_GET['timeSelect'] : "";
+    
+    $_LANG_LIST_NO_ = array('KR'=>'33','KB'=>'1814','EN'=>'512','EJ'=>'1815','JP'=>'1795','JB'=>'1816','CN'=>'514','CN2'=>'515','TH'=>'516');
+
+    $regionInfo = $sj->getAreaInfo($param);
+    $areaList = $sj->getFrontAreaList($param);
+
+    // $tag_name = $pj->Mysql->fetchOne("SELECT data_name from data_name_bank where target_no = '".$_GET['tag_no']."' and data_type='tag' and data_lang='".$param['lang']."'");
+    $poiList = $sj->getFrontPoiList($param);
+
+    if($pax) {
+        $shops = $tableResult = array();
+        for($i=0;$i<$poiList['resultRows'];$i++) {
+            if($poiList['shopid'][$i]) {
+                $shops[] = $poiList['shopid'][$i];
+            }
+        }
+        $data = array(
+            'pax' => $pax,
+            'datetime' => $today,
+            'mini' => true,
+            'ids' => implode(',',$shops)
+        );
+    
+        $headers = array(
+            "Accept: application/json",
+            "Authorization: L4CE0OB6M5N8HJG1JLJQPIK4ICS47Y8Y1KI2P6TG",
+            "Content-type: application/json"
+        );
+        
+        $url = "https://api.tablecheck.com/api/availability/v1/shops?" .http_build_query($data);
+        
+        $ch = curl_init();                                 //curl 초기화
+        curl_setopt($ch, CURLOPT_URL, $url);               //URL 지정하기
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);    //요청 결과를 문자열로 반환 
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);      //connection timeout 10초 
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);   //원격 서버의 인증서가 유효한지 검사 안함
+         
+        $response = curl_exec($ch);
+        curl_close($ch);
+        $res_result = json_decode($response,true);
+        // $tableCheck = $res_result['timetable']['availability'];
+        // if($tableCheck) {
+        //     $poiList['tableCheck'][$i] = $tableCheck;
+        //     $poiList['is_available'][$i] = 1;
+        // }
+        for($i=0;$i<count($res_result['shops']);$i++) {
+            $tableResult[$res_result['shops'][$i]['id']] = $res_result['shops'][$i]['availability'];
+        }
+    }
+
+    include_once "head.sub_sub.php";
+
+    if($_GET['debug'] == 1)
+        // print_r($res_result);
+        echo $poiList['sql'];
+
+    $service_icon = array(
+        '1'=> '61438', //신용카드결재가능
+        '2'=> '61443', //현금만가능
+        '3'=> '61445', //심야영업
+        '4'=> '61448', //일요일영업
+        '5'=> '61444', //개실
+        '6'=> '61453', //다국어메뉴
+        '7'=> '61447', //흡연정보
+        '8'=> '61441', //노미호다이메뉴있음
+        '9'=> '61451', //비건메뉴있음
+        '10'=> '61446', //테이크아웃메뉴
+        '11'=> '61449', //알러지대응
+        '12'=> '61442', //콜키지가능
+        '13'=> '61450', //와이파이가능
+        '14'=> '61440' //주차가능
+    );
+    $codelist = array();
+    $rs = $pj->Mysql->fetch("SELECT b.name , a.idx from code_list as a 
+                            left outer join code_list_lang as b on a.idx = b.code_list_idx and b.lang='".$param['lang']."' 
+                            where a.parent_idx in (62283,62284,62285,62291,62296,62299,62303,62312,62313,62316,62328,62331,62332,62333,58575)");
+    for($i=0;$i<$rs['resultRows'];$i++) {
+        $codelist[$rs['idx'][$i]] = $rs['name'][$i]; 
+    }
+
+    // $today = date('Y-m-d');
+    $now = date('H:i');
+    $yoilFullName = array("일요일","월요일","화요일","수요일","목요일","금요일","토요일");
+    $huilTypeName = array("1"=>"매주", "2"=>"첫째주", "3"=>"둘째주", "4"=>"셋째주", "5"=>"넷째주", "6"=>"마지막주");
+
+    function getWeek($date){
+        $DEFAULT_DAYS = 1; //1 ~ 7 (월 ~ 일)
+        list($yy, $mm, $dd) = explode('-', $date); // - 로 잘라서 연,월,일을 구합니다
+        $first_day = date('N', mktime(0,0,0,$mm, 1, $yy)); //입력한 날짜의 해당하는 월의 1일이 몇요일인지 구합니다.
+        
+        if($first_day <= $DEFAULT_DAYS){  
+            $remain_days = $DEFAULT_DAYS - $first_day;
+            $next_monday = $remain_days +1;
+        }else{
+            $remain_days= 7 - $first_day; //1일을 기준으로 해당주가 몇일 남았는지 구합니다.
+            $next_monday = $remain_days + $DEFAULT_DAYS +1; //1일 기준으로 차주의 월요일이 몇일인지 구합니다.
+            echo $next_monday;
+        }
+    
+        if($dd < $next_monday){ //입력한 날짜가 전달의 마지막주에 포함될 경우.
+            $new_date = date('Y-M-d', mktime(0,0,0,$mm,0,$yy)); //날짜를 0으로 입력해서 지난달의 마지막 주를 새로계산하도록 합니다.
+            return getWeek($new_date);
+        }else{
+            $week = ceil(($dd-($next_monday -1))/7); //몇번째 주차인지 구하기.
+            return $week;
+        }
+    }
+
+    
+?>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="/common/js/jquery-ui-datapicker.js"></script>
+<style>
+    .search_flex > div{padding:0}
+    .sub_title{padding:0;}
+</style>
+
+
+<div class="restaurant box_wrap">
+
+
+    <div class="sub_title_box">
+        <h3><a href="/index.php">TOP</a> > <?=$language['1021'];//레스토랑?></h3>
+        <p onclick="searchInput();"></p>
+    </div>
+    <div class="search_box">
+        <input type="text" />
+    </div>
+
+
+            <div class="flex search_flex">
+        <div>
+        <form name="search_form" id="search_form"  method="get" action="recomd_rest_list.php">
+        <input type='hidden' name='search_tag_no' id="search_tag_no" >
+        <input type='hidden' name='search_distance' id="search_distance" >
+        <input type='hidden' name='search_lunch_price' id="search_lunch_price" >
+        <input type='hidden' name='search_dinner_price' id="search_dinner_price" >
+        <input type='hidden' name='sort_by' id="sort_by" value="<?=$param['sort_by']?>">
+        <div class="flex search_flex">
+            <div>
+               
+
+                <div class="select_conbox">
+                    <!-- 하기 3개의 검색필터는 초기에는 미정입니다. 셋팅값을 설정한 뒤 선택된 값으로 표기됩니다.-->
+                    <div class="inwon">
+                        <select name="inwonSelect" id="inwonSelect">
+                            <option value="" selected><?=$language['2134'];//미정?></option>
+                            <?for($i=1;$i<=6;$i++){?>
+                                <option value="<?=$i?>" <?=$pax==$i?'selected':''?>><?=$i?></option>
+                            <?}?>
+                        </select>
+                    </div>
+                    <div class="calendar">
+                        <!-- <input type="text" id="calendarInput" value="<?=$language['2134'];//미정?>"  onfocus="this.blur()" onclick="calendarView();" /> -->
+                        <input type="date" name="dateSelect" id="calendarInput" value="<?=$today?>"/>
+                    </div>
+                    <div class="time">
+                        <select name="timeSelect" id="timeSelect">
+                            <option value="" selected><?=$language['2134'];//미정?></option>
+                            <?for($i=10;$i<=22;$i++) {?>
+                                <option value="<?=$i?>:00" <?=$i.':00'==$timeSelect?'selected':''?>><?=$i?>:00</option>
+                                <option value="<?=$i?>:30" <?=$i.':30'==$timeSelect?'selected':''?>><?=$i?>:30</option>
+                            <?}?>
+                        </select>
+                    </div>
+                </div>
+                
+                <ul class="flex detailSet">
+                    <li id="label_distance" onclick="detailSet();"><?=$language['191']?></li>
+                    <li id="label_tag" onclick="category();"><?=$language['2147']?></li>
+                    <li id="label_price" onclick="budget();"><?=$language['816']?></li>
+                </ul>
+                <p class="filter_select_value" id="filter_value"></p>
+                <div class="submit_reset_box">
+                    <button type="submit" class="search_btn" ><?=$language['2135'];//실시간 검색?></button>
+                    <button type="button" class="reset_btn" onclick="resetBtn();" style="CURSOR:hand;" title="초기화버튼"><i class="xi-redo"></i></button> <!-- 초기화 버튼 / 버튼을 누르면 인원,날짜,시간,거리,카테고리,예산의 값이 모두 초기화되어야 합니다. -->
+
+                </div>
+            </div>
+        </div>
+        </form>
+        
+    </div>
+        </div>
+
+    <div class="top_btn">
+        <button type="button" class="sort_filter_btn" onclick="sortFilter();"><?=$sort_by_txt?></button>
+        <button type="button" class="map_btn" onclick="location.href='/recomd_rest_mapview.php'"><?=$language['1228'];//지도보기?></button>
+    </div>
+
+        <div class="list_wrap mt20" style='border-top:0;'>
+
+        <?for($i=0;$i<$poiList['resultRows'];$i++) {
+            if($pax && empty($tableResult[$poiList['shopid'][$i]]))
+                continue;
+        ?>
+        <div class="list_con mb20 pb20">
+            <div class="list_title ">
+                <a href="rest_index.php?no=<?=$poiList['poi_no'][$i]?>">
+                <?if($_base_use_lang=='JP') {?>
+                    <strong><?=$poiList['poi_name'][$i]?></strong>
+                    <p><?=$poiList['poi_jbname'][$i]?></p>
+                <?} else if($_base_use_lang=='EN'){?>
+                    <strong><?=$poiList['poi_name'][$i]?></strong>
+                    <p><?=$poiList['poi_jname'][$i]?></p>
+                <?} else {?>
+                    <strong><?=$poiList['poi_name'][$i]?></strong>
+                    <p><?=$poiList['poi_jname'][$i]?></p>
+                    <p><?=$poiList['poi_ename'][$i]?></p>
+                <?}?>
+                </a>
+            </div>
+            <ul class="img_box mb10">
+                <?
+                    if($poiList['image'][$i]) {
+                        $s_image = explode(',',$poiList['image'][$i]);
+                        $image = array();
+                        for($j=0;$j<count($s_image);$j++) {
+                            $s_image_split = explode('^',$s_image[$j]);
+                            $image[$s_image_split[1]] = $s_image_split[0];
+                        }
+                        ksort($image);
+                        for($j=1;$j<=count($image);$j++) {
+                            if($j==4) break;
+                            echo "<li><img src='".$image[$j]."'></li>";
+                        }
+                    }
+                ?>
+            </ul>
+            <p class="tag mb10">
+                <?
+                $tag_list = explode(",",$poiList['tag_list'][$i]);
+                foreach($tag_list as $value) {
+                    echo "<span>#".$value."</span>";
+                }
+                ?>
+            </p>
+            <div class="desc mb10">
+                <?=$poiList['description'][$i]?>
+            </div>
+            <p class="loca mb10">
+            <?php
+                $location = '';
+                if($poiList['sm_no'][$i]) {
+                    if($poiList['de_no'][$i]) {
+                        $location = $poi->getCodeValue($poiList['sm_no'][$i],$param['lang']).' / '.$poi->getCodeValue($poiList['de_no'][$i],$param['lang']);
+                    } else {
+                        $location = $poi->getCodeValue($poiList['sm_no'][$i],$param['lang']);
+                    }
+                }
+            ?>    
+            
+            <i class="xi-maker"></i> <?=$location?>  <span> <?=$poiList['dis'][$i] > 0 ? number_format($poiList['dis'][$i],1).'km':'';?></span></p>
+            <?php
+                $info = array();
+                $info['service2'] = $pj->Mysql->fetchRow("SELECT * from _surf_poi_surf_service where poi_no = '".$poiList['poi_no'][$i]."'");
+
+            ?>
+            <ul class="icon servi_icon ">
+                <?php
+                    if(in_array('62293',explode('/',$info['service2']['payable']))) //신용카드결재가능
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['1'].".svg' style='width:30px'></li>";
+
+                    if(in_array('62292',explode('/',$info['service2']['payable']))) //현금만가능
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['2'].".svg'></li>";
+
+                    if(in_array('62287',explode('/',$info['service2']['operation_time'])))
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['3'].".png' style='width:30px; height:30px;'></li>";
+                    
+                    if(in_array('62286',explode('/',$info['service2']['operation_time'])))
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['4'].".svg'></li>";
+
+                    if(explode('/',$info['service2']['num_seat'])[2] != '') //개실룸
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['5'].".svg'></li>";
+
+                    if($info['service2']['multimenu'] ) //다국어메뉴
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['6'].".svg'></li>";
+
+                    if(in_array('62301',explode('/',$info['service2']['smoking']))) //금연
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['7'].".svg' style='width:26px'></li>";
+
+                    if(in_array('62304',explode('/',$info['service2']['ordering']))) //노미호다이메뉴
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['8'].".svg'></li>";
+
+                    if(in_array('62308',explode('/',$info['service2']['ordering']))) //비건메뉴
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['9'].".svg'></li>";
+
+                    if(in_array('62306',explode('/',$info['service2']['ordering']))) //테이크아웃메뉴
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['10'].".svg'></li>";
+
+                    if(in_array('62309',explode('/',$info['service2']['ordering']))) //알러지대응
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['11'].".png' style='width:30px; height:30px;'></li>";
+
+                    if(in_array('62326',explode('/',$info['service2']['corkage'])))//콜키지가능
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['12'].".svg'></li>";
+
+                    if(in_array('62329',explode('/',$info['service2']['wifi']))) //와이파이가능
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['13'].".svg' style='width:26px'></li>";
+
+                    if(in_array('62340',explode('/',$info['service2']['parking']))) //주차가능
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['14'].".svg'></li>";
+                    
+                ?>
+            </ul>
+            <?php
+                $poiService = $pj->Mysql->fetchRow("SELECT a.* FROM _surf_poi_search_service as a WHERE a.poi_no= ?",array('i',$poiList['poi_no'][$i]));
+                $breakfast = '';
+                $lunch = '';
+                $dinner = '';
+
+                if($poiService['black_price1']) {
+                    if($poiService['black_price2']) {
+                        $breakfast = '¥'.number_format($poiService['black_price1']).' ~ '.'¥'.number_format($poiService['black_price2']);
+                    } else {
+                        $breakfast = '¥'.number_format($poiService['black_price1']).' ~ ';
+                    }
+                } else {
+                    if($poiService['black_price2']) {
+                        $breakfast = ' ~ '.'¥'.number_format($poiService['black_price2']);
+                    } 
+                }
+
+                if($poiService['lunch_price1']) {
+                    if($poiService['lunch_price2']) {
+                        $lunch = '¥'.number_format($poiService['lunch_price1']).' ~ '.'¥'.number_format($poiService['lunch_price2']);
+                    } else {
+                        $lunch = '¥'.number_format($poiService['lunch_price1']).' ~ ';
+                    }
+                } else {
+                    if($poiService['lunch_price2']) {
+                        $lunch = ' ~ '.'¥'.number_format($poiService['lunch_price2']);
+                    } 
+                }
+
+                if($poiService['dinner_price1']) {
+                    if($poiService['dinner_price2']) {
+                        $dinner = '¥'.number_format($poiService['dinner_price1']).' ~ '.'¥'.number_format($poiService['dinner_price2']);
+                    } else {
+                        $dinner = '¥'.number_format($poiService['dinner_price1']).' ~ ';
+                    }
+                } else {
+                    if($poiService['dinner_price2']) {
+                        $dinner = ' ~ '.'¥'.number_format($poiService['dinner_price2']);
+                    } 
+                }
+            ?>
+            <?php
+                    $time_ment = '';
+                    $service_time = '';
+                    $holiday = '';
+                    $opentime = $poi->getPoiTodayOpentimeInfo($poiList['poi_no'][$i]);
+                    for($j=0;$j<$opentime['hour']['resultRows'];$j++) {
+                        if($opentime['hour']['start_time'][$j] > $now) {
+                            if($time_ment == '') {
+                                $time_ment = $language['2240'];//'영업개시전';
+                            }
+                            $service_time = $opentime['hour']['start_time'][$j].$language['930'];//'에 영업시작';
+                            break;
+                        } else if($opentime['hour']['start_time'][$j] <= $now && $opentime['hour']['end_time'][$j] >= $now) {
+                            $time_ment = $language['347'].' ('.$opentime['hour']['start_time'][$j].' ~ '.$opentime['hour']['end_time'][$j].')';//'영업중';
+                            $service_time = '';
+                            break;
+                        } else if( $opentime['hour']['end_time'][$j] < $now) {
+                            $time_ment =  $language['929'];//'영업종료';
+                            $service_time = '';
+                        }
+                    }
+                    for($j=0;$j<$opentime['huil']['resultRows'];$j++) {
+                        if($opentime['huil']['huil_type'][$j] == 1) {
+
+                            $holiday = $huilTypeName[$opentime['huil']['huil_date_type'][$j]].' '.$yoilFullName[$opentime['huil']['huil_date_day'][$j]].$language['376'];//' 휴무';
+
+                            if(($today == $opentime['huil']['huil_date_day'][$j] && $opentime['huil']['huil_date_type'][$j] == (getWeek($today)+1)) ||
+                                ($today == $opentime['huil']['huil_date_day'][$j] && $opentime['huil']['huil_date_type'][$j] == 1) ) {
+                                    $time_ment = $language['2241'];//"금일휴무";
+                                }
+                        } 
+                    }
+                ?> 
+            <div class="servi_time ">
+                <div>
+                    <?if($time_ment) {?>
+                        <div class="sales_time" onclick="salesTimeView('<?=$poiList['poi_no'][$i]?>');">
+                            <div class="time_time"><i class="xi-time-o"></i> 
+                                <p class="sales_time_detail">
+                                    <span class="close"><?=$time_ment?></span> <?=$service_time?>
+                                </p>
+                            </div>   <!-- 각각의 클래스에 따라 close = 영업종료, open = 영업중, ready = 영업준비중 holiday = 금일휴무-->
+                            <p style="padding-left:18px;"><?=$holiday?></p>                        
+                        </div>
+                    <?}?>
+                    <p><?if($lunch){?><i class="xi-sun"></i> <?=$lunch?> <?}?><?if($dinner){?><i class="xi-night"></i> <?=$dinner?><?}?></p>
+                </div>
+                <?if($poiList['shopid'][$i]) {?>
+                    <button type="button" class="reser_btn2" onclick="window.open('<?=$poiList['reserve_url'][$i]?>')"><?=$language['2149'];//예약?></button>
+                <?}?>
+                
+            </div>
+
+            <!--  예약시간 버튼 -->
+            <ul class="reser_time"> 
+                <?
+                if($poiList['shopid'][$i] && $tableResult[$poiList['shopid'][$i]]) {
+                    foreach($tableResult[$poiList['shopid'][$i]] as $value){
+                        $tableDate = explode('T',$value)[0];
+                        $tableTime = substr(explode('T',$value)[1],0,5);
+                ?>
+                <li onclick="window.open('https://www.tablecheck.com/shops/kyoto-kitcho-arashiyama/reserve')"><?=$tableTime?></li>
+                <? 
+                    }
+                }
+                ?>
+            </ul>
+            
+            <div class="select_btn">
+                <button type="button"  onclick="like()" class="like"></button> <!-- 좋아요 -->
+                <p class="share" onclick="share()"></p> <!-- 해당 식당 공유 -->
+            </div>
+
+        </div>
+    <?}?>
+
+        </div>
+        <div id="endList"></div>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- 달력팝업 -->     
+<div class="sort_pop">
+
+    <span class="close"></span>
+<div class="cal_wrap">
+    <div class="cal_nav_pop">
+        <a href="#none" class="prev_pop nav_btn_pop left">prev</a>
+        <div class="year_month_pop"><p>2023</p><h3>12</h3></div>
+        <a href="#none" class="next_pop nav_btn_pop right">next</a>
+    </div>
+
+    <div class="days_pop">
+        <!-- 요일 -->
+        <div class="week_days_pop">
+            <div class="day sun">S</div>
+            <div class="day">M</div>
+            <div class="day">T</div>
+            <div class="day">W</div>
+            <div class="day">T</div>
+            <div class="day">F</div>
+            <div class="day">S</div>
+        </div>
+        <div class="calendar_day">
+
+        </div>
+    </div> 
+    </div>
+    
+    </div>
+
+</div>
+<div class="black_bg"></div>
+<script>
+    
+  /***************** 달력팝업 ****************/
+  $(document).ready(function() {
+        // calendarInitPop();
+    });
+
+$('.calendar_day div.day').click(function(){
+    $('.calendar_day div.day').removeClass('on');
+    $(this).addClass('on');
+})
+
+
+    function calendarInitPop() {
+
+        // 날짜 정보 가져오기
+        var date = new Date(); // 현재 날짜(로컬 기준) 가져오기
+        var utc = date.getTime() + (date.getTimezoneOffset() * 60 * 1000); // uct 표준시 도출
+        var kstGap = 9 * 60 * 60 * 1000; // 한국 kst 기준시간 더하기
+        var today = new Date(utc + kstGap); // 한국 시간으로 date 객체 만들기(오늘)
+      
+        var thisMonth = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        // 달력에서 표기하는 날짜 객체
+      
+        
+        var currentYear = thisMonth.getFullYear(); // 달력에서 표기하는 연
+        var currentMonth = thisMonth.getMonth(); // 달력에서 표기하는 월
+        var currentDate = thisMonth.getDate(); // 달력에서 표기하는 일
+
+        // kst 기준 현재시간
+        // console.log(thisMonth);
+
+        // 캘린더 렌더링
+        renderCalender(thisMonth);
+
+        function renderCalender(thisMonth) {
+
+            // 렌더링을 위한 데이터 정리
+            currentYear = thisMonth.getFullYear();
+            currentMonth = thisMonth.getMonth();
+            currentDate = thisMonth.getDate();
+
+            // 이전 달의 마지막 날 날짜와 요일 구하기
+            var startDay = new Date(currentYear, currentMonth, 0);
+            var prevDate = startDay.getDate();
+            var prevDay = startDay.getDay()+1;
+
+
+            // 이번 달의 마지막날 날짜와 요일 구하기
+            var endDay = new Date(currentYear, currentMonth + 1, 0);
+            var nextDate = endDay.getDate();
+            var nextDay = endDay.getDay();
+
+            // console.log(prevDate, prevDay, nextDate, nextDay);
+
+            // 현재 월 표기
+            $('.year_month_pop').html("<p>"+currentYear + "</p><h3>" + (currentMonth + 1)+"</h3>");
+            if(currentMonth < 9) {
+                $(".year_month_pop h3").html("0" +(currentMonth + 1));
+            } else {
+                $(".year_month_pop h3").html((currentMonth + 1));
+            }
+
+            // 렌더링 html 요소 생성
+            calendar = document.querySelector('.calendar_day')
+            calendar.innerHTML = '';
+
+
+            // 지난달
+            for (var i = prevDate - prevDay + 1; i <= prevDate; i++) {
+                calendar.innerHTML = calendar.innerHTML + '<div class="day prev disable"><span>' + i + '</span></div>'
+            }
+            // 이번달
+            for (var i = 1; i <= nextDate; i++) {
+                calendar.innerHTML = calendar.innerHTML + '<div class="day current"><span>' + i + '</span></div>'
+            }
+            // 다음달
+            for (var i = 1; i <= (7 - nextDay == 7 ? 0 : 7 - nextDay); i++) {
+                calendar.innerHTML = calendar.innerHTML + '<div class="day next disable"><span>' + i + '</span></div>'
+            }
+
+            // 오늘 날짜 표기
+            /* 오늘날짜에 휴무면 rest 클래스 추가 */
+            if (today.getMonth() == currentMonth) {
+                todayDate = today.getDate();
+                var currentMonthDate = document.querySelectorAll('.calendar_day .current');
+                currentMonthDate[todayDate -1].classList.add('today');
+            }
+            
+        }
+
+
+        // 이전달로 이동
+        $('.prev_pop').on('click', function() {
+            thisMonth = new Date(currentYear, currentMonth - 1, 1);
+            renderCalender(thisMonth);
+        });
+
+        // 다음달로 이동
+        $('.next_pop').on('click', function() {
+            thisMonth = new Date(currentYear, currentMonth + 1, 1);
+            renderCalender(thisMonth); 
+        });
+
+
+    }
+</script>
+
+
+<!-- //달력팝업 -->
+
+
+
+
+<!-- 무한스크롤링 -->
+
+<script>
+const listEnd = document.querySelector("#endList");
+const option = {
+    root: null,
+    rootMargin: "0px 0px 0px 0px",
+    thredhold: 0,
+}
+
+const onIntersect = (entries, observer) => { 
+    // entries는 IntersectionObserverEntry 객체의 리스트로 배열 형식을 반환합니다.
+    entries.forEach(entry => {
+        if(entry.isIntersecting){
+            const listWrap = document.querySelector(".list_wrap");
+            listWrap.insertAdjacentHTML("beforeend", `
+            <div class="list_con mb20 pb20">
+            <div class="list_title ">
+                <a href="rest_index.php?no=<?=$poiList['poi_no'][$i]?>">
+                <?if($_base_use_lang=='JP') {?>
+                    <strong><?=$poiList['poi_name'][$i]?></strong>
+                    <p><?=$poiList['poi_jbname'][$i]?></p>
+                <?} else if($_base_use_lang=='EN'){?>
+                    <strong><?=$poiList['poi_name'][$i]?></strong>
+                    <p><?=$poiList['poi_jname'][$i]?></p>
+                <?} else {?>
+                    <strong><?=$poiList['poi_name'][$i]?></strong>
+                    <p><?=$poiList['poi_jname'][$i]?></p>
+                    <p><?=$poiList['poi_ename'][$i]?></p>
+                <?}?>
+                </a>
+            </div>
+            <ul class="img_box mb10">
+                <?
+                    if($poiList['image'][$i]) {
+                        $s_image = explode(',',$poiList['image'][$i]);
+                        $image = array();
+                        for($j=0;$j<count($s_image);$j++) {
+                            $s_image_split = explode('^',$s_image[$j]);
+                            $image[$s_image_split[1]] = $s_image_split[0];
+                        }
+                        ksort($image);
+                        for($j=1;$j<=count($image);$j++) {
+                            if($j==4) break;
+                            echo "<li><img src='".$image[$j]."'></li>";
+                        }
+                    }
+                ?>
+            </ul>
+            <p class="tag mb10">
+                <?
+                $tag_list = explode(",",$poiList['tag_list'][$i]);
+                foreach($tag_list as $value) {
+                    echo "<span>#".$value."</span>";
+                }
+                ?>
+            </p>
+            <div class="desc mb10">
+                <?=$poiList['description'][$i]?>
+            </div>
+            <p class="loca mb10">
+            <?php
+                $location = '';
+                if($poiList['sm_no'][$i]) {
+                    if($poiList['de_no'][$i]) {
+                        $location = $poi->getCodeValue($poiList['sm_no'][$i],$param['lang']).' / '.$poi->getCodeValue($poiList['de_no'][$i],$param['lang']);
+                    } else {
+                        $location = $poi->getCodeValue($poiList['sm_no'][$i],$param['lang']);
+                    }
+                }
+            ?>    
+            
+            <i class="xi-maker"></i> <?=$location?>  <span> <?=$poiList['dis'][$i] > 0 ? number_format($poiList['dis'][$i],1).'km':'';?></span></p>
+            <?php
+                $info = array();
+                $info['service2'] = $pj->Mysql->fetchRow("SELECT * from _surf_poi_surf_service where poi_no = '".$poiList['poi_no'][$i]."'");
+
+            ?>
+            <ul class="icon servi_icon ">
+                <?php
+                    if(in_array('62293',explode('/',$info['service2']['payable']))) //신용카드결재가능
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['1'].".svg' style='width:30px'></li>";
+
+                    if(in_array('62292',explode('/',$info['service2']['payable']))) //현금만가능
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['2'].".svg'></li>";
+
+                    if(in_array('62287',explode('/',$info['service2']['operation_time'])))
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['3'].".png' style='width:30px; height:30px;'></li>";
+                    
+                    if(in_array('62286',explode('/',$info['service2']['operation_time'])))
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['4'].".svg'></li>";
+
+                    if(explode('/',$info['service2']['num_seat'])[2] != '') //개실룸
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['5'].".svg'></li>";
+
+                    if($info['service2']['multimenu'] ) //다국어메뉴
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['6'].".svg'></li>";
+
+                    if(in_array('62301',explode('/',$info['service2']['smoking']))) //금연
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['7'].".svg' style='width:26px'></li>";
+
+                    if(in_array('62304',explode('/',$info['service2']['ordering']))) //노미호다이메뉴
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['8'].".svg'></li>";
+
+                    if(in_array('62308',explode('/',$info['service2']['ordering']))) //비건메뉴
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['9'].".svg'></li>";
+
+                    if(in_array('62306',explode('/',$info['service2']['ordering']))) //테이크아웃메뉴
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['10'].".svg'></li>";
+
+                    if(in_array('62309',explode('/',$info['service2']['ordering']))) //알러지대응
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['11'].".png' style='width:30px; height:30px;'></li>";
+
+                    if(in_array('62326',explode('/',$info['service2']['corkage'])))//콜키지가능
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['12'].".svg'></li>";
+
+                    if(in_array('62329',explode('/',$info['service2']['wifi']))) //와이파이가능
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['13'].".svg' style='width:26px'></li>";
+
+                    if(in_array('62340',explode('/',$info['service2']['parking']))) //주차가능
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['14'].".svg'></li>";
+                    
+                ?>
+            </ul>
+            <?php
+                $poiService = $pj->Mysql->fetchRow("SELECT a.* FROM _surf_poi_search_service as a WHERE a.poi_no= ?",array('i',$poiList['poi_no'][$i]));
+                $breakfast = '';
+                $lunch = '';
+                $dinner = '';
+
+                if($poiService['black_price1']) {
+                    if($poiService['black_price2']) {
+                        $breakfast = '¥'.number_format($poiService['black_price1']).' ~ '.'¥'.number_format($poiService['black_price2']);
+                    } else {
+                        $breakfast = '¥'.number_format($poiService['black_price1']).' ~ ';
+                    }
+                } else {
+                    if($poiService['black_price2']) {
+                        $breakfast = ' ~ '.'¥'.number_format($poiService['black_price2']);
+                    } 
+                }
+
+                if($poiService['lunch_price1']) {
+                    if($poiService['lunch_price2']) {
+                        $lunch = '¥'.number_format($poiService['lunch_price1']).' ~ '.'¥'.number_format($poiService['lunch_price2']);
+                    } else {
+                        $lunch = '¥'.number_format($poiService['lunch_price1']).' ~ ';
+                    }
+                } else {
+                    if($poiService['lunch_price2']) {
+                        $lunch = ' ~ '.'¥'.number_format($poiService['lunch_price2']);
+                    } 
+                }
+
+                if($poiService['dinner_price1']) {
+                    if($poiService['dinner_price2']) {
+                        $dinner = '¥'.number_format($poiService['dinner_price1']).' ~ '.'¥'.number_format($poiService['dinner_price2']);
+                    } else {
+                        $dinner = '¥'.number_format($poiService['dinner_price1']).' ~ ';
+                    }
+                } else {
+                    if($poiService['dinner_price2']) {
+                        $dinner = ' ~ '.'¥'.number_format($poiService['dinner_price2']);
+                    } 
+                }
+            ?>
+            <?php
+                    $time_ment = '';
+                    $service_time = '';
+                    $holiday = '';
+                    $opentime = $poi->getPoiTodayOpentimeInfo($poiList['poi_no'][$i]);
+                    for($j=0;$j<$opentime['hour']['resultRows'];$j++) {
+                        if($opentime['hour']['start_time'][$j] > $now) {
+                            if($time_ment == '') {
+                                $time_ment = $language['2240'];//'영업개시전';
+                            }
+                            $service_time = $opentime['hour']['start_time'][$j].$language['930'];//'에 영업시작';
+                            break;
+                        } else if($opentime['hour']['start_time'][$j] <= $now && $opentime['hour']['end_time'][$j] >= $now) {
+                            $time_ment = $language['347'].' ('.$opentime['hour']['start_time'][$j].' ~ '.$opentime['hour']['end_time'][$j].')';//'영업중';
+                            $service_time = '';
+                            break;
+                        } else if( $opentime['hour']['end_time'][$j] < $now) {
+                            $time_ment =  $language['929'];//'영업종료';
+                            $service_time = '';
+                        }
+                    }
+                    for($j=0;$j<$opentime['huil']['resultRows'];$j++) {
+                        if($opentime['huil']['huil_type'][$j] == 1) {
+
+                            $holiday = $huilTypeName[$opentime['huil']['huil_date_type'][$j]].' '.$yoilFullName[$opentime['huil']['huil_date_day'][$j]].$language['376'];//' 휴무';
+
+                            if(($today == $opentime['huil']['huil_date_day'][$j] && $opentime['huil']['huil_date_type'][$j] == (getWeek($today)+1)) ||
+                                ($today == $opentime['huil']['huil_date_day'][$j] && $opentime['huil']['huil_date_type'][$j] == 1) ) {
+                                    $time_ment = $language['2241'];//"금일휴무";
+                                }
+                        } 
+                    }
+                ?> 
+            <div class="servi_time ">
+                <div>
+                    <?if($time_ment) {?>
+                        <div class="sales_time" onclick="salesTimeView('<?=$poiList['poi_no'][$i]?>');">
+                            <div class="time_time"><i class="xi-time-o"></i> 
+                                <p class="sales_time_detail">
+                                    <span class="close"><?=$time_ment?></span> <?=$service_time?>
+                                </p>
+                            </div>   <!-- 각각의 클래스에 따라 close = 영업종료, open = 영업중, ready = 영업준비중 holiday = 금일휴무-->
+                            <p style="padding-left:18px;"><?=$holiday?></p>                        
+                        </div>
+                    <?}?>
+                    <p><?if($lunch){?><i class="xi-sun"></i> <?=$lunch?> <?}?><?if($dinner){?><i class="xi-night"></i> <?=$dinner?><?}?></p>
+                </div>
+                <?if($poiList['shopid'][$i]) {?>
+                    <button type="button" class="reser_btn2" onclick="window.open('<?=$poiList['reserve_url'][$i]?>')"><?=$language['2149'];//예약?></button>
+                <?}?>
+                
+            </div>
+
+            <!--  예약시간 버튼 -->
+            <ul class="reser_time"> 
+                <?
+                if($poiList['shopid'][$i] && $tableResult[$poiList['shopid'][$i]]) {
+                    foreach($tableResult[$poiList['shopid'][$i]] as $value){
+                        $tableDate = explode('T',$value)[0];
+                        $tableTime = substr(explode('T',$value)[1],0,5);
+                ?>
+                <li onclick="window.open('https://www.tablecheck.com/shops/kyoto-kitcho-arashiyama/reserve')"><?=$tableTime?></li>
+                <? 
+                    }
+                }
+                ?>
+            </ul>
+            
+            <div class="select_btn">
+                <button type="button"  onclick="like()" class="like"></button> <!-- 좋아요 -->
+                <p class="share" onclick="share()"></p> <!-- 해당 식당 공유 -->
+            </div>
+
+        </div>
+            `)
+        }
+    });
+};
+
+const observer = new IntersectionObserver(onIntersect, option);
+observer.observe(listEnd);
+  
+</script>
+
+<!-- //무한스크롤링 -->
+
+
+
+<!-- 검색창 관련 부분 시작 -->
+
+<!-- 지역 설정 팝업 -->
+
+<div class="detailSetPop">
+    <span class="close"></span>
+    <div class="loca">
+        <h4> <?=$language['2143'];//현재위치에서 찾기?></h4>
+        <div class="range">
+            <div class="slideValue">
+                <p><input type="radio" name="area" id="loca01"><label for="loca01"><?=$language['2142'];//현재위치에서?> <span class="km">1</span>Km </label></p>
+            </div>
+            <div class="field">
+                <div class="value left">0km</div>
+                <input type="range" id="rangeInput" min="0" max="3" value="1" step="0.5">
+                <div class="value right">3km</div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <h4><?=$language['2148'];//지역에서 찾기?></h4>
+        <ul class="chk_list" style="margin-bottom:5px">
+            <?php
+                $sql = "SELECT fsr.de_no, b.name FROM surf_japan.front_sub_region as fsr
+                        left outer join omakase.code_list_lang as b on fsr.de_no = b.code_list_idx and b.lang= '".$param['lang']."'
+                        where fsr.region_no='".$param['region_no']."' and fsr.gubun=1 ORDER BY fsr.sort";
+                $codeList = $pj->Mysql->fetch($sql);
+                for($i=0;$i<$codeList['resultRows'];$i++) {
+                ?>
+                    <li><input type="radio" name="area" id="area_<?=$codeList['de_no'][$i]?>" value='spot_<?=$codeList['de_no'][$i]?>'><label for="area_<?=$codeList['de_no'][$i]?>"><?=$codeList['name'][$i]?></label></li>
+            <?
+                }
+            ?>
+        </ul>
+        <p onclick="detailArea();"><?=$language['2140'];//상세지역?> <img src="/common/images/ico-down.svg"></p>
+        <div class="detail_area box_scroll">
+            <ul class="chk_list">
+            <?php
+                $sql = "SELECT fsr.de_no, b.name FROM surf_japan.front_sub_region as fsr
+                        left outer join omakase.code_list_lang as b on fsr.de_no = b.code_list_idx and b.lang= '".$param['lang']."'
+                        where fsr.region_no='".$param['region_no']."' and fsr.gubun=2 ORDER BY fsr.sort";
+                $codeList = $pj->Mysql->fetch($sql);
+                for($i=0;$i<$codeList['resultRows'];$i++) {
+                ?>
+                    <li><input type="radio" name="area" id="area_<?=$codeList['de_no'][$i]?>" value='spot_<?=$codeList['de_no'][$i]?>'><label for="area_<?=$codeList['de_no'][$i]?>"><?=$codeList['name'][$i]?></label></li>
+            <?
+                }
+            ?>
+            </ul>
+        </div>
+    </div>
+    <div class="map">
+        <h4><?=$language['2139'];//지도에서 찾기?></h4>
+        <p><input type="radio" name="area" id="map01"><label for="map01"> <?=$regionInfo['region_poi_name'].' '.$language['1228'];//지도 보기?></label></p> <!-- 해당지역명이 들어갑니다. -->
+    </div>
+    <div class="btn_box">
+        <button type="button" class="search_btn search_close" onclick="SearchValue();"><?=$language['40'];//검색?></button>
+    </div>
+</div>
+<!-- //지역 설정 팝업 -->
+
+
+<!-- 예산 설정 팝업 -->
+
+<div class="detailSetPop2">
+    <span class="close"></span>
+
+    <h4><?=$language['816'];//예산?></h4>
+    <div class="double_slider_box">
+        <div class="range_slider">
+            <span class="slider-track"></span>
+            <input type="range" name="min_val" class="min-val" min="0" max="30000" value="0" step="1000" oninput="slideMin();">
+            <input type="range" name="max_val" class="max-val" min="0" max="30000" value="30000" step="1000" oninput="slideMax();">
+            <div class="tooltip min-tooltip"></div>
+            <div class="tooltip max-tooltip"></div>
+        </div>
+
+        <div class="input-box">
+            <input type="radio" name="dining" value="lunch"  onchange="toggleInputBox();" id="lunch"> <label for="lunch" style='width:80px'><?=$language['364'];//lunch?></label>
+            <div class="min-box">
+                <div class="input-wrap">
+                    <span class="input-addon">¥</span>
+                    <input type="text" name="min_input" id="lunch_min" class="input-field min-input"  inputmode="numeric" pattern="[0-9]*" onchange="setMinInput();">
+                </div>
+            </div>
+            ~
+            <div class="max-box">
+                <div class="input-wrap">
+                    <span class="input-addon">¥</span>
+                    <input type="text" name="max_input" id="lunch_max" class="input-field max-input"  inputmode="numeric" pattern="[0-9]*" onchange="setMaxInput();">
+                </div>
+            </div>
+            
+        </div>
+
+        
+        <div class="input-box">
+            <input type="radio" name="dining" value="dinner" onchange="toggleInputBox();" id="dinner"> <label for="dinner" style='width:80px'><?=$language['365'];//Dinner?></label>
+            <div class="min-box">
+                <div class="input-wrap">
+                    <span class="input-addon">¥</span>
+                    <input type="text" name="min_input" id="dinner_min" class="input-field min-input2"  inputmode="numeric" pattern="[0-9]*" onchange="setMinInput2();">
+                </div>
+            </div>
+            ~
+            <div class="max-box">
+                <div class="input-wrap">
+                    <span class="input-addon">¥</span>
+                    <input type="text" name="max_input" id="dinner_max" class="input-field max-input2"  inputmode="numeric" pattern="[0-9]*" onchange="setMaxInput2();">
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class="btn_box">
+        <button type="button" class="search_btn search_close" onclick="costBudget()"><?=$language['40'];//검색?></button>
+    </div>
+</div>
+<!-- //예산 설정 팝업 -->
+
+
+
+<!-- 카테고리 설정 팝업 -->
+<div class="detailSetPop3">
+    <span class="close"></span>
+
+    <h4><?=$language['2141'];//카테고리 선택하기?></h4>
+    
+    <ul class="chk_list" style="margin-bottom:20px">
+        <?php
+            $sql = "SELECT ft.tag, dnb.data_name as tag_name FROM surf_japan.front_tag as ft
+                    left outer join omakase.data_name_bank as dnb on ft.tag = dnb.target_no and dnb.data_type='tag' and dnb.data_lang='".$param['lang']."'
+                    where ft.region_no='".$param['region_no']."' ORDER BY ft.sort";
+            $codeList = $pj->Mysql->fetch($sql);
+            for($i=0;$i<$codeList['resultRows'];$i++) {
+            ?>
+                <li><input type="radio" name="category" id="cate_<?=$codeList['tag'][$i]?>" value='<?=$codeList['tag'][$i]?>'><label for="cate_<?=$codeList['tag'][$i]?>"><?=$codeList['tag_name'][$i]?></label></li>
+        <?
+            }
+        ?>
+
+    </ul>
+
+
+    <div class="btn_box">
+        <button type="button" class="search_btn search_close" onclick="SearchValue();"><?=$language['40'];//검색?></button>
+    </div>
+</div>
+<!-- //카테고리 설정 팝업 -->
+
+
+<!-- 정렬팝업 -->
+<div class="sort_filter">   
+    <span class="close"></span>
+    <h4>Sort</h4>
+
+    <ul class="radio_chk">
+        <li><input type="radio" name="foodmall_sort" id="sort01" value="recommend" <?=$param['sort_by']=='recommend'?'checked':''?>/><label for="sort01"><?=$language['1118'];//추천순?></label></li>
+        <li><input type="radio" name="foodmall_sort" id="sort02" value="distance" <?=$param['sort_by']=='distance'?'checked':''?>/><label for="sort02"><?=$language['802'];//거리순?></label></li>
+    </ul>
+
+    <div class="btn_box">
+        <button type="button" class="search_btn sort_select" onclick="sortSelect();"><?=$language['24'];//선택?></button>
+    </div>
+</div>
+<!-- //정렬팝업 -->
+
+<script>
+
+//정렬팝업
+function sortFilter(){
+    $('.sort_filter, .black_bg').show();
+    $('body').addClass('notScroll');
+}
+$('.black_bg, .sort_filter span.close').click(function(){
+    $('.sort_filter, .black_bg').hide();
+    $('body').removeClass('notScroll');
+})
+
+//팝업 선택 시 선택 값이 노출되게
+function sortSelect(){
+    const foodmallSelect = document.querySelector('input[name="foodmall_sort"]:checked');
+    const SelectResult = document.querySelector('.sort_filter_btn');
+
+    $("#sort_by").val($('input[name="foodmall_sort"]:checked').val());
+    $("#search_form").submit();
+
+    if(foodmallSelect){
+        SelectResult.textContent = foodmallSelect.nextElementSibling.textContent;
+        $('.sort_filter, .black_bg').hide();
+    }
+}
+
+</script>
+
+
+<!-- 영업시간 관련 시작 -->
+
+<!-- 영업시간 팝업 -->
+<div class="time_list pop">
+    <span class="close"></span>
+    <h3><?=$language['45'];//영업시간?></h3>
+    <div id="sales_time_list">
+        <!-- 선택하면 이 부분을 ajax를 통해 표현함. -->
+    </div>
+</div>
+<div class="black_bg"></div>
+<!-- //영업시간 팝업 -->
+
+<script>
+
+//영업시간보기
+function salesTimeView(poi_no){
+    $("#sales_time_list").html('');
+    $.ajax({
+        type: "POST",
+        url: "../_ajax.restaurant.php",
+        data: {'mode':'sales_date','poi_no':poi_no},
+        success: function(res_data) {
+            $("#sales_time_list").html(res_data);
+            $('.time_list, .time_list + .black_bg').show();
+            $('body').addClass('not_scroll');
+        }
+    }); 
+    
+}
+$('.time_list + .black_bg, .time_list span.close').click(function(){
+    $('.time_list, .time_list + .black_bg').hide();
+    $('body').removeClass('not_scroll');
+})
+</script>
+
+
+<!-- 영업시간 관련 끝 -->
+
+
+<script>
+
+//검색창 토글
+function searchInput(){
+    $('.search_box').slideToggle();
+}
+
+
+//공석 선택 시 해당일자 예약가능한 시간 노출
+$('.week_seat_tb td').click(function(){
+    $('.week_seat_tb td').removeClass('pick');
+    $(this).addClass('pick');
+})
+
+
+
+//예산 Range
+window.onload = function(){
+    slideMin();
+    slideMax();
+};
+
+
+//지역 Range
+const slideValue = document.querySelector("span.km");
+const inputSlider = document.querySelector("#rangeInput");
+
+const roadValue = document.querySelector('.range .slideValue p');
+
+inputSlider.addEventListener("input", () => {
+    let value = inputSlider.value;
+    slideValue.textContent = value;
+
+    // roadValue.style.left = (value / 100) * 100 + "%";
+});
+
+//예산 Range
+
+const minVal = document.querySelector(".min-val"),
+    maxVal = document.querySelector(".max-val"),
+    minTooltip = document.querySelector(".min-tooltip"),
+    maxTooltip = document.querySelector(".max-tooltip"),
+    minGap = 0,
+    range = document.querySelector(".slider-track"),
+    sliderMinValue = parseInt(minVal.min),
+    sliderMaxValue = parseInt(maxVal.max),
+    selectedInputBox = document.querySelector('input[name="dining"]:checked');
+const priceInputMin = document.querySelector(".min-input");
+const priceInputMax = document.querySelector(".max-input");
+const priceInputMin2 = document.querySelector(".min-input2");
+const priceInputMax2 = document.querySelector(".max-input2");
+var priceText='' ;
+
+
+//상세지역 토글
+function detailArea(){
+    $('.detail_area').slideToggle();
+    $('.detail_area, .detailSetPop .chk_list + p').toggleClass('on');
+
+}
+
+//예산클릭 시 max풋값 설정
+function costBudget(){
+    $("#search_lunch_price").val("");
+    $("#search_dinner_price").val("");
+    if($('#lunch').is(':checked')) {
+        $("#search_lunch_price").val($("#lunch_min").val().replace(',','')+'/'+$("#lunch_max").val().replace(',',''));
+        priceText = '<?=$language['364'];//lunch?> : ¥'+$("#lunch_min").val()+" ~ ¥"+$("#lunch_max").val();
+    }
+    if($('#dinner').is(':checked')) {
+        $("#search_dinner_price").val($("#dinner_min").val().replace(',','')+'/'+$("#dinner_max").val().replace(',',''));
+        priceText = '<?=$language['365'];//Dinner?> : ¥'+$("#dinner_min").val()+" ~ ¥"+$("#dinner_max").val();
+    }
+    selectValue();
+}
+
+function selectValue()
+{
+    let chkValueArea = document.querySelector('input[name="area"]:checked');
+    let chkValueCategory = document.querySelector('input[name="category"]:checked');
+    var resultVal='';
+
+    let areaValue = chkValueArea ? chkValueArea.nextElementSibling.textContent : '';
+    let categoryValue = chkValueCategory ? chkValueCategory.nextElementSibling.textContent : '';
+    
+    if (areaValue || categoryValue) {
+        resultVal = (areaValue ? areaValue : "") + (areaValue && categoryValue ? " / " : "") + categoryValue;
+    } 
+    resultVal = (resultVal ? resultVal : '') + (resultVal && priceText ? " / ":"") + priceText;
+    $("#filter_value").html(resultVal); //해당 결과값중 런치.디너가 다국어로 연결되어야 합니다.
+
+    if($('input[name=area]:checked').attr('id') == 'loca01') {
+        $('#search_distance').val('dis_'+$('#rangeInput').val());
+    } else {
+        $('#search_distance').val($('input[name=area]:checked').val());
+    }
+
+    $('#search_tag_no').val($('input[name=category]:checked').val());
+
+}
+
+
+function toggleInputBox() {
+    setRangeValue();
+}
+
+function setRangeValue() {
+    const selectedInputBox = document.querySelector('input[name="dining"]:checked');
+    const addonInput = document.querySelector('.input-addon');
+    if (selectedInputBox && selectedInputBox.value == "lunch") {
+        slideMin();
+        slideMax();
+        priceInputMin2.disabled = true;
+        priceInputMin2.value = '';
+        priceInputMax2.disabled = true;
+        priceInputMax2.value = '';
+        priceInputMin.disabled = false;
+        priceInputMin.value = minVal.value;
+        priceInputMax.disabled = false;
+        priceInputMax.value = maxVal.value;
+        // console.log(selectedInputBox.value);
+    } else if (selectedInputBox && selectedInputBox.value == "dinner") {
+        slideMin();
+        slideMax();
+        priceInputMin.disabled = true;
+        priceInputMin.value = '';
+        priceInputMax.disabled = true;
+        priceInputMax.value = '';
+        priceInputMin2.disabled = false;
+        priceInputMin2.value = minVal.value;
+        priceInputMax2.disabled = false;
+        priceInputMax2.value = maxVal.value;
+        // console.log(selectedInputBox.value);
+    }
+}
+
+
+function slideMin(){
+    let gap = parseInt(maxVal.value) - parseInt(minVal.value);
+    if(gap <= minGap){
+        minVal.value = parseInt(maxVal.value) - minGap;
+    }
+    let formatMinVal = minVal.value;
+    let formatMinValNumber = formatMinVal.replace(/[^0-9]/g, '');
+    let formatMinValNumberResult = numberWithCommas(formatMinValNumber);
+
+    minTooltip.innerHTML = "¥"+ formatMinValNumberResult;
+    if($('#lunch').is(':checked')) {
+        priceInputMin.value = formatMinValNumberResult;
+    }
+    if($('#dinner').is(':checked')) {
+        priceInputMin2.value = formatMinValNumberResult;
+    }
+    
+    setArea();
+
+}
+
+function slideMax(){
+    let gap = parseInt(maxVal.value) - parseInt(minVal.value);
+    if(gap <= minGap){
+        maxVal.value = parseInt(minVal.value) + minGap;
+    }
+    let formatMaxVal = maxVal.value;
+    let formatMaxValNumber = formatMaxVal.replace(/[^0-9]/g, '');
+    let formatMaxValNumberResult = numberWithCommas(formatMaxValNumber);
+
+    if (parseInt(formatMaxValNumber) >= 29999) {
+        formatMaxValNumberResult += " <?=$language['2138']//이상?>";
+    }
+    
+    maxTooltip.innerHTML = "¥"+ formatMaxValNumberResult;
+    if($('#lunch').is(':checked')) {
+        priceInputMax.value = formatMaxValNumberResult;
+    }
+    if($('#dinner').is(':checked')) {
+        priceInputMax2.value = formatMaxValNumberResult;
+    }
+    setArea();
+    
+}
+
+function setArea(){
+    range.style.left = (minVal.value / sliderMaxValue) * 100 + "%";
+    minTooltip.style.left = (minVal.value / sliderMaxValue) * 100  + 2 + "%";
+    range.style.right = 100 - (maxVal.value / sliderMaxValue) * 100 + 1 + "%";
+    maxTooltip.style.right = 100 - (maxVal.value / sliderMaxValue) * 100 - 4 + "%";
+}
+
+function setMinInput(){
+    let minPrice = parseInt(priceInputMin.value);
+    if(minPrice < sliderMinValue){
+        priceInputMin.value = sliderMinValue;
+    }
+    minVal.value = priceInputMin.value;
+    slideMin();
+}
+
+function setMaxInput(){
+    let maxPrice =parseInt(priceInputMax.value);
+    if(maxPrice > sliderMaxValue){
+        priceInputMax.value =sliderMaxValue;
+    }
+    maxVal.value =priceInputMax.value;
+    slideMax();
+}
+
+function setMinInput2(){
+    let minPrice = parseInt(priceInputMin2.value);
+    if(minPrice < sliderMinValue){
+        priceInputMin2.value = sliderMinValue;
+    }
+    minVal.value = priceInputMin2.value;
+    slideMin();
+}
+
+function setMaxInput2(){
+    let maxPrice = parseInt(priceInputMax2.value);
+    if(maxPrice > sliderMaxValue){
+        priceInputMax2.value = sliderMaxValue;
+    }
+    maxVal.value = priceInputMax2.value;
+    slideMax();
+}
+
+
+//천의자리마다 콤마찍는 함수
+function numberWithCommas(number){
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+//거리의 검색값이 있으면 팝업창의 값들을 검색값으로 변경
+<?
+if($param['search_distance']) {
+    $search_distance = explode('_',$param['search_distance']);
+    if($search_distance[0] == 'dis') {
+?>
+    $("#loca01").prop("checked",true);
+    $("#rangeInput").val('<?=$search_distance[1]?>');
+<?
+    } else {
+?>
+    $("#area_<?=$search_distance[1]?>").prop('checked',true);
+<?
+    }
+} 
+
+?>
+
+
+<?if($param['search_tag_no']) {?>
+    $("#cate_<?=$param['search_tag_no']?>").prop('checked',true);
+<?}?> 
+
+<?if($param['search_lunch_price']) {
+    $price = explode('/',$param['search_lunch_price']);
+    $priceMax = strpos($price[1],'30000')===false? $price[1]:30000;
+?>
+    $("#lunch").prop('checked',true);
+    priceInputMin.value = '<?=$price[0]?>';
+    priceInputMax.value = '<?=$priceMax?>';
+    setMinInput();
+    setMaxInput();
+    costBudget();
+<?}?>
+
+<?if($param['search_dinner_price']) {
+    $price = explode('/',$param['search_dinner_price']);
+    $priceMax = strpos($price[1],'30000')===false? $price[1]:30000;
+?>
+    $("#dinner").prop('checked',true);
+    priceInputMin2.value = '<?=$price[0]?>';
+    priceInputMax2.value = '<?=$priceMax?>';
+    setMinInput2();
+    setMaxInput2();
+    costBudget();
+<?}?>
+
+selectValue(); //처음 로딩시 검색조건을 필터창에 표시
+
+
+//지역
+function detailSet(){
+    $('.detailSetPop, .black_bg').show();
+    $('body').addClass('not_scroll');
+    
+}
+$('.black_bg, .detailSetPop .close, .search_close').click(function(){
+    $('.detailSetPop, .black_bg').hide();
+    $('body').removeClass('not_scroll');
+});
+
+//예산
+function budget(){
+    $('.detailSetPop2, .black_bg').show();
+    $('body').addClass('not_scroll');
+
+}
+$('.black_bg, .detailSetPop2 .close, .search_close').click(function(){
+    $('.detailSetPop2, .black_bg').hide();
+    $('body').removeClass('not_scroll');
+});
+
+//카테고리
+function category(){
+    $('.detailSetPop3, .black_bg').show();
+    $('body').addClass('not_scroll');
+
+}
+
+$('.black_bg, .detailSetPop3 .close, .search_close').click(function(){
+    $('.detailSetPop3, .black_bg').hide();
+    $('body').removeClass('not_scroll');
+});
+
+
+//초기화 버튼을 누르면 각 값들이 초기화된다.
+function resetBtn() {
+    $("input[name=area]").prop('checked',false);
+    $("input[name=category]").prop('checked',false);
+    $("input[name=dining]").prop('checked',false);
+    $('#search_tag_no').val("");
+    $('#search_distance').val("");
+    $('#search_lunch_price').val("");
+    $('#search_dinner_price').val("");
+    $("#filter_value").html("");
+}
+
+function SearchValue(){
+
+    selectValue();
+};
+
+</script>
+
+
+
+<!-- 검색창 관련부분 끝 -->
+
+
+
+
+
+
+
+
+
+
+<script src="common/js/jquery-ui.js"></script>
+<script src="common/js/datepicker.js"></script>
+<script src="common/js/nouislider.js"></script>
+<script src="common/js/wNumb.js"></script>
+
+<script>
+  //달력 데이터피커
+  $(function() {
+        $("#calendar").datepicker({
+            minDate: 0
+        });
+        $('#calendar').datepicker('setDate', 'today');
+    });
+
+
+//좋아요
+function like(){
+    $('.select_btn button.like').toggleClass('on');
+}
+
+
+//달력팝업
+function calendarView(){
+    $('.sort_pop, .black_bg').show();
+    $('body').addClass('notScroll');
+}
+$('.black_bg, .sort_pop span.close').click(function(){
+    $('.sort_pop, .black_bg').hide();
+    $('body').removeClass('notScroll');
+})
+
+$('.dates button.day').click(function(){
+    $('.dates button.day').removeClass('on');
+    $(this).addClass('on');
+});
+
+
+//input에 today 널기
+let today = new Date();
+let year = today.getFullYear();
+let month = String(today.getMonth() + 1).padStart(2, '0');
+let day = String(today.getDate()).padStart(2, '0');
+let after7 = new Date(today.setDate(today.getDate() + 6));
+
+var formattedDate = year + '-' + month + '-' + day  ;
+var after7Date = after7.getFullYear() + '-' + String(after7.getMonth() + 1).padStart(2, '0') + '-' + String(after7.getDate()).padStart(2, '0');
+
+// document.getElementById('calendarInput').value = formattedDate;
+
+
+//전체지역보기 팝업
+function citySelect() {
+    $('.area_all, .area_all + .black_bg, .area_all .close').show();
+    $('body').addClass('notScroll');
+}
+$('.area_all + .black_bg').click(function() {
+    $('.area_all, .area_all + .black_bg').hide();
+    $('body').removeClass('notScroll');
+});
+
+</script>
+
+
+
+<?php
+    include_once "tail.php";
+?>
