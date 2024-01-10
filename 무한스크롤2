@@ -1,0 +1,91 @@
+무한스크롤
+
+
+    <div id="scroll-container">
+        <div class="list_wrap mt20" style='border-top:0;'>
+
+        <?for($i=0;$i<$poiList['resultRows'];$i++) {?>
+        <div class="list_con mb20 pb20">
+            <div class="list_title ">
+                <a href="rest_index.php?no=<?=$poiList['poi_no'][$i]?>">
+                <?if($_base_use_lang=='JP') {?>
+                    <strong><?=$poiList['poi_name'][$i]?></strong>
+                    <p><?=$poiList['poi_jbname'][$i]?></p>
+                <?} else if($_base_use_lang=='EN'){?>
+                    <strong><?=$poiList['poi_name'][$i]?></strong>
+                    <p><?=$poiList['poi_jname'][$i]?></p>
+                <?} else {?>
+                    <strong><?=$poiList['poi_name'][$i]?></strong>
+                    <p><?=$poiList['poi_jname'][$i]?></p>
+                    <p><?=$poiList['poi_ename'][$i]?></p>
+                <?}?>
+                </a>
+            </div>
+            <ul class="img_box mb10">
+                <?
+                    if($poiList['image'][$i]) {
+                        $s_image = explode(',',$poiList['image'][$i]);
+                        $image = array();
+                        for($j=0;$j<count($s_image);$j++) {
+                            $s_image_split = explode('^',$s_image[$j]);
+                            $image[$s_image_split[1]] = $s_image_split[0];
+                        }
+                        ksort($image);
+                        for($j=1;$j<=count($image);$j++) {
+                            if($j==4) break;
+                            echo "<li><img src='".$image[$j]."'></li>";
+                        }
+                    }
+                ?>
+            </ul>
+            <p class="tag mb10">
+                <?
+                $tag_list = explode(",",$poiList['tag_list'][$i]);
+                foreach($tag_list as $value) {
+                    echo "<span>#".$value."</span>";
+                }
+                ?>
+            </p>
+            <div class="desc mb10">
+                <?=$poiList['description'][$i]?>
+            </div>
+            <p class="loca mb10">
+
+
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+    var page = 1; // Initial page number
+
+    function loadMoreContent() {
+        // Use AJAX to fetch more content from the server
+        $.ajax({
+            url: '/path/to/your/infinite-scroll-endpoint.php?page=' + page,
+            method: 'GET',
+            success: function (data) {
+                if (data.trim() !== '') {
+                    // Append new content to the container
+                    $('#scroll-container .list_wrap').append(data);
+                    page++; // Increment the page number
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error loading more content:', error);
+            }
+        });
+    }
+
+    // Trigger the loadMoreContent function when the user scrolls to the bottom
+    $(window).scroll(function () {
+        if ($(window).scrollTop() + $(window).height() >= $('#scroll-container').height() - 100) {
+            loadMoreContent();
+        }
+    });
+</script>
+
+
+
