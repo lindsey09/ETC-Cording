@@ -6,7 +6,7 @@
   <meta http-equiv="refresh" content="5;url=새로운페이지주소">
   여기에서 content="5 5는 초 5초를 의미함.
 
-javascript 사용
+javascript 사용 (이거는 한큐에 페이지 접속할 때 마다 페이지 접속하면 실행이 됨.)
   <script>
     setTimeout(function(){
         window.location.href = "새로운페이지주소";
@@ -15,7 +15,7 @@ javascript 사용
 
 
 
-처음 접속했을때만 적용되게 하는 방법 (다시 새로 접속하면 다시 또 동작이 실행됨)
+처음 접속했을때만 적용되게 하는 방법 (이거는 한큐에 페이지 접속할 때 마다 페이지 접속하면 실행이 되지 않음. 다시 새로 접속하면 다시 또 동작이 실행됨)
 
 // 세션 스토리지에서 'hasVisited' 키를 확인하여 최초 접속 여부를 체크
 var hasVisited = sessionStorage.getItem('hasVisited');
