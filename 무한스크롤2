@@ -1,11 +1,24 @@
-무한스크롤
+
+<div id="endList"></div>
 
 
-    <div id="scroll-container">
-        <div class="list_wrap mt20" style='border-top:0;'>
+<!-- 무한스크롤링 -->
 
-        <?for($i=0;$i<$poiList['resultRows'];$i++) {?>
-        <div class="list_con mb20 pb20">
+<script>
+const listEnd = document.querySelector("#endList");
+const option = {
+    root: null,
+    rootMargin: "0px 0px 0px 0px",
+    thredhold: 0,
+}
+
+const onIntersect = (entries, observer) => { 
+    // entries는 IntersectionObserverEntry 객체의 리스트로 배열 형식을 반환합니다.
+    entries.forEach(entry => {
+        if(entry.isIntersecting){
+            const listWrap = document.querySelector(".list_wrap");
+            listWrap.insertAdjacentHTML("beforeend", `
+            <div class="list_con mb20 pb20">
             <div class="list_title ">
                 <a href="rest_index.php?no=<?=$poiList['poi_no'][$i]?>">
                 <?if($_base_use_lang=='JP') {?>
@@ -50,42 +63,193 @@
                 <?=$poiList['description'][$i]?>
             </div>
             <p class="loca mb10">
+            <?php
+                $location = '';
+                if($poiList['sm_no'][$i]) {
+                    if($poiList['de_no'][$i]) {
+                        $location = $poi->getCodeValue($poiList['sm_no'][$i],$param['lang']).' / '.$poi->getCodeValue($poiList['de_no'][$i],$param['lang']);
+                    } else {
+                        $location = $poi->getCodeValue($poiList['sm_no'][$i],$param['lang']);
+                    }
+                }
+            ?>    
+            
+            <i class="xi-maker"></i> <?=$location?>  <span> <?=$poiList['dis'][$i] > 0 ? number_format($poiList['dis'][$i],1).'km':'';?></span></p>
+            <?php
+                $info = array();
+                $info['service2'] = $pj->Mysql->fetchRow("SELECT * from _surf_poi_surf_service where poi_no = '".$poiList['poi_no'][$i]."'");
 
+            ?>
+            <ul class="icon servi_icon ">
+                <?php
+                    if(in_array('62293',explode('/',$info['service2']['payable']))) //신용카드결재가능
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['1'].".svg' style='width:30px'></li>";
 
+                    if(in_array('62292',explode('/',$info['service2']['payable']))) //현금만가능
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['2'].".svg'></li>";
+
+                    if(in_array('62287',explode('/',$info['service2']['operation_time'])))
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['3'].".png' style='width:30px; height:30px;'></li>";
+                    
+                    if(in_array('62286',explode('/',$info['service2']['operation_time'])))
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['4'].".svg'></li>";
+
+                    if(explode('/',$info['service2']['num_seat'])[2] != '') //개실룸
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['5'].".svg'></li>";
+
+                    if($info['service2']['multimenu'] ) //다국어메뉴
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['6'].".svg'></li>";
+
+                    if(in_array('62301',explode('/',$info['service2']['smoking']))) //금연
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['7'].".svg' style='width:26px'></li>";
+
+                    if(in_array('62304',explode('/',$info['service2']['ordering']))) //노미호다이메뉴
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['8'].".svg'></li>";
+
+                    if(in_array('62308',explode('/',$info['service2']['ordering']))) //비건메뉴
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['9'].".svg'></li>";
+
+                    if(in_array('62306',explode('/',$info['service2']['ordering']))) //테이크아웃메뉴
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['10'].".svg'></li>";
+
+                    if(in_array('62309',explode('/',$info['service2']['ordering']))) //알러지대응
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['11'].".png' style='width:30px; height:30px;'></li>";
+
+                    if(in_array('62326',explode('/',$info['service2']['corkage'])))//콜키지가능
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['12'].".svg'></li>";
+
+                    if(in_array('62329',explode('/',$info['service2']['wifi']))) //와이파이가능
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['13'].".svg' style='width:26px'></li>";
+
+                    if(in_array('62340',explode('/',$info['service2']['parking']))) //주차가능
+                        echo "<li><img src='/common/images/ico-service_".$service_icon['14'].".svg'></li>";
+                    
+                ?>
+            </ul>
+            <?php
+                $poiService = $pj->Mysql->fetchRow("SELECT a.* FROM _surf_poi_search_service as a WHERE a.poi_no= ?",array('i',$poiList['poi_no'][$i]));
+                $breakfast = '';
+                $lunch = '';
+                $dinner = '';
+
+                if($poiService['black_price1']) {
+                    if($poiService['black_price2']) {
+                        $breakfast = '¥'.number_format($poiService['black_price1']).' ~ '.'¥'.number_format($poiService['black_price2']);
+                    } else {
+                        $breakfast = '¥'.number_format($poiService['black_price1']).' ~ ';
+                    }
+                } else {
+                    if($poiService['black_price2']) {
+                        $breakfast = ' ~ '.'¥'.number_format($poiService['black_price2']);
+                    } 
+                }
+
+                if($poiService['lunch_price1']) {
+                    if($poiService['lunch_price2']) {
+                        $lunch = '¥'.number_format($poiService['lunch_price1']).' ~ '.'¥'.number_format($poiService['lunch_price2']);
+                    } else {
+                        $lunch = '¥'.number_format($poiService['lunch_price1']).' ~ ';
+                    }
+                } else {
+                    if($poiService['lunch_price2']) {
+                        $lunch = ' ~ '.'¥'.number_format($poiService['lunch_price2']);
+                    } 
+                }
+
+                if($poiService['dinner_price1']) {
+                    if($poiService['dinner_price2']) {
+                        $dinner = '¥'.number_format($poiService['dinner_price1']).' ~ '.'¥'.number_format($poiService['dinner_price2']);
+                    } else {
+                        $dinner = '¥'.number_format($poiService['dinner_price1']).' ~ ';
+                    }
+                } else {
+                    if($poiService['dinner_price2']) {
+                        $dinner = ' ~ '.'¥'.number_format($poiService['dinner_price2']);
+                    } 
+                }
+            ?>
+            <?php
+                    $time_ment = '';
+                    $service_time = '';
+                    $holiday = '';
+                    $opentime = $poi->getPoiTodayOpentimeInfo($poiList['poi_no'][$i]);
+                    for($j=0;$j<$opentime['hour']['resultRows'];$j++) {
+                        if($opentime['hour']['start_time'][$j] > $now) {
+                            if($time_ment == '') {
+                                $time_ment = $language['2240'];//'영업개시전';
+                            }
+                            $service_time = $opentime['hour']['start_time'][$j].$language['930'];//'에 영업시작';
+                            break;
+                        } else if($opentime['hour']['start_time'][$j] <= $now && $opentime['hour']['end_time'][$j] >= $now) {
+                            $time_ment = $language['347'].' ('.$opentime['hour']['start_time'][$j].' ~ '.$opentime['hour']['end_time'][$j].')';//'영업중';
+                            $service_time = '';
+                            break;
+                        } else if( $opentime['hour']['end_time'][$j] < $now) {
+                            $time_ment =  $language['929'];//'영업종료';
+                            $service_time = '';
+                        }
+                    }
+                    for($j=0;$j<$opentime['huil']['resultRows'];$j++) {
+                        if($opentime['huil']['huil_type'][$j] == 1) {
+
+                            $holiday = $huilTypeName[$opentime['huil']['huil_date_type'][$j]].' '.$yoilFullName[$opentime['huil']['huil_date_day'][$j]].$language['376'];//' 휴무';
+
+                            if(($today == $opentime['huil']['huil_date_day'][$j] && $opentime['huil']['huil_date_type'][$j] == (getWeek($today)+1)) ||
+                                ($today == $opentime['huil']['huil_date_day'][$j] && $opentime['huil']['huil_date_type'][$j] == 1) ) {
+                                    $time_ment = $language['2241'];//"금일휴무";
+                                }
+                        } 
+                    }
+                ?> 
+            <div class="servi_time ">
+                <div>
+                    <?if($time_ment) {?>
+                        <div class="sales_time" onclick="salesTimeView('<?=$poiList['poi_no'][$i]?>');">
+                            <div class="time_time"><i class="xi-time-o"></i> 
+                                <p class="sales_time_detail">
+                                    <span class="close"><?=$time_ment?></span> <?=$service_time?>
+                                </p>
+                            </div>   <!-- 각각의 클래스에 따라 close = 영업종료, open = 영업중, ready = 영업준비중 holiday = 금일휴무-->
+                            <p style="padding-left:18px;"><?=$holiday?></p>                        
+                        </div>
+                    <?}?>
+                    <p><?if($lunch){?><i class="xi-sun"></i> <?=$lunch?> <?}?><?if($dinner){?><i class="xi-night"></i> <?=$dinner?><?}?></p>
+                </div>
+                <?if($poiList['shopid'][$i]) {?>
+                    <button type="button" class="reser_btn2" onclick="window.open('<?=$poiList['reserve_url'][$i]?>')"><?=$language['2149'];//예약?></button>
+                <?}?>
+                
+            </div>
+
+            <!--  예약시간 버튼 -->
+            <ul class="reser_time"> 
+                <?
+                if($poiList['shopid'][$i] && $tableResult[$poiList['shopid'][$i]]) {
+                    foreach($tableResult[$poiList['shopid'][$i]] as $value){
+                        $tableDate = explode('T',$value)[0];
+                        $tableTime = substr(explode('T',$value)[1],0,5);
+                ?>
+                <li onclick="window.open('https://www.tablecheck.com/shops/kyoto-kitcho-arashiyama/reserve')"><?=$tableTime?></li>
+                <? 
+                    }
+                }
+                ?>
+            </ul>
+            
+            <div class="select_btn">
+                <button type="button"  onclick="like()" class="like"></button> <!-- 좋아요 -->
+                <p class="share" onclick="share()"></p> <!-- 해당 식당 공유 -->
+            </div>
 
         </div>
-    </div>
-
-</div>
-
-<script>
-    var page = 1; // Initial page number
-
-    function loadMoreContent() {
-        // Use AJAX to fetch more content from the server
-        $.ajax({
-            url: '/path/to/your/infinite-scroll-endpoint.php?page=' + page,
-            method: 'GET',
-            success: function (data) {
-                if (data.trim() !== '') {
-                    // Append new content to the container
-                    $('#scroll-container .list_wrap').append(data);
-                    page++; // Increment the page number
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error loading more content:', error);
-            }
-        });
-    }
-
-    // Trigger the loadMoreContent function when the user scrolls to the bottom
-    $(window).scroll(function () {
-        if ($(window).scrollTop() + $(window).height() >= $('#scroll-container').height() - 100) {
-            loadMoreContent();
+            `)
         }
     });
+};
+
+const observer = new IntersectionObserver(onIntersect, option);
+observer.observe(listEnd);
+  
 </script>
 
-
-
+<!-- //무한스크롤링 -->
