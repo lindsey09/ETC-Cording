@@ -1,0 +1,113 @@
+
+https://yoosazzo630830.surf.menu/travel/travel_schedule_regi09.php 참고 
+<div class="regi_pop">
+    <h3 class="mb10"><?=$language['2317'];//비고사항?></h3>
+    
+
+    <ul class="radio_chkbox mt10 mb10 flex gap10">
+        <li><input type="radio" name="etc" id="etc01" checked><label for="etc01"><?=$language['1222'];//선택등록?></label></li>
+        <li><input type="radio" name="etc" id="etc02"><label for="etc02"><?=$language['231'];//직접입력?></label></li>
+    </ul>
+
+
+    <div class="etc_box etc01" >
+        <table class="etc_tb list_tb">
+            <colgroup>
+                <col style="width:2%">
+                <col style="width:4%">
+                <col style="">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="all_chk"><label for="all_chk"></label></th>
+                    <th>No</th>
+                    <th><?=$language['2317'];//비고사항?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" class="chk" id="chk01"><label for="chk01"></label></td>
+                    <td>1</td>
+                    <td class="left">가격은 1인1실 기준입니다. 2인1실은 2인으로 계산해주세요</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="chk" id="chk02"><label for="chk02"></label></td>
+                    <td>2</td>
+                    <td class="left">5인승카트의 셀프플레이 조건입니다. 캐디사용은 불가합니다</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="chk" id="chk03"><label for="chk03"></label></td>
+                    <td>3</td>
+                    <td class="left">식사시간이외의 식사는 불가가며, 환불되지 않습니다</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+
+    <div class="etc_box etc02" style='display:none'>
+        
+       <textarea name="" id="TextArea01" cols="30" rows="10" class="schedule_textbox"></textarea>
+
+    </div>
+
+
+    <ul class="regi_btn">
+        <li><button type="submit" class="regi" onclick="EtcText()"><?=$language['387'];//등록?></button></li>
+        <li><button type="button" class="cancel" onclick="regiCancel()"><?=$language['75'];//취소?></button></li>
+    </ul>
+    
+</div>
+
+
+
+
+
+
+
+
+
+<script>
+
+function regiCancel(){
+    window.close();
+}
+
+function EtcText(){
+    if ($("#etc01").is(":checked")) {
+        let textValue = $(".etc_tb .chk:checked").last().parent().siblings("td.left").text();
+        window.opener.handleTaxValue(textValue);
+
+        console.log( $(".etc_tb .chk:checked").last());
+    } else if ($("#etc02").is(":checked")) {
+        let text = document.querySelector('.schedule_textbox');
+        let textValue = text.value;
+        window.opener.handleTaxValue(textValue);
+    }
+    window.close();
+}
+//전체선택
+$(document).on("click", "#all_chk", function(){
+    if($("#all_chk").is(":checked")){
+        $('.chk').prop("checked", true);
+    }else{
+        $('.chk').prop("checked", false);
+    }
+})
+
+
+// 라디오 선택버튼
+$('.radio_chkbox li input[type="radio"]').click(function(){
+    let value = $(this).attr("id");
+    // console.log(value)
+    $('.etc_box').hide();
+    $('.'+value).show();
+
+
+})
+    
+
+</script>
+
+
