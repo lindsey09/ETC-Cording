@@ -1,9 +1,10 @@
 
 https://yoosazzo630830.surf.menu/travel/travel_schedule_regi09.php 참고 
+
+
 <div class="regi_pop">
     <h3 class="mb10"><?=$language['2317'];//비고사항?></h3>
     
-
     <ul class="radio_chkbox mt10 mb10 flex gap10">
         <li><input type="radio" name="etc" id="etc01" checked><label for="etc01"><?=$language['1222'];//선택등록?></label></li>
         <li><input type="radio" name="etc" id="etc02"><label for="etc02"><?=$language['231'];//직접입력?></label></li>
@@ -28,17 +29,38 @@ https://yoosazzo630830.surf.menu/travel/travel_schedule_regi09.php 참고
                 <tr>
                     <td><input type="checkbox" class="chk" id="chk01"><label for="chk01"></label></td>
                     <td>1</td>
-                    <td class="left">가격은 1인1실 기준입니다. 2인1실은 2인으로 계산해주세요</td>
+                    <td class="left">
+                        한국 : 가격은 1인1실 기준입니다. 2인1실은 2인으로 계산해주세요 <br>
+                        영어 : The price is based on a room for one person. Please pay for a room for two people<br>
+                        일본어 : 価格は1人1室基準です。 2人1室は2人で計算してください<br>
+                        중국간체 : 价格以1人1室为标准。 2人1室，请用2人计算。<br>
+                        중국번체 : 價格以1人1室爲標準。 2人1室，請用2人計算。<br>
+                        태국어 : ราคาขึ้นอยู่กับห้องละ 1 คนค่ะ ห้องละ 2 คน คิดเงินสำหรับ 2 คนนะคะ
+                    </td>
                 </tr>
                 <tr>
                     <td><input type="checkbox" class="chk" id="chk02"><label for="chk02"></label></td>
                     <td>2</td>
-                    <td class="left">5인승카트의 셀프플레이 조건입니다. 캐디사용은 불가합니다</td>
+                    <td class="left">
+                        한국 : 5인승카트의 셀프플레이 조건입니다. 캐디사용은 불가합니다 <br>
+                        영어 : This is a self-play condition for the 5-seater cart. Caddy is not allowed<br>
+                        일본어 : 5人乗りカートのセルフプレイ条件です。 キャディのご使用はできません<br>
+                        중국간체 : 这是5人座卡丁车的自助玩法条件。 不能使用球童。<br>
+                        중국번체 : 這是5人座卡丁車的自助玩法條件。 不能使用球童。<br>
+                        테국어 : เป็นเงื่อนไขการเล่นด้วยตัวเองของรถเข็นสำหรับ 5 คนค่ะ ห้ามใช้แคดดี้นะครับ
+                    </td>
                 </tr>
                 <tr>
                     <td><input type="checkbox" class="chk" id="chk03"><label for="chk03"></label></td>
                     <td>3</td>
-                    <td class="left">식사시간이외의 식사는 불가가며, 환불되지 않습니다</td>
+                    <td class="left">
+                        한국 : 식사시간이외의 식사는 불가가며, 환불되지 않습니다 <br>
+                        영어 : Meals other than meal time are not allowed, and no refunds are allowed<br>
+                        일본어 : 食事時間以外の食事は不可であり、払い戻しはできません<br>
+                        중국간체 : 除用餐时间外，不得退餐<br>
+                        중국번체 : 除用餐時間外，不得退餐<br>
+                        태국어 : อาหารอื่นนอกเหนือจากเวลาอาหารไม่สามารถคืนเงินได้
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -47,10 +69,43 @@ https://yoosazzo630830.surf.menu/travel/travel_schedule_regi09.php 참고
 
 
     <div class="etc_box etc02" style='display:none'>
-        
-       <textarea name="" id="TextArea01" cols="30" rows="10" class="schedule_textbox"></textarea>
+        <ul class=" flex gap5 justify_end">
+            <li><input type="checkbox" class="lang" id="lang_KR" checked=""><label for="lang_KR"><?=$language['33'];//한국어?></label></li>
+            <li><input type="checkbox" class="lang" id="lang_EN"><label for="lang_EN"><?=$language['512'];//영어?></label></li>
+            <li><input type="checkbox" class="lang" id="lang_JP"><label for="lang_JP"><?=$language['513'];//일본어?></label></li>
+            <li><input type="checkbox" class="lang" id="lang_CN"><label for="lang_CN"><?=$language['514'];//중국어간체?></label></li>
+            <li><input type="checkbox" class="lang" id="lang_CN2"><label for="lang_CN2"><?=$language['515'];//중국어번체?></label></li>
+            <li><input type="checkbox" class="lang" id="lang_TH"><label for="lang_TH"><?=$language['516'];//태국어?></label></li>
+        </ul>
+            
+        <div class="lang_box lang_KR mb20">
+            <h5><?=$language['33'];//한국어?></h5>
+        <textarea name="" id="TextArea01" cols="30" rows="10" data-lang="<?=$language['33'];?>" class="schedule_textbox"></textarea>
+        </div>
+        <div class="lang_box lang_EN mb20" style="display:none">
+            <h5><?=$language['512'];//영어?></h5>
+            <textarea name="" id="TextArea02" cols="30" rows="10" data-lang="<?=$language['512'];?>" class="schedule_textbox"></textarea>
+        </div>
+        <div class="lang_box lang_JP mb20" style="display:none">
+            <h5><?=$language['513'];//일본어?></h5>
+            <textarea name="" id="TextArea03" cols="30" rows="10" data-lang="<?=$language['513'];?>" class="schedule_textbox"></textarea>
+        </div>
+        <div class="lang_box lang_CN mb20" style="display:none">
+            <h5><?=$language['514'];//중국어간체?></h5>
+            <textarea name="" id="TextArea04" cols="30" rows="10" data-lang="<?=$language['514'];?>" class="schedule_textbox"></textarea>
+        </div>    
+        <div class="lang_box lang_CN2 mb20" style="display:none">
+            <h5><?=$language['515'];//중국어번체?></h5>
+            <textarea name="" id="TextArea05" cols="30" rows="10" data-lang="<?=$language['515'];?>" class="schedule_textbox"></textarea>
+        </div>    
+        <div class="lang_box lang_TH mb20" style="display:none">
+            <h5><?=$language['516'];//태국어?></h5>
+            <textarea name="" id="TextArea06" cols="30" rows="10" data-lang="<?=$language['516'];?>" class="schedule_textbox"></textarea>
+        </div>    
 
     </div>
+
+
 
 
     <ul class="regi_btn">
@@ -76,17 +131,30 @@ function regiCancel(){
 
 function EtcText(){
     if ($("#etc01").is(":checked")) {
-        let textValue = $(".etc_tb .chk:checked").last().parent().siblings("td.left").text();
+        let textValue = $(".etc_tb .chk:checked").last().parent().siblings("td.left").html();
         window.opener.handleTaxValue(textValue);
 
         console.log( $(".etc_tb .chk:checked").last());
     } else if ($("#etc02").is(":checked")) {
-        let text = document.querySelector('.schedule_textbox');
-        let textValue = text.value;
-        window.opener.handleTaxValue(textValue);
+        // let text = document.querySelector('.schedule_textbox');
+        // let textValue = text.value;
+        let texts = [];
+        $('.etc_box.etc02 textarea').each(function() {
+            let desiredText = $(this).data("lang"); // 각 textarea에 설정된 원하는 텍스트를 가져옵니다.
+            let value = $(this).val();
+            if (value !== "") { // textarea의 값이 비어있지 않은 경우에만 처리합니다.
+                let textToDisplay = desiredText + ": " + value; // 원하는 텍스트와 textarea의 값 사이에 콜론과 공백을 추가하여 값을 조합합니다.
+                texts.push(textToDisplay);
+            }
+        });
+        let joinedText = texts.join("\n"); // 줄바꿈을 위해 `\n`을 사용하여 배열을 문자열로 합칩니다.
+        let formattedText = "<pre>" + joinedText + "</pre>"; // <pre> 태그로 문자열을 감싸줍니다.
+        window.opener.handleTaxValue(formattedText);
     }
     window.close();
 }
+
+
 //전체선택
 $(document).on("click", "#all_chk", function(){
     if($("#all_chk").is(":checked")){
@@ -103,11 +171,21 @@ $('.radio_chkbox li input[type="radio"]').click(function(){
     // console.log(value)
     $('.etc_box').hide();
     $('.'+value).show();
-
-
 })
-    
+   
+
+//직접입력 언어선택
+$('.lang').change(function(){
+    let id = $(this).attr('id');
+    console.log(id);
+    if($(this).is(':checked')){
+        $('.'+id).show();
+    }else{
+        $('.'+id).hide();
+    }
+})
 
 </script>
+
 
 
