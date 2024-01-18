@@ -329,3 +329,182 @@ css
 }
 
 /* //달력 */
+
+
+
+
+팝업으로 처리할 시
+
+달력만들기2
+
+달력만들기1의 스타일 그대로 가지고와서
+<script>
+     /***************** 달력 ****************/
+     $(document).ready(function() {
+        calendarInit();
+    });
+
+    function calendarInit() {
+
+        // 날짜 정보 가져오기
+        var date = new Date(); // 현재 날짜(로컬 기준) 가져오기
+        var utc = date.getTime() + (date.getTimezoneOffset() * 60 * 1000); // uct 표준시 도출
+        var kstGap = 9 * 60 * 60 * 1000; // 한국 kst 기준시간 더하기
+        var today = new Date(utc + kstGap); // 한국 시간으로 date 객체 만들기(오늘)
+      
+        var thisMonth = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        // 달력에서 표기하는 날짜 객체
+      
+        
+        var currentYear = thisMonth.getFullYear(); // 달력에서 표기하는 연
+        var currentMonth = thisMonth.getMonth(); // 달력에서 표기하는 월
+        var currentDate = thisMonth.getDate(); // 달력에서 표기하는 일
+
+        // kst 기준 현재시간
+        // console.log(thisMonth);
+
+        // 캘린더 렌더링
+        renderCalender(thisMonth);
+
+        function renderCalender(thisMonth) {
+
+            // 렌더링을 위한 데이터 정리
+            currentYear = thisMonth.getFullYear();
+            currentMonth = thisMonth.getMonth();
+            currentDate = thisMonth.getDate();
+
+            // 이전 달의 마지막 날 날짜와 요일 구하기
+            var startDay = new Date(currentYear, currentMonth, 0);
+            var prevDate = startDay.getDate();
+            var prevDay = startDay.getDay()+1;
+
+
+            // 이번 달의 마지막날 날짜와 요일 구하기
+            var endDay = new Date(currentYear, currentMonth + 1, 0);
+            var nextDate = endDay.getDate();
+            var nextDay = endDay.getDay();
+
+            // console.log(prevDate, prevDay, nextDate, nextDay);
+
+            // 현재 월 표기
+            $('.year_month').html("<p>"+currentYear + "</p><h3>" + (currentMonth + 1)+"</h3>");
+            if(currentMonth < 9) {
+                $(".year_month h3").html("0" +(currentMonth + 1));
+            } else {
+                $(".year_month h3").html((currentMonth + 1));
+            }
+
+            // 렌더링 html 요소 생성
+            calendar = document.querySelector('.days_day')
+            calendar.innerHTML = '';
+
+            
+
+
+            // 현재 날짜가 속한 주 계산
+            var currentWeekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+            var currentWeekEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 6);
+
+            // console.log(currentWeekStart)
+            // console.log(currentWeekEnd)
+
+
+
+            // 지난달
+            for (var i = prevDate - prevDay + 1; i <= prevDate; i++) {
+                calendar.innerHTML = calendar.innerHTML + '<div class="day prev disable"><span>' + i + '</span></div>'
+            }
+            // 이번달
+            for (var i = 1; i <= nextDate; i++) {
+                calendar.innerHTML = calendar.innerHTML + '<div class="day current"><span>' + i + '</span></div>'
+
+                /* 휴무는 rest 클래스 추가 */
+                // $(".days_day div").eq(0).addClass("rest");
+                // $(".days_day div").eq(7).addClass("rest");
+                // $(".days_day div").eq(14).addClass("rest");
+                // $(".days_day div").eq(21).addClass("rest");
+                // $(".days_day div").eq(28).addClass("rest");
+                // $(".days_day div").eq(35).addClass("rest");
+            }
+            // 다음달
+            for (var i = 1; i <= (7 - nextDay == 7 ? 0 : 7 - nextDay); i++) {
+                calendar.innerHTML = calendar.innerHTML + '<div class="day next disable"><span>' + i + '</span></div>'
+            }
+
+            // 오늘 날짜 표기
+            /* 오늘날짜에 휴무면 rest 클래스 추가 */
+            if (today.getMonth() == currentMonth) {
+                todayDate = today.getDate();
+                var currentMonthDate = document.querySelectorAll('.days_day .current');
+                currentMonthDate[todayDate -1].classList.add('today');
+            }
+            // 현재 날짜가 속한 주 표시
+            renderCurrentWeek(currentWeekStart, currentWeekEnd);
+            
+        }
+
+
+        function renderCurrentWeek(start, end) {
+            // 현재 날짜가 속한 주 표시
+            $('.weekend').html('');
+                //오늘날짜와 휴일표시
+                for (var i = start.getDate(); i <= end.getDate(); i++) {
+                    $(".weekend div").eq(0).addClass("rest");
+                    var dayClass = (i === today.getDate() && start.getMonth() === today.getMonth()) ? 'today' : '';
+                    $('.weekend').append('<div class="day current ' + dayClass + '"><span>' + i + '</span></div>');
+                }
+        }
+
+
+        // 이전달로 이동
+        $('.prev').on('click', function() {
+            thisMonth = new Date(currentYear, currentMonth - 1, 1);
+            renderCalender(thisMonth);
+        });
+
+        // 다음달로 이동
+        $('.next').on('click', function() {
+            thisMonth = new Date(currentYear, currentMonth + 1, 1);
+            renderCalender(thisMonth); 
+        });
+
+
+    }
+
+    
+</script>
+
+<!-- //달력팝업 -->
+
+
+
+<!-- 달력팝업 -->     
+<div class="calendar_box Pop" style='display:none'>
+<span class="close"></span>
+    <div class="cal_nav">
+        <a href="#none" class="prev nav_btn left">prev</a>
+        <div class="year_month"><p>2023</p><h3>12</h3></div>
+        <a href="#none" class="next nav_btn right">next</a>
+    </div>
+
+    <div class="days">
+        <!-- 요일 -->
+        <div class="days week_days">
+            <div class="day sun">S</div>
+            <div class="day">M</div>
+            <div class="day">T</div>
+            <div class="day">W</div>
+            <div class="day">T</div>
+            <div class="day">F</div>
+            <div class="day">S</div>
+        </div>
+
+
+        <!-- 1달 달력 -->
+        <div class="days days_day">
+        </div>
+   
+    </div>
+</div>
+<div class="black_bg"></div>
+
