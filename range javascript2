@@ -1,0 +1,217 @@
+<html>
+ <div class="double_slider_box">
+            <div class="range_slider">
+                <span class="slider-track"></span>
+                <input type="range" name="min_val" class="min-val" min="0" max="30000" value="0" step="1000" oninput="slideMin();">
+                <input type="range" name="max_val" class="max-val" min="0" max="30000" value="30000" step="1000" oninput="slideMax();">
+                <div class="tooltip min-tooltip"></div>
+                <div class="tooltip max-tooltip"></div>
+            </div>
+            <div class="input-box">
+                <input type="radio" name="dining" value="lunch"  onchange="toggleInputBox();" id="lunch"> <label for="lunch" ><?=$language['364'];//lunch?></label>
+                <div class="min-box">            
+                    <div class="input-wrap">
+                        <span class="input-addon">¥</span>
+                        <input type="text" name="min_input" id="lunch_min" class="input-field min-input"  inputmode="numeric" pattern="[0-9]*" onchange="setMinInput();">
+                    </div>
+                </div>
+                <div class="max-box">
+                    <div class="input-wrap">
+                        <span class="input-addon">¥</span>
+                        <input type="text" name="max_input" id="lunch_max" class="input-field max-input"  inputmode="numeric" pattern="[0-9]*" onchange="setMaxInput();">
+                    </div>
+                </div>
+            </div>
+            <div class="input-box">
+            <input type="radio" name="dining" value="dinner" onchange="toggleInputBox();" id="dinner"> <label for="dinner"><?=$language['365'];//Dinner?></label>
+                <div class="min-box">
+                    <div class="input-wrap">
+                        <span class="input-addon">¥</span>
+                        <input type="text" name="min_input" id="dinner_min" class="input-field min-input2"  inputmode="numeric" pattern="[0-9]*" onchange="setMinInput2();">
+                    </div>
+                </div>
+                <div class="max-box">
+                    <div class="input-wrap">
+                        <span class="input-addon">¥</span>
+                        <input type="text" name="max_input" id="dinner_max" class="input-field max-input2"  inputmode="numeric" pattern="[0-9]*" onchange="setMaxInput2();">
+                    </div>
+                </div>
+            </div>
+        </div>
+</html>
+
+
+<script>
+
+
+//예산 Range
+
+window.onload = function(){
+    slideMin();
+    slideMax();
+};
+
+const minVal = document.querySelector(".min-val"),
+        maxVal = document.querySelector(".max-val"),
+        minTooltip = document.querySelector(".min-tooltip"),
+        maxTooltip = document.querySelector(".max-tooltip"),
+        minGap = 0,
+        range = document.querySelector(".slider-track"),
+        sliderMinValue = parseInt(minVal.min),
+        sliderMaxValue = parseInt(maxVal.max),
+    selectedInputBox = document.querySelector('input[name="dining"]:checked');
+const priceInputMin = document.querySelector(".min-input");
+const priceInputMax = document.querySelector(".max-input");
+const priceInputMin2 = document.querySelector(".min-input2");
+const priceInputMax2 = document.querySelector(".max-input2");
+
+
+
+
+function toggleInputBox() {
+    setRangeValue();
+}
+
+function setRangeValue() {
+    const selectedInputBox = document.querySelector('input[name="dining"]:checked');
+    const addonInput = document.querySelector('.input-addon');
+    if (selectedInputBox && selectedInputBox.value == "lunch") {
+        slideMin();
+        slideMax();
+        priceInputMin2.disabled = true;
+        priceInputMin2.value = '';
+        priceInputMax2.disabled = true;
+        priceInputMax2.value = '';
+        priceInputMin.disabled = false;
+        priceInputMin.value = minVal.value;
+        priceInputMax.disabled = false;
+        priceInputMax.value = maxVal.value;
+        // console.log(selectedInputBox.value);
+    } else if (selectedInputBox && selectedInputBox.value == "dinner") {
+        slideMin();
+        slideMax();
+        priceInputMin.disabled = true;
+        priceInputMin.value = '';
+        priceInputMax.disabled = true;
+        priceInputMax.value = '';
+        priceInputMin2.disabled = false;
+        priceInputMin2.value = minVal.value;
+        priceInputMax2.disabled = false;
+        priceInputMax2.value = maxVal.value;
+        // console.log(selectedInputBox.value);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function slideMin(){
+    let gap = parseInt(maxVal.value) - parseInt(minVal.value);
+    if(gap <= minGap){
+        minVal.value = parseInt(maxVal.value) - minGap;
+    }
+    let formatMinVal = minVal.value;
+    let formatMinValNumber = formatMinVal.replace(/[^0-9]/g, '');
+    let formatMinValNumberResult = numberWithCommas(formatMinValNumber);
+
+    minTooltip.innerHTML = "¥"+ formatMinValNumberResult;
+    if($('#lunch').is(':checked')) {
+        priceInputMin.value = formatMinValNumberResult;
+    }
+    if($('#dinner').is(':checked')) {
+        priceInputMin2.value = formatMinValNumberResult;
+    }
+
+    setArea();
+}
+
+function slideMax(){
+    let gap = parseInt(maxVal.value) - parseInt(minVal.value);
+    if(gap <= minGap){
+        maxVal.value = parseInt(minVal.value) + minGap;
+    }
+    let formatMaxVal = maxVal.value;
+    let formatMaxValNumber = formatMaxVal.replace(/[^0-9]/g, '');
+    let formatMaxValNumberResult = numberWithCommas(formatMaxValNumber);
+
+    if (parseInt(formatMaxValNumber) >= 29999) {
+        formatMaxValNumberResult += " <?=$language['2138']//이상?>";
+    }
+
+    maxTooltip.innerHTML = "¥"+ formatMaxValNumberResult;
+    if($('#lunch').is(':checked')) {
+        priceInputMax.value = formatMaxValNumberResult;
+    }
+    if($('#dinner').is(':checked')) {
+        priceInputMax2.value = formatMaxValNumberResult;
+    }
+
+    setArea();
+}
+    
+    function setArea(){
+        range.style.left = (minVal.value / sliderMaxValue) * 100 + "%";
+        minTooltip.style.left = (minVal.value / sliderMaxValue) * 100  + 4 + "%";
+        range.style.right = 100 - (maxVal.value / sliderMaxValue) * 100 + 2 +"%";
+        maxTooltip.style.right = 100 - (maxVal.value / sliderMaxValue) * 100 - 10 + "%";
+    }
+
+    function setMinInput(){
+        let minPrice = parseInt(priceInputMin.value);
+        if(minPrice < sliderMinValue){
+            priceInputMin.value = sliderMinValue;
+        }
+        minVal.value = priceInputMin.value;
+        slideMin();
+    }
+    
+    function setMaxInput(){
+        let maxPrice =parseInt(priceInputMax.value);
+        if(maxPrice > sliderMaxValue){
+            priceInputMax.value =sliderMaxValue;
+        }
+        maxVal.value =priceInputMax.value;
+        slideMax();
+    }
+
+    function setMinInput2(){
+        let minPrice = parseInt(priceInputMin2.value);
+        if(minPrice < sliderMinValue){
+            priceInputMin2.value = sliderMinValue;
+        }
+        minVal.value = priceInputMin2.value;
+        slideMin();
+    }
+    
+    function setMaxInput2(){
+        let maxPrice =parseInt(priceInputMax2.value);
+        if(maxPrice > sliderMaxValue){
+            priceInputMax2.value =sliderMaxValue;
+        }
+        maxVal.value =priceInputMax2.value;
+        slideMax();
+    }
+
+  //천의자리마다 콤마찍는 함수
+  function numberWithCommas(number){
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+
+
+
+
+</script>
