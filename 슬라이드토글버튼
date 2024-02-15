@@ -1,14 +1,21 @@
-style
-
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+   
 .on_off {
     position: absolute;
-    right: 0;
-    top: 0;
-    display: flex;
+    right: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    /* display: flex;
     align-items: center;
     gap: 5px;
     flex-direction: column;
-    z-index: 3
+    z-index: 3 */
 }
 
 .on_off>span {
@@ -68,12 +75,15 @@ style
 
 
 
-
-
-
-html
-
-<label class="onoff_switch">
-<input type="checkbox">
-<span class="slider"></span>
-</label>
+    </style>
+  </head>
+  <body>
+    <div class="on_off">
+        <label class="onoff_switch">
+            <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+    </div>
+ 
+  </body>
+</html>
