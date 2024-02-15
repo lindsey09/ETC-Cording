@@ -1,0 +1,79 @@
+style
+
+.on_off {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-direction: column;
+    z-index: 3
+}
+
+.on_off>span {
+    font-size: 14px
+}
+
+.on_off .onoff_switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 25px
+}
+
+.on_off input[type=checkbox] {
+    display: none
+}
+
+.on_off .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ddd;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px
+}
+
+.on_off .slider:before {
+    position: absolute;
+    content: "";
+    height: 19px;
+    width: 19px;
+    left: 4px;
+    bottom: 3px;
+    background-color: #fff;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%
+}
+
+.on_off input[type=checkbox]:checked+.slider {
+    background: #1790f3
+}
+
+.on_off input[type=checkbox]:checked+.slider:before {
+    background-color: #fff
+}
+
+.on_off input[type=checkbox]:checked+.slider:before {
+    -webkit-transform: translateX(33px);
+    -ms-transform: translateX(33px);
+    transform: translateX(33px)
+}
+
+
+
+
+
+
+html
+
+<label class="onoff_switch">
+<input type="checkbox">
+<span class="slider"></span>
+</label>
