@@ -31,7 +31,7 @@ $(".mobile").scroll(function(){
 </script>
 
 2. <script>
-//무한스크롤 구현
+//무한스크롤 구현할 수 있을껄?
 $(".mobile").scroll(function(){
  	var scrollTop = $(this).scrollTop(); //현재스크롤영역의 가장 위의 위치
   var innerHeight = $(this).innerHeight(); // 패딩값을 포함한 현재 .mobile의 높이
