@@ -1,0 +1,26 @@
+//모바일 탭 내렸을 때 식당 이름 표시
+$(window).scroll(function() {
+    // console.log('스크롤탑' + $(window).scrollTop());
+    // console.log('오프셋탑' + $('.normal_top .rest_tit').offset().top);
+
+    if (window.innerWidth < 1024) {
+
+        if ($('.rest_tit').offset() != undefined){
+            if ($(window).scrollTop() > $('.rest_tit').offset().top) {
+                $('#header h1 .city_name').removeClass('on');
+                $('#header h1 .rest_name').addClass('on');
+                $('#header h1 .rest_name img, #header h1 a').hide();
+            } else {
+                $('#header h1 .city_name').addClass('on');
+                $('#header h1 .rest_name').removeClass('on');
+                $('#header h1 .rest_name img, #header h1 a').show();
+            }
+        }
+    }
+});
+
+
+조건문 if ($('.rest_tit').offset() != undefined)은 .rest_tit 클래스를 가진 요소의 위치가 정의되어 있는지 확인하는 조건문입니다. 
+만약 위치가 정의되어 있다면 조건문 내부의 코드가 실행됩니다.
+
+
