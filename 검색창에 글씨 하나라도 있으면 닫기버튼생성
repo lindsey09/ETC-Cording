@@ -1,0 +1,18 @@
+ <input type="text" name="search_name" class="search_name" id="search_name" oninput="showDel()" />
+ <img src="/common/images/ic_close_circle.svg" alt="" style='display:none; width:23px;' class="words_del" id="words_del">
+ <button type="submit" class="zoom"></button>
+
+
+function showDel(){
+    let Input = document.getElementById("search_name").value;
+    let delBtn = document.getElementById("words_del");
+    console.log(Input)
+
+    if(Input.length > 0){
+        delBtn.style.display = "block";
+    }else{
+        delBtn.style.display = "none";
+    }
+}
+
+input에는 oninput이라는 함수로 넣어야 함 
