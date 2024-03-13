@@ -1,23 +1,25 @@
-       <style>
-        .pagination{
-            display: flex;
-            gap:20px;
-            align-items: center;
-        }
-        #numbers{
-            display: flex;
-            gap:5px;
-            list-style:none;
-        }
-        #numbers a{
-            font-size:14px;
-        }
-        #numbers a.active{
-            background:#222;
-            color:#fff;
-        }  
-
-    </style>
+<style>
+.pagination{
+    display: flex;
+    gap:20px;
+    align-items: center;
+    justify-content: center;
+}
+#numbers{
+    display: flex;
+    gap:5px;
+    list-style:none;
+}
+#numbers a{
+    font-size:14px;
+    padding:5px 10px;
+    border-radius: 3px;;
+}
+#numbers a.active{
+    background:#222;
+    color:#fff;
+}  
+</style>
       
       <div class="table">
         <div class="pagination">
@@ -137,13 +139,14 @@
         }
 
 
-
+//페이지 10개씩 보여주기
         numberBtn.forEach((item,idx) => {
                 item.addEventListener('click', (e)=>{ 
                     e.preventDefault()
                     
                     // console.log(idx)
                     displayRow(idx);
+                     window.scrollTo({top:0, behavior:'smooth'}); //페이지 이동 시 스크롤탑으로 올리기
                 })    
             });
             //상단의idx와 달라도되고 같아도 됨. function안에 idx는 지역번수임
