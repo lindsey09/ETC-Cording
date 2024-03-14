@@ -1,0 +1,21 @@
+//탭 누르면 각각 해당 내용 보여주기
+$(".room_type li").click(function() {
+        $(".room_type li").removeClass("active");
+        $(this).addClass("active");
+        console.log($(this))
+        let tab = $(this).attr('data-tab');
+        console.log(tab);
+
+		$('.room_list').removeClass('active');
+
+		$(this).addClass('active');
+		$("#"+tab).addClass('active');
+
+        //전체일떄 다 보여주기
+        if(tab =='tab-0'){
+            $(".room_list").addClass('active');
+        }
+    });
+ 
+
+해당 html에 li에 data-tab이라는 속성값을 주고, 해당 내용에 id값을 속성값과 일치시킨다. ex) data-tab='tab-1'. id='tab-1'
