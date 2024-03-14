@@ -24,3 +24,11 @@ string 에서 ,하고 쓰면 지우고 다시쓰는거고,
 
   strings: ['아리가또 고자이마스 <br> `백키를준다고?` 도죠요코시쿠 오네가이시마스'],
 이렇게 `` 를 사용할 경우 `` 안에 있는 글씨가 한번에 다 써진다
+
+
+
+typing을 input box에 사용할 경우
+attr: 'placeholder', // 속성에 사용할 placeholder
+bindInputFocusEvents: true, // cursor가 생겼을 때 멈추기 
+
+이런 태그를 주면 된다.
