@@ -168,6 +168,13 @@
                     ra.style.display='none';
                 }   //모든 tr을 display:none해라
 
+
+                //tr 혹은 게시글이 하나도 없으면 좌 우 화살표 없애기    
+                if(rowsArray.length == '0'){        
+                    prevPageBtn.style.display='none';
+                    nextPageBtn.style.display='none';
+                }
+
                 let newRows = rowsArray.slice(start, end);
                 for(nr of newRows){
                     nr.style.display='';
