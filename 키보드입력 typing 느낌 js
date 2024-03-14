@@ -1,0 +1,18 @@
+  <!-- Element to contain animated typing -->
+  <span id="element"></span>
+
+  <!-- Load library from the CDN -->
+  <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+
+  <!-- Setup and start animation! -->
+  <script>
+    var typed = new Typed('#element', {
+      strings: ['<i>First</i> sentence.', '&amp; a second sentence.'],
+      typeSpeed: 50,
+    });
+  </script>
+</body>
+
+
+string 에서 ,하고 쓰면 지우고 다시쓰는거고,
+붙여서<br>쓰면 줄바꿈해서 계속 쓰는 것,
