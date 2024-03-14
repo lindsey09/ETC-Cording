@@ -8,7 +8,12 @@
   <script>
     var typed = new Typed('#element', {
       strings: ['<i>First</i> sentence.', '&amp; a second sentence.'],
-      typeSpeed: 50,
+      typeSpeed: 50, //쓰는속도
+       backSpeed: 50, //지우는속도
+     fadeOut: false, //지울때 페이드 적용 미적용
+     smartBackspace: true,
+     cursorChar:'|', //키보드 커서
+     loop:true //무한반복
     });
   </script>
 </body>
