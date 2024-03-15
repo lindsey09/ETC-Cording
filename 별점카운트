@@ -63,6 +63,15 @@ function setPyungJum_diary(num,_p,_id_ , idx)
 간단하게 
 function ReviewScore(num,_p)
     {
+        //별점빼기
+        for(i=1; i <= 5; i++)
+        {
+            if($("#star"+_p+i).length > 0)
+            {
+                $("#star"+_p+i).prop('checked',false);
+            }
+        }
+        //별점주기
         for(i=1; i <= num; i++)
         {
             if($("#star"+_p+i).length > 0)
