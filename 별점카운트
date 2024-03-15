@@ -23,7 +23,9 @@
 </ul>
 </html>
 
+
 <script>
+<!-- 
 function setPyungJum_diary(num,_p,_id_ , idx)
     {
         if(num == 5)
@@ -55,5 +57,21 @@ function setPyungJum_diary(num,_p,_id_ , idx)
 
 
     }
+-->
 
+
+간단하게 
+function ReviewScore(num,_p)
+    {
+        for(i=1; i <= num; i++)
+        {
+            if($("#star"+_p+i).length > 0)
+            {
+                $("#star"+_p+i).prop('checked',true);
+            }
+        }
+
+
+    }
+이거 하나만 있어도 나에게는 동작이 다 됨.
 </script>
