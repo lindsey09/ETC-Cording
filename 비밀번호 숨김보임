@@ -1,0 +1,19 @@
+<div class="input_line">
+   <input type="password" placeholder="8자리 이상" name="join_password" class="input_box">
+   <input type="button" name="showPassword" value="표시">
+</div>
+
+
+
+//비밀번호 감추기 보이기
+$('input[name=showPassword]').on('click', function() {
+    var passwordField = $(this).prev();
+    var passwordFieldType = passwordField.attr('type');
+    if (passwordFieldType == 'password') {
+        passwordField.attr('type', 'text');
+        $(this).parent().addClass("on");
+    } else {
+        passwordField.attr('type', 'password');
+        $(this).parent().removeClass("on");
+    }
+});
