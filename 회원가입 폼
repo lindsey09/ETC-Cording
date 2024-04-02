@@ -1,3 +1,6 @@
+숫자input의 경우 maxlength="4" inputmode="numeric" pattern="[0-9]*" required 설정해주어서 모바일에서 숫자키패드가 뜨도록 한다.
+
+
 <?php
     include_once "../_common1.php";
     $addStyleCss = array();
@@ -226,7 +229,7 @@
 </div>
 
 <script>
-    //비밀번호 감추기 보이기
+    //비밀번호 감추기 보이기 lindsey
     $('input[name=showPassword]').on('click', function() {
         var passwordField = $(this).prev();
         var passwordFieldType = passwordField.attr('type');
@@ -240,7 +243,7 @@
     });
 
 
-    //아이디와 이메일값은 동일 체크
+    //아이디와 이메일값은 동일 체크 lindsey
     function sameID(){
         var joinID = document.querySelector('.login_id');
         var joinEmail = document.querySelector('.email');
@@ -263,7 +266,7 @@
     }
     }
 
-    //이메일 도메인이 없다면 새로운 input 노출
+    //이메일 도메인이 없다면 새로운 input 노출 lindsey
     function domainEtc(){
         let domainSelect = document.getElementById('domain');
         let domainSelectValue = domainSelect.options[domainSelect.selectedIndex].value;
@@ -284,8 +287,8 @@
     }
 
 
-function passConfirm(){
-    //비밀번호 규칙 확인
+function passConfirm(){ lindsey
+    //비밀번호 규칙 확인 
     $("input[name=login_password]").on('keyup', function(){
         var pw = $("#login_password").val();
         var reg = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()])[a-zA-Z\d!@#$%^&*()]{8,}$/;
@@ -317,19 +320,19 @@ passConfirm();
 
 
 
-//숫자만 입력
+//숫자만 입력 lindsey
 $("#birth_year, #phoneNumber, #code").on('input',function() {
     $(this).val($(this).val().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1'));
 });
 
-// 영문만 입력
+// 영문만 입력 lindsey
 $('.FirstName, .LastName').on('keyup blur',function(){
     // var node = $(this);
     // node.val(node.val().replace(/[^a-z]/g,''));
     $(this).val($(this).val().replace(/[^a-z]/g,'').replace(/(\..*?)\..*/g, '$1'));
 });
 
-//모두동의
+//모두동의 lindsey
 $(document).ready(function() {
     $("#all_chk").click(function() {
         var Checked = $(this).is(':checked');
@@ -608,7 +611,7 @@ $(document).ready(function() {
 
 
 
-//아이디 중복확인 버튼 ON
+//아이디 중복확인 버튼 ON lindsey
 let inputValue = document.getElementById('login_id');
 let onBtn = document.querySelector('.id_btn');
 
@@ -622,7 +625,7 @@ inputValue.addEventListener('input', function() {
     }
 })
 
-//인증번호확인 버튼 on
+//인증번호확인 버튼 on lindsey
 let inputNumber = document.getElementById('code');
 let certiBtn =document.getElementById('certi_btn')
 
@@ -637,7 +640,7 @@ inputNumber.addEventListener('input', function(){
 })
 
 
-// 회원가입란 전체 입력되었다면 다음버튼 on
+// 회원가입란 전체 입력되었다면 다음버튼 on lindsey
 let InputFieldValue = false;
 let SelectFieldValue = false;
 let CheckFieldValue = false;
@@ -660,7 +663,7 @@ function myInformation(){
 
 }
 
-function myInformation2(){
+function myInformation2(){ lindsey
     let inputField = document.querySelectorAll('select[required]')
 
     inputField.forEach(function(Field, idx){
@@ -677,7 +680,7 @@ function myInformation2(){
 }
 
 
-function requireChk(){
+function requireChk(){ lindsey
     let requireCheckboxes = document.querySelectorAll('.require_chk');
     let AllCheckbox = document.getElementById('all_chk');
     let nextButton = document.getElementById('nextButton');
@@ -700,7 +703,7 @@ function requireChk(){
     checkFormNext();
 }
 
-function checkFormNext(){
+function checkFormNext(){ lindsey
     let nextButton = document.getElementById('nextButton');
     if(InputFieldValue && SelectFieldValue && CheckFieldValue){
         nextButton.classList.add('on')
