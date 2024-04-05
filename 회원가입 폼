@@ -291,7 +291,7 @@ function passConfirm(){ lindsey
     //비밀번호 규칙 확인 
     $("input[name=login_password]").on('keyup', function(){
         var pw = $("#login_password").val();
-        var reg = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()])[a-zA-Z\d!@#$%^&*()]{8,}$/;
+        var reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[a-zA-Z\d!@#$%^&*()]{8,}$/;
         if (pw.match(reg) == null) {
             $('.step02').show();
         }else{
