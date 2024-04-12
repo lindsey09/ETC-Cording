@@ -1,55 +1,6 @@
 숫자input의 경우 maxlength="4" inputmode="numeric" pattern="[0-9]*" required 설정해주어서 모바일에서 숫자키패드가 뜨도록 한다.
 
 
-<?php
-    include_once "../_common1.php";
-    $addStyleCss = array();
-    $_PAGE_TITLE_ = '회원가입';
-    $addStyleCss[] = "common/css/login.css?v=1";
-    include_once "head.sub_sub.php";
-
-    if (isset($_SESSION['member'])){
-        echo "<script>alert({$language['728']});</script>"; //이미 로그인한 회원입니다.
-        echo "<script>location.href='/';</script>";
-        exit;
-    }
-
-    // 국적 정보
-    $code_list_idx_n = $newMember->getChildCodeList("3371"); // 국적 정보가 담긴 상위 코드 정보
-    $nationality = [];
-
-    for($i = 0; $i < $code_list_idx_n["resultRows"]; $i++){
-        $data = $newMember->getCodeList($code_list_idx_n["idx"][$i], $_base_use_lang);
-        $data["parentIdx"] = $code_list_idx_n["idx"][$i];
-        array_push($nationality, $data);
-    }
-
-    // 핸드폰 국가 정보
-    $code_list_idx_p = $newMember->getChildCodeList("56346"); // 핸드폰 국적 정보가 담긴 상위 코드 정보
-    $international_calling_country_code = [];
-    for($i = 0; $i < $code_list_idx_p["resultRows"]; $i++){
-        $data = $newMember->getCodeList($code_list_idx_p["idx"][$i], $_base_use_lang);
-        $data["parentIdx"] = $code_list_idx_p["idx"][$i];
-        array_push($international_calling_country_code, $data);
-    }
-?>
-
-<style>
-    .search_flex>div {
-        padding: 0
-    }
-
-    #container,
-    #scontainer {
-        margin: 0 auto;
-        min-height: 100%;
-    }
-
-    #header {
-        display: none;
-    }
-</style>
-
 <div class="login">
     <div id="titleArea">
         <a href="javascript:void(0)" onclick="history.back();" class="prev"></a>
@@ -75,16 +26,16 @@
                 <div>
                     <p class="require mb10"><?=$language['3'];//비밀번호?></p>
                     <div class="input_line">
-                        <input type="password" placeholder="<?=$language['2521'];//대문자, 소문자, 특수문자가 포함된 8자리 이상?>" id="login_password" name="login_password" class="input_box" required  onkeyup="myInformation()">
+                        <input type="password" placeholder="<?=$language['2571'];//대문자, 소문자, 숫자, 특수문자를 포함한 8자리 이상?>" id="login_password" name="login_password" class="input_box" required  onkeyup="myInformation()">
                         <input type="button" name="showPassword" value="<?=$language['9'];//표시?>">
                     </div>
 
-                    <p class="errorMent step02" style="display:none"><?=$language['2554'];//비밀번호는 대문자, 소문자, 특수문자가 포함된 8자리 이상입니다.?></p>
+                    <p class="errorMent step02" style="display:none"><?=$language['2528'];//8~16자 하나 이상의 대문자, 소문자, 숫자, 특수문자가 포함되어야 합니다.?></p>
                 </div>
                 <div>
                     <p class="require mb10"><?=$language['875'];//비밀번호 확인?></p>
                     <div class="input_line">
-                        <input type="password" placeholder="<?=$language['2521'];//대문자, 소문자, 특수문자가 포함된 8자리 이상?>" id="login_password2" name="login_password2" class="input_box" required  onkeyup="myInformation()">
+                        <input type="password" placeholder="<?=$language['2571'];//대문자, 소문자, 숫자, 특수문자를 포함한 8자리 이상?>" id="login_password2" name="login_password2" class="input_box" required  onkeyup="myInformation()">
                         <input type="button" name="showPassword" value="<?=$language['9'];//표시?>">
                     </div>
 
@@ -105,7 +56,7 @@
                 <div class="mb20">
                     <h5 class="require mb10"><?=$language['1257'];//생년월일?></h5>
                     <div class="input_line flex gap5">
-                        <input type="text" name="birth_year" id="birth_year" placeholder="1993" maxlength="4" inputmode="numeric" pattern="[0-9]*" required onkeyup="myInformation()">
+                        <input type="text" name="birth_year" id="birth_year" placeholder="1993" maxlength="4" inputmode="numeric"  pattern="[0-9]*" required onkeyup="myInformation()">
                         <!-- <select name="birth_year" id="birth_year">
                             <?php
                                 for($i = 1920; $i <= 2020; $i++){
@@ -185,7 +136,6 @@
                     <div class="input_line">
                         <div class="phone_num">
                             <select name="international_calling_country_code" id="" required onchange="myInformation2()">
-                                <option value="82">test<span>82</span></option>
                                 <option value="+82">한국(KR) <span>+82</span></option>
                                 <option value="+81">일본(JP) <span>+81</span></option>
                                 <option value="+1">미국(US) <span>+1</span></option>
@@ -217,8 +167,11 @@
                     <p class="pb10">
                         <input type="checkbox" class="chk" id="chk_person3" name="marketing_opt_in_agree_yn" value="N"><label for="chk_person3"><?=$language['1015'];//마케팅 수신 동의?> </label>
                     </p>
+                    <p class="pb10">
+                        <input type="checkbox" class="chk" id="chk_person4" name="app_push" value="N"><label for="chk_person4">앱 푸쉬</label>
+                    </p>
                 </div>
-                <button type="submit" class="regist_btn" id="nextButton"><?=$language['879'];//다음?></button>
+                <button type="submit" class="regist_btn" id="nextButton" onclick="joinNext()" disabled><?=$language['879'];//다음?></button>
 
                 <div class="util clear mb20">
                     <a href="login.php"><?=$language['878'];//로그인으로 돌아가기?></a>
@@ -229,7 +182,7 @@
 </div>
 
 <script>
-    //비밀번호 감추기 보이기 lindsey
+    //비밀번호 감추기 보이기
     $('input[name=showPassword]').on('click', function() {
         var passwordField = $(this).prev();
         var passwordFieldType = passwordField.attr('type');
@@ -243,7 +196,7 @@
     });
 
 
-    //아이디와 이메일값은 동일 체크 lindsey
+    //아이디와 이메일값은 동일 체크
     function sameID(){
         var joinID = document.querySelector('.login_id');
         var joinEmail = document.querySelector('.email');
@@ -266,7 +219,7 @@
     }
     }
 
-    //이메일 도메인이 없다면 새로운 input 노출 lindsey
+    //이메일 도메인이 없다면 새로운 input 노출
     function domainEtc(){
         let domainSelect = document.getElementById('domain');
         let domainSelectValue = domainSelect.options[domainSelect.selectedIndex].value;
@@ -287,12 +240,13 @@
     }
 
 
-function passConfirm(){ lindsey
-    //비밀번호 규칙 확인 
+function passConfirm(){
+    //비밀번호 규칙 확인
     $("input[name=login_password]").on('keyup', function(){
         var pw = $("#login_password").val();
         var reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[a-zA-Z\d!@#$%^&*()]{8,}$/;
-        if (pw.match(reg) == null) {
+        console.log(pw.match(reg))
+        if (pw.match(reg) === null) {
             $('.step02').show();
         }else{
             $('.step02').hide();
@@ -320,19 +274,23 @@ passConfirm();
 
 
 
-//숫자만 입력 lindsey
+
+
+
+
+//숫자만 입력
 $("#birth_year, #phoneNumber, #code").on('input',function() {
     $(this).val($(this).val().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1'));
 });
 
-// 영문만 입력 lindsey
+// 영문만 입력
 $('.FirstName, .LastName').on('keyup blur',function(){
     // var node = $(this);
     // node.val(node.val().replace(/[^a-z]/g,''));
-    $(this).val($(this).val().replace(/[^a-z]/g,'').replace(/(\..*?)\..*/g, '$1'));
+    $(this).val($(this).val().replace(/[^a-z,A-Z]/g,'').replace(/(\..*?)\..*/g, '$1'));
 });
 
-//모두동의 lindsey
+//모두동의
 $(document).ready(function() {
     $("#all_chk").click(function() {
         var Checked = $(this).is(':checked');
@@ -342,7 +300,7 @@ $(document).ready(function() {
     $(".chk_login .chk").click(function() {
         var total = $(".chk_login .chk").length;
         var checked = $(".chk_login .chk:checked").length;
-        
+
         $("#all_chk").prop("checked", total === checked);
     });
 });
@@ -444,6 +402,12 @@ $(document).ready(function() {
         if(chk_person3.checked){
             $("input[name=marketing_opt_in_agree_yn]").val('Y');
         }
+
+        // 앱 푸쉬
+        var chk_person4 = document.getElementById("chk_person4");
+        if(chk_person4.checked){
+            $("input[name=app_push]").val('Y');
+        }
     }
 
     // 회원가입
@@ -524,8 +488,6 @@ $(document).ready(function() {
         if (isSend == 1){
             alert("<?=$language['2542'];//이미 발송되었습니다.?>");
             return false;
-        }else{
-            $("#isSendAuthCode").val('1');
         }
 
         var email = $("input[name=email]").val();
@@ -534,6 +496,16 @@ $(document).ready(function() {
         let domainSelectValue = domainSelect.options[domainSelect.selectedIndex].value; // 기타 선택 시 도메인 변경
         if(domainSelectValue == 'etc'){
             domain = document.querySelector('.etc_email').value;
+        }
+
+        if (email == ''){
+            alert('<?=$language['2532'];//이메일을 입력하세요.?>');
+            return false;
+        }
+
+        if (domain == ''){
+            alert('<?=$language['2584'];//도메인을 입력하세요.?>');
+            return false;
         }
 
         $.ajax({
@@ -548,6 +520,7 @@ $(document).ready(function() {
             async: false,
             success: function(data) {
                 if ($.trim(data) == 'S') {
+                    $("#isSendAuthCode").val('1');
                     alert("<?=$language['2543'];//발송되었습니다.?>");
                     $("#email_code_check").show();
                 } else {
@@ -604,6 +577,8 @@ $(document).ready(function() {
         chkPerson2.checked = true;
         var chkPerson3 = document.getElementById("chk_person3");
         chkPerson3.checked = true;
+        var chkPerson4 = document.getElementById("chk_person4");
+        chkPerson4.checked = true;
     }
 
 
@@ -611,7 +586,7 @@ $(document).ready(function() {
 
 
 
-//아이디 중복확인 버튼 ON lindsey
+//아이디 중복확인 버튼 ON
 let inputValue = document.getElementById('login_id');
 let onBtn = document.querySelector('.id_btn');
 
@@ -625,13 +600,13 @@ inputValue.addEventListener('input', function() {
     }
 })
 
-//인증번호확인 버튼 on lindsey
+//인증번호확인 버튼 on
 let inputNumber = document.getElementById('code');
 let certiBtn =document.getElementById('certi_btn')
 
 inputNumber.addEventListener('input', function(){
-    console.log(inputNumber);
-    console.log(inputNumber.value.length);
+    // console.log(inputNumber);
+    // console.log(inputNumber.value.length);
     if(inputNumber.value.length > 0){
         certiBtn.classList.add('on');
     }else{
@@ -640,22 +615,41 @@ inputNumber.addEventListener('input', function(){
 })
 
 
-// 회원가입란 전체 입력되었다면 다음버튼 on lindsey
+
+// 생년월일 올해보다 작게 입력하기
+document.getElementById('birth_year').addEventListener('keyup', function() {
+    let birthYear = document.getElementById('birth_year');
+    let birthYearValue = parseInt(birthYear.value);
+    let ThisYear = new Date().getFullYear();
+
+    if(birthYearValue > ThisYear){
+        alert("<?=$language['2585'];//현재년도보다 클 수 없습니다.?>")
+        document.getElementById('birth_year').value = '';
+    }
+});
+
+
+
+
+
+
+// 회원가입란 전체 입력되었다면 다음버튼 on
 let InputFieldValue = false;
 let SelectFieldValue = false;
 let CheckFieldValue = false;
 
+// 입력
 function myInformation(){
     let inputField = document.querySelectorAll('input[required]')
 
     inputField.forEach(function(Field, idx){
-        console.log(Field.value, idx)
+        // console.log(Field.value, idx)
 
         if(!Field.value){
-            console.log('false')
+            // console.log('false')
         }else{
             InputFieldValue = true;
-            console.log('true')
+            // console.log('true')
         }
     })
 
@@ -663,54 +657,69 @@ function myInformation(){
 
 }
 
-function myInformation2(){ lindsey
+// 셀렉트
+function myInformation2(){
     let inputField = document.querySelectorAll('select[required]')
 
     inputField.forEach(function(Field, idx){
-        console.log(Field.value, idx)
+        // console.log(Field.value, idx)
         if(!Field.value){
-            console.log('false')
+            // console.log('false')
         }else{
             SelectFieldValue = true;
-            console.log('true')
+            // console.log('true')
         }
     })
 
     checkFormNext();
 }
 
+// 전체동의
+document.getElementById('all_chk').onclick = function() {
+    let allChecked = this.checked;
+    let requireCheckboxes = document.querySelectorAll('.require_chk');
+    requireCheckboxes.forEach(function(checkbox) {
+        checkbox.checked = allChecked;
+    });
+    requireChk(); 
+};
 
-function requireChk(){ lindsey
+// 동의체크박스
+function requireChk(){
     let requireCheckboxes = document.querySelectorAll('.require_chk');
     let AllCheckbox = document.getElementById('all_chk');
     let nextButton = document.getElementById('nextButton');
+    CheckFieldValue = true; 
     
-    //전체동의
-    if(AllCheckbox){
-        CheckFieldValue = true;
-    }else{
-        nextButton.classList.remove('on')
-    }
-    
-   //필수동의
+
+    //필수동의
     for(let i = 0; i < requireCheckboxes.length; i++){
         if (!requireCheckboxes[i].checked) {
-            CheckFieldValue = false; 
+            CheckFieldValue = false;
             break;
         }
     }
 
+    if(AllCheckbox.checked){
+        CheckFieldValue = true; 
+    }
+    
     checkFormNext();
 }
 
-function checkFormNext(){ lindsey
+
+function checkFormNext(){
     let nextButton = document.getElementById('nextButton');
     if(InputFieldValue && SelectFieldValue && CheckFieldValue){
         nextButton.classList.add('on')
+        nextButton.setAttribute("disabled", false);
     }else{
         nextButton.classList.remove('on')
     }
 }
 
 
+
+
 </script>
+
