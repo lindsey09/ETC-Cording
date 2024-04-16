@@ -108,6 +108,7 @@
                     <div class="input_line flex mb10" id="email_code_check" style='display:none;'>
                         <div class="input_box_line">
                             <input type="text" class="" id="code" style="width: 100%;" maxlength="6" inputmode="numeric" pattern="[0-9]*" required  onkeyup="myInformation()">
+                            <span class="time_count">3:00</span>
                         </div>
                         <button class="regist_btn" id="certi_btn" style="margin-top:initial;" onclick="checkAuthCode()"><?=$language['2525'];//인증번호 인증?></button>
                     </div>
@@ -481,6 +482,25 @@ $(document).ready(function() {
         });
     }
 
+
+
+    //이메일인증 유효시간
+    function startTimer(duration, display) {
+        var timer = duration, minutes, seconds;
+        setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            display.textContent = minutes + ":" + seconds;
+
+            if (--timer < 0) {
+                timer = duration;
+            }
+        }, 1000);
+    }
+
     // 이메일 인증 발송
     function sendSms(){
         event.preventDefault()
@@ -523,6 +543,10 @@ $(document).ready(function() {
                     $("#isSendAuthCode").val('1');
                     alert("<?=$language['2543'];//발송되었습니다.?>");
                     $("#email_code_check").show();
+                    // 타이머 시작
+                    let twoMinutes = 3 * 60;
+                    let display = document.querySelector('.time_count');
+                    startTimer(twoMinutes, display);
                 } else {
                     alert("<?=$language['2544'];//발송이 실패하였습니다.?>");
                 }
@@ -700,10 +724,10 @@ function requireChk(){
         }
     }
 
-    if(AllCheckbox.checked){
-        CheckFieldValue = true; 
+    if(AllCheckbox.checked && CheckFieldValue){
+        CheckFieldValue = true;
     }
-    
+
     checkFormNext();
 }
 
