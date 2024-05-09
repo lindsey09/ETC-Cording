@@ -1,0 +1,36 @@
+Modal API 사용법
+
+
+<link href="/js/remodal-default-theme.css" rel="stylesheet">
+<link href="/js/remodal.css" rel="stylesheet">
+<script src="/js/remodal.js>"></script>
+<script>window.jQuery || document.write('<script src="/js/jquery-1.12.4.min.js"><\/script>')</script>
+
+이렇게 불러오고
+
+<a href="#none" onclick="clickPop()">Modal №1</a><br>
+
+<div class="remodal" data-remodal-id="change" role="dialog" >
+  <button data-remodal-action="close" class="remodal-close"></button>
+  <div>
+    <h2 id="modal1Title">Remodal</h2>
+    <p id="modal1Desc">
+      Responsive, lightweight, fast, synchronized with CSS animations, fully customizable modal window plugin
+      with declarative state notation and hash tracking.
+    </p>
+  </div>
+
+  <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
+  <button data-remodal-action="confirm" class="remodal-confirm">OK</button>
+</div>
+
+
+
+함수
+function clickPop(){
+  let pop = $('[data-remodal-id=change]').remodal();
+  pop.open()
+}`
+
+
+
