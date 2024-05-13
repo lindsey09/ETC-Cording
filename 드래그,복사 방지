@@ -1,0 +1,48 @@
+
+oncontextmenu = "return false" : 우클릭 방지
+onseletstart = "return false" : 마우스 드래그 방지
+ondragstart =  "return false" : 이미지 복사 드래그 방지
+onkeydown = "return false" : 키보드 단축키 복사 방지
+
+
+<!--바디 태그-->
+<body oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onkeydown="return false">
+
+
+<style>
+body,html{
+    /*텍스트 선택 불가*/
+  -webkit-user-select: none !important; 
+  -moz-user-select: -moz-none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+</style>
+
+해드태그안쪽에서 src로 불러오기
+<script>
+// 오른쪽 클릭 방지
+document.oncontextmenu = function() {
+    return false;
+}
+
+// 드래그 방지
+var omitformtags = ["input", "textarea", "select"]
+omitformtags = omitformtags.join("|")
+
+function disableselect(e) {
+    if (omitformtags.indexOf(e.target.tagName.toLowerCase()) == -1)
+        return false
+}
+
+function reEnable() {
+    return true
+}
+
+if (typeof document.onselectstart != "undefined")
+    document.onselectstart = new Function("return false")
+else {
+    document.onmousedown = disableselect
+    document.onmouseup = reEnable
+}
+</script>
