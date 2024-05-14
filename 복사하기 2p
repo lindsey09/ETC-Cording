@@ -29,7 +29,7 @@ copyButtons.forEach(function(button) {
         var selection = window.getSelection();
         selection.removeAllRanges();
         selection.addRange(range);
-        document.execCommand('copy');
+        document.execCommand('copy'); // 이부분을 navigator.clipboard.writeText(range); 이렇게 바꾸면 됨.
 
         // 복사가 완료되었음을 알리는 메시지를 표시합니다.
         alert('<?=$language['1330'];//복사되었습니다?>');
