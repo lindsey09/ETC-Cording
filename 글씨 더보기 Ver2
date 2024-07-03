@@ -1,0 +1,48 @@
+불러오는 text값이 textarea를 통해 가지고 올 경우, val로 처리해서 불러와야 함.
+
+
+
+//글씨더보기 
+$(document).ready(function(){
+    $('.rest_desc01 .border_bottom').each(function(){
+        var content = $(this).children('.desc');
+        var content_txt;
+
+        if (content.is('textarea')) {
+            // textarea의 내용을 가져옴
+            content_txt = content.val();
+        } else {
+            // 일반적인 요소의 텍스트를 가져옴
+            var content_html = content.html();
+            content_txt = content_html.replace(/<br\s*[\/]?>/gi, "\n");
+        }
+
+        console.log(content_txt);
+        var content_txt_short = content_txt.substring(0,200) + "...";
+        
+        var btn_more = $('<a href="javascript:void(0)" class="readmore">더보기</a>');
+        $(this).append(btn_more);
+
+        if(content_txt.length >= 130){
+            content.html(content_txt_short.replace(/\n/g, "<br>"));
+        } else {
+            btn_more.hide();
+        }
+
+        btn_more.click(toggle_content);
+
+        function toggle_content(){
+            if($(this).hasClass('short')){
+                // 접기 상태
+                $(this).html('더보기');
+                content.html(content_txt_short.replace(/\n/g, "<br>"));
+                $(this).removeClass('short');
+            } else {
+                // 더보기 상태
+                $(this).html('접기');
+                content.html(content_txt.replace(/\n/g, "<br>"));
+                $(this).addClass('short');
+            }
+        }
+    });
+});
