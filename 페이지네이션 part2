@@ -1,0 +1,215 @@
+해당코드는 서버에서 다시 호출해서 가져오는 방식
+데이타가 많거나 url이 변하거나,
+보통은 해당방법을 많이 사용함.
+
+
+
+
+<dl>
+            <dt>1P출력수</dt>
+            <dd>
+                <div class="flex justify_between ">
+                    <select name="limit" id="sortCount" class="select" onchange="limitChange(this.value)">
+                        <option value="10" <?=$_GET["limit"] == "10" ? "selected" : ''?>>10</option>
+                        <option value="20" <?=$_GET["limit"] == "20" ? "selected" : ''?>>20</option>
+                        <option value="50" <?=$_GET["limit"] == "50" ? "selected" : ''?>>50</option>
+                        <option value="100" <?=$_GET["limit"] == "100" ? "selected" : ''?>>100</option>
+                        <option value="300" <?=$_GET["limit"] == "300" ? "selected" : ''?>>300</option>
+                        <option value="500" <?=$_GET["limit"] == "500" ? "selected" : ''?>>500</option>
+                    </select>
+                </div>
+            </dd>
+        </dl>
+
+<div class="table_Xscroll">
+    <table class="list_tb" id="myTable">
+        <colgroup>
+            <col style="width:6%">
+            <col style="width:13%">
+            <col style="width:13%">
+            <col style="width:8%">
+            <col style="width:4%">
+            <col style="width:8%">
+            <col style="width:8%">
+            <col style="width:5%">
+            <col style="width:10%">
+            <col style="width:10%">
+            <col style="width:7%">
+            <col style="width:8%">
+        </colgroup>
+        <thead style="position:sticky; top:0;">
+            <tr>
+                <th><?=$language['2552'];//회원번호?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['2'];//ID?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['900'];//이름(닉네임)?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['2695'];//회원구분?><img src="/img/ico-down.svg"></th>
+                <th><?=$language['1201'];//국가?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['97'];//전화번호?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['909'];//국적?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['196'];//성별?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['2501'];//가입일?> <a href="#" onclick="sortBy('registration_datetime asc')">▲</a><a href="#" onclick="sortBy('registration_datetime desc')">▼</a></th>
+                <th><?=$language['2502'];//접속일?> <a href="#" onclick="sortBy('last_login_datetime asc')">▲</a><a href="#" onclick="sortBy('last_login_datetime desc')">▼</a></th>
+                <th><?=$language['587'];//상태?> <img src="/img/ico-down.svg"></th>
+                <th class="not_Event"><?=$language['482'];//관리?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php for($i = 0; $i < $memberList["resultRows"]; $i++){?>
+                <?php
+                    // 국가 -> 나중에 이것도 쿼리로 빼야함
+                    $nationality = $newMember->getCodeList($memberList["nationality"][$i], $_base_use_lang);
+                ?>
+                <tr>
+                    <td><?=$memberList["member_no"][$i]?></td>
+                    <td class="left"><?=$memberList["login_id"][$i]?></td>
+                    <td class="left"><a href="/member/surfMember_detail.php?member_no=<?=$memberList["member_no"][$i]?>" target="_blank"><?=$memberList["last_name"][$i]." ".$memberList["first_name"][$i]?></a></td>
+                    <td><?=$memberList["member_type"][$i]?></td>
+                    <td><?=$memberList["international_calling_country_code"][$i]?></td>
+                    <td><?=$memberList["mobile_phone_number"][$i]?></td>
+                    <td class="left"><?=$nationality["name"]?></td>
+                    <td><?=$memberList["gender"][$i]?></td>
+                    <td><?=date("Y-m-d H:i", strtotime($memberList["registration_datetime"][$i]))?></td>
+                    <td><?=date("Y-m-d H:i", strtotime($memberList["last_login_datetime"][$i]))?></td>
+                    <td><?=$memberList["delete_yn"][$i]?></td>
+                    <td>
+                        <button type="button" class="del" onclick="deleteMember('<?=$memberList['member_no'][$i]?>')"><?=$language['253'];//삭제?></button>
+                    </td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+
+    <div class="pagination" style="display: none;" id="pagination">
+        <i class="fa-solid fa-angle-left" width="20px" height="20px" style="cursor:pointer;" onclick="prevPageCheck();"></i>
+        <ul id="numbers" class="numbers"></ul>
+        <i class="fa-solid fa-angle-right" width="20px" height="20px" style="cursor:pointer;" onclick="nextPageCheck();"></i>
+    </div>    
+</div>
+
+
+
+<script>
+    // 아래부터는 페이징 처리 추가 수정 필요
+
+    // 셀렉트박스값
+    var selectElement = document.getElementById('sortCount');
+
+    function getSelectedValue() {
+        var selectedValue = selectElement.options[selectElement.selectedIndex].value;
+        return selectedValue;
+    }
+    var selectedLimit = getSelectedValue();
+
+    // 총 페이지 개수 = Math.ceil(전체 컨텐츠 개수 / 한 페이지에 보여줄 컨텐츠의 개수)
+    // 화면에 보여질 페이지 그룹 = Math.ceil(현재 페이지 번호 / 한 화면에 보여줄 페이지의 개수)
+    // 화면에 보여질 페이지의 첫번째 페이지 번호 = ((페이지 그룹 번호 - 1) * 한 화면에 보여줄 페이지의 개수) + 1
+    // 화면에 보여질 페이지의 마지막 페이지 번호 = 페이지 그룹 번호 * 한 화면에 보여줄 페이지의 개수
+    // 단, 페이지 그룹 번호 * 한 화면에 보여줄 페이지의 개수가 전체 페이지 개수보다 크다면 전체 페이지가 된다
+
+    let listTotal = <?=$newMemberCount["count"] ? $newMemberCount["count"] : 0 ?>; //총 리스트 수 
+    const rowsPerPage = selectedLimit; //한페이지에 보여지는 갯수 
+    const rows = document.querySelectorAll('.list_tb tbody tr');
+    const pageCount = Math.ceil(listTotal/selectedLimit);  // 총몇라인 / 한페이지갯수 = 총 페이지 수 
+    const numbers = document.querySelector('#numbers');
+    const prevPageBtn = document.querySelector('.pagination .fa-angle-left');
+    const nextPageBtn = document.querySelector('.pagination .fa-angle-right');
+    const numberBtn = numbers.querySelectorAll('#numbers li');
+    let pageActiveIdx = 0 //현재 보고있는 페이지 그룹 번호
+    let maxPageNum = <?=!$_GET["limit"] ? 10 : $_GET["limit"]?>; //보여지는 페이지 그룹의 최대 개수
+    let limit= <?=!$_GET["limit"] ? 10 : $_GET["limit"]?>; //한페이지당 나타낼 아이템 갯
+    let offset = <?=!$_GET["offset"] ? 0 : $_GET["offset"]?>;
+    let nowPage = Math.ceil(offset / limit);
+
+    // 페이징 처리
+    $(function() {
+        if (pageCount > 0){
+            $("#pagination").show();      
+                
+            for(let i = 1; i<=pageCount; i++){ 
+                numbers.innerHTML += `<li><a href="" id="page_${i}">${i}</a></li>`;
+            }
+
+            numberBtn.forEach((item, idx) => {
+                item.addEventListener("click", (e)=>{
+                    e.preventDefault();
+                    for(nb of numberBtn){
+                        nb.classList.remove("active");
+                    }
+                    e.target.classList.add("active");
+                    displayRow(idx);
+                    window.scrollTop({top:0, behavior:'smooth'}); //페이지 이동 시 스크롤탑으로 올리기
+                });
+            });
+
+            if (offset == 0 || offset == ''){
+                $("#page_1").addClass("active");    
+            }else{
+                $("#page_"+offset).addClass("active");
+            }
+
+            //페이징클릭 시 보여주기
+            $('#numbers').on('click', 'li', function(e) {
+                e.preventDefault();
+                $('#numbers li').removeClass('active');
+                $(this).addClass('active');
+
+                let pageOffset = $(this).text();
+                let pageNumber = Math.ceil(pageOffset * selectedLimit); //선택된페이지번호 * 페이지리스트갯수 2*50 보여지는갯수
+                let offsetInput = $('#offset'); //오프셋 클릭된 넘버값
+                let pageFixed = Math.ceil(selectedLimit / offset); // 클릭된넘버 값 / 셀렉트갯수
+                let presentPage = Math.ceil(offset / limit); //현재페이지
+                let value = Math.ceil(pageNumber * offset);
+                let pageValue = Math.ceil(offset / limit);
+
+                $('#offset').val(pageOffset);                
+                $('#surfMemberList').submit();
+            });
+        }
+    });
+
+
+    //페이지네이션 그룹 표시 함수
+    function displayPage(num){
+        //페이지 네이션 번호 감추기
+        for(nb of numberBtn){
+            nb.style.display="none"
+        }
+        let totalPageCount = Math.ceil(pageCount/maxPageNum); //2449/ 10
+        let pageArr = [...numberBtn];
+        let start = num * maxPageNum;
+        let end = start + maxPageNum;
+        let pageListArr = pageArr.slice(start, end);
+
+        for(let item of pageListArr){
+            item.style.display='block';
+        }
+
+        if(pageActiveIdx === 0){
+            prevPageBtn.style.display='none'
+        }else{
+            prevPageBtn.style.display='block'
+        }
+
+        if(pageActiveIdx === totalPageCount - 1){
+            nextPageBtn.style.display='none'
+        }else{
+            nextPageBtn.style.display='block'
+        }
+
+    }
+
+    function nextPageCheck(){
+        let nextPageNum = pageActiveIdx * maxPageNum + maxPageNum;
+        displayRow(nextPageNum);
+        ++pageActiveIdx;
+        displayPage(pageActiveIdx);
+        
+    }
+
+    function prevPageCheck(){
+        let prevPageNum = pageActiveIdx * maxPageNum - maxPageNum;
+        displayRow(prevPageNum);
+        --pageActiveIdx;
+        displayPage(pageActiveIdx);
+    }
+</script>
