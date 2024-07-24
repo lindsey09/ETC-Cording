@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax Pagination</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="content">
+        <!-- 리스트를 표시할 영역 -->
+    </div>
+    <div id="pagination">
+        <!-- 페이지 네비게이션을 표시할 영역 -->
+    </div>
+
+    <script src="pagination.js"></script>
+</body>
+</html>
+
+
+
+<script>
+$(document).ready(function() {
+    const itemsPerPage = 10; // 페이지당 항목 수
+    let currentPage = 1; // 현재 페이지
+
+    function loadPage(page) {
+        $.ajax({
+            url: 'server.php', // 서버의 URL
+            type: 'GET',
+            data: {
+                page: page,
+                itemsPerPage: itemsPerPage
+            },
+            success: function(response) {
+                // 서버에서 받은 데이터를 JSON으로 파싱
+                const data = JSON.parse(response);
+                
+                // 리스트를 비우고 새 항목 추가
+                $('#content').empty();
+                data.items.forEach(item => {
+                    $('#content').append(`<p>${item}</p>`);
+                });
+
+                // 페이지 네비게이션 업데이트
+                updatePagination(data.totalItems, page);
+            }
+        });
+    }
+
+    function updatePagination(totalItems, currentPage) {
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        $('#pagination').empty();
+        
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === currentPage) {
+                $('#pagination').append(`<span>${i}</span> `);
+            } else {
+                $('#pagination').append(`<a href="#" class="page-link" data-page="${i}">${i}</a> `);
+            }
+        }
+    }
+
+    // 페이지 링크 클릭 이벤트 처리
+    $('#pagination').on('click', '.page-link', function(e) {
+        e.preventDefault();
+        const page = $(this).data('page');
+        loadPage(page);
+    });
+
+    // 초기 페이지 로드
+    loadPage(currentPage);
+});
+</script>
+
+append 부분에 데이터를 받아서 item으로 뿌려주는 방식
