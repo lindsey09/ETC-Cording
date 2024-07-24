@@ -1,3 +1,5 @@
+해당 페이지네이션은 데이터를 전부 가지고와서 페이징처리하는 방식!!
+
 <style>
 .pagination{
     display: flex;
