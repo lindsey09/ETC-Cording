@@ -1,0 +1,140 @@
+<script src="/common/js/nouislider.js"></script>
+
+<!-- Include noUiSlider CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css" rel="stylesheet">
+
+ <!-- Include noUiSlider -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+<!-- Include wNumb for number formatting -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/wnumb/1.1.0/wNumb.min.js"></script>
+
+
+<style>
+.noUi-horizontal .noUi-handle{top:-15px; width:30px; height:30px; border-radius: 50%; box-shadow:none;}
+.noUi-handle:after, .noUi-handle:before{display:none;}
+</style>
+
+
+<html>
+    <div class="price_form mb30 filterBox">
+        <h4 class="mb30"><input type="radio" name="sakeFilter" id="sakeFilter1" checked><label for="sakeFilter1"><?=$language['847'];//가격대?></label></h4>
+
+        <div class="filter_select filter_cont mb30 active" >
+            <div class="slider-keypress hslider" id="slider"></div>
+            <div class="flex mb30">
+                <input type="num"  name="start_price" id="input-with-keypress-0" placeholder="0" value="2,000" onkeyup="inputNumberFormat(this)">
+                <span>-</span>
+                <input type="num"  name="end_price" id="input-with-keypress-1" placeholder="0" value="50,000" onkeyup="inputNumberFormat(this)">
+                <!-- -->
+            </div>
+            <!-- -->
+        </div>
+    </div>
+    
+</html>
+
+
+<script>
+
+// 가격대 range
+    var keypressSlider = document.querySelector(".slider-keypress");
+    var input0 = document.getElementById('input-with-keypress-0');
+    var input1 = document.getElementById('input-with-keypress-1');
+    var inputs = [input0, input1];
+
+    noUiSlider.create(keypressSlider, {
+        start: [2000, 50000], // 해당 매장의 최소금액, 최대금액
+        connect: true,
+        format: wNumb({
+            decimals: 0,     // 소수점 자릿수 설정
+            thousand: ',',   // 천 단위 구분 기호
+        }),
+        step: 500,
+        range: {
+            'min':2000, // 해당 매장의 최소금액
+            'max': 50000 // 해당 매장의 최대금액
+        }
+    });
+    keypressSlider.noUiSlider.on('update', function (values, handle) {
+        inputs[handle].value = values[handle];
+
+    });
+
+    
+    keypressSlider.noUiSlider.on('slide', (values, handle) => {
+        console.log('Sliding values:', values);
+    });
+
+    inputs.forEach(function (input, handle) {
+
+        input.addEventListener('change', function () {
+            stepsSlider.noUiSlider.setHandle(handle, this.value);
+            //console.log('aa');
+        });
+
+        input.addEventListener('keydown', function (e) {
+            var values = stepsSlider.noUiSlider.get();
+            var value = Number(values[handle]);
+
+            var steps = stepsSlider.noUiSlider.steps();
+            var step = steps[handle];
+            var position;
+
+            switch (e.which) {
+                case 13:
+                    stepsSlider.noUiSlider.setHandle(handle, this.value);
+                    break;
+                case 38:
+                    position = step[1];
+                    if (position === false) {
+                        position = 1;
+                    }
+                    if (position !== null) {
+                        stepsSlider.noUiSlider.setHandle(handle, value + position);
+                    }
+                    break;
+                case 40:
+                    position = step[0];
+                    if (position === false) {
+                        position = 1;
+                    }
+                    if (position !== null) {
+                        stepsSlider.noUiSlider.setHandle(handle, value - position);
+                    }
+                    break;
+            }
+        });
+    });
+
+    
+    $(".price_form .refresh").click(function() {
+        keypressSlider.noUiSlider.set([<?=$min_price?>, <?=$max_price?>]);
+    });
+    /* // 20220807 */
+
+    $("#price_input").change(function() {
+        if($(this).is(":checked")) {
+            keypressSlider.setAttribute('disabled', true);
+            keypressSlider.noUiSlider.set([0, 0]);
+            $(".hslider").addClass("disabled");
+            $(".price_form .filter_select .flex").css("display","flex");
+            $(".price_form .noUi-handle").css("opacity","0");
+        } else {
+            keypressSlider.removeAttribute('disabled');
+            $(".hslider").removeClass("disabled");
+            $(".price_form .filter_select .flex").css("display","none");
+            $(".price_form .filter_select .flex input").val('');
+            $(".price_form .noUi-handle").css("opacity","1");
+       }
+    });
+    $(document).on("click",".hslider.disabled",function() {
+        $("#price_input").prop("checked",false);
+        keypressSlider.removeAttribute('disabled');
+        $(".hslider").removeClass("disabled");
+        $(".price_form .filter_select .flex").css("display","none");
+        $(".price_form .noUi-handle").css("opacity","1");
+        $(".price_form .filter_select .flex input").val('');
+    });
+
+
+</script>
