@@ -1,0 +1,41 @@
+해당 클릭영역을 querySelectorAll로 모두가지고온다.
+
+forEach문으로 나누어 해당 클릭된 부분의 다음엘리먼트를 선택!
+다음 엘리먼트가 none이거나 아무것도 없을 경우, 스타일을 block
+그렇지 않으면 none
+<html>
+  
+    <div class="qna">
+        <?for($i=0;$i<$list['resultRows'];$i++) {?>
+            <dl>
+                <dt><h4><?=$list['faq_question'][$i]?></h4></dt>
+                <dd><?=$list['faq_answer'][$i]?></dd>
+            </dl>
+        <?}?>
+
+    </div>
+
+</html>
+
+
+  
+<script>
+const qnaTitle = document.querySelectorAll('.qna dl dt');
+
+qnaTitle.forEach(function(tit){
+    tit.addEventListener("click", function(){
+        const cont = this.nextElementSibling;
+
+        if(cont.style.display ==='none' || cont.style.display === ""){
+            $('.qna dl dd').hide(); //전체숨기기
+            $('.qna dl dt').removeClass('on'); //on클래스 지우기
+            cont.style.display = "block";
+            this.classList.add('on');
+        }else{
+            cont.style.display = "none"
+            this.classList.remove('on');
+        }
+    })
+})
+
+</script>
