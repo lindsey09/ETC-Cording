@@ -35,6 +35,43 @@ table.date-month td.sat {
 table.date-month td.today {
   background-color: #f0f8ff;
 }
+
+button.listView{
+	width:auto;
+	border:1px solid #ddd;
+	border-radius: 5px;
+	padding:5px 7px 5px 27px;
+	background:url('../img/ic_list.svg') 5px center no-repeat;
+	background-size:20px;
+}
+button.calendarView{
+	width:auto;
+	border:1px solid #ddd;
+	border-radius: 5px;
+	padding:5px 7px 5px 27px;
+	background:url('../img/ic_calendar.svg') 5px center no-repeat;
+	background-size:20px;
+}
+
+.date-month.listView{
+	border:0;
+}
+.calender_header.listView,
+.date-month.listView colgroup{
+	display:none;
+}
+.calender_body.listView{
+	display:block;
+	border:0;
+}
+.calender_body.listView tr{
+	width:100%;
+	display:block;;
+}
+.calender_body.listView tr td{
+	width:100%;
+	display:block;
+}
 </style>
 
 
