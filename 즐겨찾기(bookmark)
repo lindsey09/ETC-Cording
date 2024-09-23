@@ -1,0 +1,20 @@
+ <button onclick="addToFavorites()">즐겨찾기 추가</button>
+
+  <script>
+        function addToFavorites() {
+            const url = window.location.href; // 현재 페이지 URL
+            const title = document.title; // 페이지 제목
+
+            // IE 및 Firefox 사용자 안내
+            if (window.sidebar && window.sidebar.addPanel) { // Firefox < 23
+                window.sidebar.addPanel(title, url, '');
+            } else if (window.external && ('AddFavorite' in window.external)) { // IE
+                window.external.AddFavorite(url, title);
+            } else if (window.opera && window.print) { // Opera
+                this.title = title;
+                return true;
+            } else { // 기타 브라우저
+                alert('CTRL + D를 눌러 즐겨찾기에 추가하세요.');
+            }
+        }
+    </script>
