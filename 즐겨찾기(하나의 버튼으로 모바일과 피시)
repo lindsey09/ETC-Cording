@@ -1,3 +1,4 @@
+
 //즐겨찾기
 document.getElementById("bookmarkButton").addEventListener("click", function() {
     // 사용자 에이전트 확인
@@ -14,20 +15,21 @@ document.getElementById("bookmarkButton").addEventListener("click", function() {
 
 //모바일
 function addMobileBookmark() {
-    alert('모바일 브라우저에서는 즐겨찾기를 추가하려면 브라우저 메뉴에서 "북마크 추가"를 선택하세요.');
+    alert('즐겨찾기를 추가하려면 브라우저 메뉴에서 "북마크 추가"를 선택하세요.');
 }
 //PC
 function addPCBookmark() {
-    const title = ""; // 즐겨찾기 제목
-    const url = window.location.href; // 현재 페이지 URL
+    const title = document.title; // 페이지 제목
+    const url = window.location.href; // 현재 URL
 
-    if (window.sidebar && window.sidebar.addPanel) { // Firefox
+    if (window.sidebar && window.sidebar.addPanel) { // Firefox <23
         window.sidebar.addPanel(title, url, '');
-    } else if (window.external && ('AddFavorite' in window.external)) { // Internet Explorer
+    } else if (window.external && ('AddFavorite' in window.external)) { // IE
         window.external.AddFavorite(url, title);
     } else if (window.opera && window.print) { // Opera
-        alert('CTRL+D를 눌러 즐겨찾기에 추가하세요.');
+        this.title = title;
+        return true;
     } else { // 기타 브라우저
-        alert('즐겨찾기를 추가하려면 브라우저의 즐겨찾기 기능을 사용하세요.'); 
+        alert('Ctrl+D 키를 눌러 즐겨찾기에 추가하세요.');
     }
 }
