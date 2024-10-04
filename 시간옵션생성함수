@@ -1,0 +1,20 @@
+<select name="" id="">
+                ${generateOptions()}
+            </select>
+            ~
+            <select name="" id="">
+                ${generateOptions()}
+            </select>
+
+
+// 시간 옵션 생성 함수
+function generateOptions() {
+    let options = '';
+    for (let hour = 0; hour < 24; hour++) {
+        for (let minute = 0; minute < 60; minute += 30) {
+            const time = String(hour).padStart(2, '0') + ':' + String(minute).padStart(2, '0');
+            options += `<option value="${time}">${time}</option>`;
+        }
+    }
+    return options;
+}
