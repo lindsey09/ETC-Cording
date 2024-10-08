@@ -1,0 +1,44 @@
+    <div class="sticky_select" id="sticky_select">
+        <select name="serviceKind" id="serviceKind" class="serviceKind">
+            <option value=""><?=$language['2913'];//서비스를 선택하세요?></option>
+            <option value="room"><a href="#room">룸서비스</a></option>
+            <option value="welcome"><a href="#welcome">웰컴드링크서비스</a></option>
+            <option value="wash"><a href="#wash">세탁서비스</a></option>
+            <option value="amenity"><a href="#amenity">어메니티서비스</a></option>
+            <option value="exchange"><a href="#exchange">환전서비스</a></option>
+            <option value="bus"><a href="#bus">송영서비스</a></option>
+            <option value="luggage"><a href="#luggage">여행짐배송서비스</a></option>
+            <option value="post"><a href="#post">택배서비스</a></option>
+            <option value="rental"><a href="#rental">렌탈서비스</a></option>
+            <option value="foodDelivery"><a href="#foodDelivery">푸드배달서비스</a></option>
+        </select>
+    </div>
+
+
+각각의 value값 필요 해당 div에 id값 넣어주기
+
+//제이쿼리
+$(document).ready(function() {
+        $('#serviceKind').change(function() {
+            const selectedValue = $(this).val();
+            if (selectedValue) {
+                const target = $('#' + selectedValue); 
+
+                $('html, body').animate({
+                    scrollTop: target.offset().top
+                }, 500); // 500ms 동안 부드럽게 스크롤
+            }
+        });
+    });
+
+//자바스크립트
+    const selectBox = document.getElementById('serviceKind');
+    selectBox.addEventListener("change", function(){
+        const selectedValue = this.value;
+        if(selectedValue){
+            const target = document.getElementById(selectedValue);
+            target.scrollIntoView({behavior:'smooth'});
+        }
+    })  
+
+
