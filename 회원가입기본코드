@@ -1,0 +1,416 @@
+
+
+<div class="login">
+    <div id="titleArea">
+        <a href="javascript:void(0)" onclick="history.back();" class="prev"></a>
+        <h3><?=$language['864'];//회원가입?></h3>
+    </div>
+
+    <p class="require_ment"><?=$language['94'];//필수입력입니다?></p>
+    
+    <div class="join">
+
+        <div class="form">
+            <div class="mb20">
+                <h5 class="require mb10"><?=$language['2'];//아이디?></h5>
+                <div class="input_line mb10" style="border:0;">
+                    <div class="input_box_line flex">
+                        <input type="text" class="input_box join_email" id="email" name="email" required onkeyup="myInformation()"  style="border:1px solid #ddd;"> @
+                        <select name="domain" id="domain" onchange='domainEtc()' required>
+                            <option value=""><?=$language['24'];//선택?></option>
+                            <option value="naver.com">naver.com</option>
+                            <option value="gmail.com">gmail.com</option>
+                            <option value="daum.net">daum.net</option>
+                            <option value="hanmail.com">hanmail.com</option>
+                            <option value="hotmail.com">hotmail.com</option>
+                            <option value="etc"><?=$language['231'];//직접입력?></option>
+                        </select>
+                        <input type="text" class="input_box etc_email" style="display: none; " name="etc_email" id="etc_email" >
+                        <input type="hidden" name="is_login_id_ok">
+                    </div>
+                    <button class="regist_btn mt10 " id="email_btn" style="margin-top:initial;" onclick="sendSms()"><?=$language['2524'];//인증번호 발송?></button>
+                    <button class="regist_btn resendNum mt10 on" style="margin-top:initial; display:none;" onclick="reSendSms()"><?=$language['2673'];//인증번호 재발송?></button> 
+                    <button class="regist_btn sendNum mt10 id_btn hidden" style="margin-top:initial;" id="duplicated_check" onclick="loginIdDuplicationCheck()"><?=$language['2524'];//인증번호 발송?></button>
+                </div>
+                <div class="input_line flex mb10" id="email_code_check" style='display:none;'>
+                    <div class="input_box_line email_code">
+                        <input type="text" class="" id="code" style="width: 100%;" maxlength="6" inputmode="numeric" pattern="[0-9]*" required  onkeyup="myInformation()">
+                        <span class="time_count">5:00</span>
+                    </div>
+                    <button class="regist_btn" id="certi_btn" style="margin-top:initial;" onclick="checkAuthCode()"><?=$language['2525'];//인증번호 인증?></button>
+                </div>
+            </div>
+            <div>
+                <p class="require mb10"><?=$language['3'];//비밀번호?></p>
+                <div class="input_line">
+                    <input type="password" placeholder="<?=$language['2571'];//대문자, 소문자, 숫자, 특수문자를 포함한 8자리 이상?>" id="login_password" name="login_password" class="input_box" required  onkeyup="myInformation()">
+                    <input type="button" name="showPassword" value="<?=$language['9'];//표시?>">
+                </div>
+
+                <p class="errorMent step02" style="display:none"><?=$language['2528'];//8~16자 하나 이상의 대문자, 소문자, 숫자, 특수문자가 포함되어야 합니다.?></p>
+            </div>
+            <div>
+                <p class="require mb10"><?=$language['875'];//비밀번호 확인?></p>
+                <div class="input_line">
+                    <input type="password" placeholder="<?=$language['2571'];//대문자, 소문자, 숫자, 특수문자를 포함한 8자리 이상?>" id="login_password2" name="login_password2" class="input_box" required  onkeyup="myInformation()">
+                    <input type="button" name="showPassword" value="<?=$language['9'];//표시?>">
+                </div>
+
+                <p class="errorMent step01" style="display:none"><?=$language['1088'];//비밀번호가 일치하지 않습니다?></p>
+            </div>
+            <div>
+                <h5 class="require mb10"><?=$language['2522'];//성(영문)?></h5>
+                <div class="input_line ">
+                    <input type="text" placeholder="<?=$language['2522'];//성(영문)?>" name="last_name" class="input_box FirstName" required onkeyup="myInformation()">
+                </div>
+            </div>
+            <div>
+                <h5 class="require mb10"><?=$language['2523'];//이름(영문)?></h5>
+                <div class="input_line">
+                    <input type="text" placeholder="<?=$language['2523'];//이름(영문)?>" name="first_name" class="input_box LastName" required onkeyup="myInformation()">
+                </div>
+            </div>
+            <div class="mb20">
+                <h5 class="require mb10"><?=$language['1257'];//생년월일?></h5>
+                <div class="input_line flex gap5">
+                    <input type="text" name="birth_year" id="birth_year" placeholder="1993" maxlength="4" inputmode="numeric"  pattern="[0-9]*" required onkeyup="myInformation()">
+                    <select name="birth_month" id="birth_month" required onchange="myInformation2()">
+                        <?php
+                            for($i = 1; $i <= 12; $i++){
+                                if ($i < 10)
+                                    echo "<option value='0$i'>0$i</option>";
+                                else
+                                    echo "<option value='$i'>$i</option>";
+                            }
+                        ?>
+                    </select>
+                    <select name="birth_day" id="birth_day" required onchange="myInformation2()">
+                        <?php
+                            for($i = 1; $i <= 31; $i++){
+                                if ($i < 10)
+                                    echo "<option value='0$i'>0$i</option>";
+                                else
+                                    echo "<option value='$i'>$i</option>";
+                            }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="mb20">
+                <h5 class="require mb10"><?=$language['196'];//성별?></h5>
+                <div class="input_line flex">
+                    <input type="radio" id="gender01" name="gender" checked value="man" ><label for="gender01"><?=$language['907'];//남자?></label>
+                    <input type="radio" id="gender02" name="gender" value="woman" ><label for="gender02"><?=$language['908'];//여자?></label>
+                </div>
+            </div>
+            <div>
+                <p class="require mb10"><?=$language['909'];//국적?></p>
+                <select name="" id="" class="country_select" required onchange="myInformation2()">
+                    <option value=""><?=$language['24'];//선택?> </option>
+                    <option value="">대한민국</option>
+                    <option value="">미국</option>
+                    <option value="">일본</option>
+                    <option value="">중국</option>
+                    <option value="">태국</option>
+                </select>
+            </div>
+            <div>
+                <h5 class="require mb10"><?=$language['17'];//휴대폰번호?></h5>
+                <div class="input_line">
+                    <div class="phone_num">
+                        <select name="" id="" required onchange="myInformation2()">
+                            <option value="">대한민국(+82)</option>
+                            <option value="">미국(+1)</option>
+                            <option value="">일본(+81)</option>
+                            <option value="">중국(+86)</option>
+                        </select>
+                        <input type="text" placeholder="01012346789" id="phoneNumber" name="mobile_phone_number" placeholder="<?=$language['1509'];//숫자만 입력해주세요?>" class="input_box" maxlength="13" inputmode="numeric" pattern="[0-9]*" required onkeyup="myInformation()">
+                    </div>
+                    <p class="txt n_cmp" style="display:none;"><?=$language['871'];//유효한 휴대전화번호를 입력해주세요?></p>
+                    <p class="txt n_tel" style="display:none;"><?=$language['872'];//이미 가입된 휴대전화번호 입니다?></p>
+                </div>
+            </div>
+            <div class="chk_login mt40">
+                <p class="pb10 all_chk">
+                    <input type="checkbox" onclick="requireChk()" id="all_chk"><label for="all_chk"><?=$language['2555'];//전체동의?></label>
+                </p>
+                <p class="pb10">
+                    <input type="checkbox" onclick="requireChk()" class="chk require_chk" id="chk_person1" name="service_use_agree_yn" value="N" required><label for="chk_person1"><?=$language['922'];//필수?><a href="/provision.php" target="_blank"> <?=$language['2526'];//이용약관 동의?></a> </label>
+                </p>
+                <p class="pb10">
+                    <input type="checkbox" onclick="requireChk()" class="chk require_chk" id="chk_person2" name="privacy_policy_agree_yn" value="N" required><label for="chk_person2"><?=$language['922'];//필수?><a href="/privacy.php" target="_blank"> <?=$language['2527'];//개인정보활용 동의?></a> </label>
+                </p>
+                <p class="pb10">
+                    <input type="checkbox" class="chk" id="chk_person3" name="marketing_opt_in_agree_yn" value="N"><label for="chk_person3"><?=$language['923'];//선택?> <?=$language['1015'];//마케팅 수신 동의?> </label>
+                </p>
+                <p class="pb10">
+                    <input type="checkbox" class="chk" id="chk_person4" name="app_push" value="N"><label for="chk_person4"><?=$language['923'];//선택?> <?=$language['2586'];//	앱 푸시 알림 수신 동의?></label>
+                </p>
+            </div>
+
+            <button type="submit" class="regist_btn" id="nextButton" onclick="joinNext()" ><?=$language['879'];//다음?></button>
+
+            <div class="util clear mb20">
+                <a href="/area_map_login.php"><?=$language['878'];//로그인으로 돌아가기?></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// 아이디입력시 인증번호발송버튼 on
+let inputValue = document.getElementById('email');
+let onBtn = document.getElementById('email_btn');
+inputValue.addEventListener('input', function() {
+    // console.log(inputValue.value);
+    // console.log(inputValue.value.length);
+    if(inputValue.value.length > 0){
+        onBtn.classList.add('on');
+    }else{
+        onBtn.classList.remove('on');
+    }
+})
+
+//인증번호확인 버튼 on
+let inputNumber = document.getElementById('code');
+let certiBtn =document.getElementById('certi_btn')
+inputNumber.addEventListener('input', function(){
+    // console.log(inputNumber);
+    // console.log(inputNumber.value.length);
+    if(inputNumber.value.length > 0){
+        certiBtn.classList.add('on');
+    }else{
+        certiBtn.classList.remove('on');
+    }
+})
+
+//비밀번호 감추기 보이기
+$('input[name=showPassword]').on('click', function() {
+    var passwordField = $(this).prev();
+    var passwordFieldType = passwordField.attr('type');
+    if (passwordFieldType == 'password') {
+        passwordField.attr('type', 'text');
+        $(this).parent().addClass("on");
+    } else {
+        passwordField.attr('type', 'password');
+        $(this).parent().removeClass("on");
+    }
+});
+
+// 이메일 인증 발송
+function sendSms(){
+    alert("<?=$language['2543'];//발송되었습니다.?>")
+    $("#email_code_check").show();
+    $('#email_btn').hide();
+    $('.resendNum').show();
+
+    // 타이머시작
+    let twoMinutes = 5 * 60;
+    let display = document.querySelector('.time_count');
+
+    startTimer(twoMinutes, display);
+
+}
+
+ //이메일인증 유효시간
+ function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    
+    // 타이머 함수
+    function timerFunction() {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+            clearTimeout(timerTimeout);
+        } else {
+            timerTimeout = setTimeout(timerFunction, 1000);
+        }
+    }
+
+    // 타이머 시작
+    var timerTimeout = setTimeout(timerFunction, 1000);
+}
+
+ // 이메일 인증 확인
+ function checkAuthCode(){
+    event.preventDefault()
+
+    alert("<?=$language['2545'];//인증되었습니다.?>");
+    clearTimeout(timerTimeout);
+}
+
+function passConfirm(){
+    //비밀번호 규칙 확인
+    $("input[name=login_password]").on('keyup', function(){
+        var pw = $("#login_password").val();
+        var reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[a-zA-Z\d!@#$%^&*()]{8,}$/;
+        console.log(pw)
+        console.log(pw.match(reg))
+
+        if (pw.match(reg) === null) {
+            $('.step02').show();
+            $('#login_password, #login_password2').addClass('error');
+            $('#login_password2').attr('disabled', true);
+        }else{
+            $('.step02').hide();
+            $('#login_password, #login_password2').removeClass('error');
+            $('#login_password2').attr('disabled', false);
+        }
+    });
+
+    //비밀번호 재입력 확인
+    $("input[name=login_password2]").on('keyup', function(){
+        if($.trim($("input[name=login_password]").val()) != $.trim($("input[name=login_password2]").val()))
+        {
+            $("#login_password").addClass('error');
+            $("#login_password2").addClass('error');
+            $(".step01").css("display","block");
+            $("input[name=login_password2]").focus();
+            return false;
+        }else{
+            $("#login_password").removeClass('error');
+            $("#login_password2").removeClass('error');
+            $(".step01").css("display","none");
+        }
+    })
+}
+passConfirm();
+
+//숫자만 입력
+$("#birth_year, #phoneNumber, #code").on('input',function() {
+    $(this).val($(this).val().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1'));
+});
+
+// 영문만 입력
+$('.FirstName, .LastName').on('keyup blur',function(){
+    // var node = $(this);
+    // node.val(node.val().replace(/[^a-z]/g,''));
+    $(this).val($(this).val().replace(/[^a-z,A-Z,\s]/g,'').replace(/(\..*?)\..*/g, '$1'));
+});
+
+//이메일 도메인이 없다면 새로운 input 노출
+function domainEtc(){
+    let domainSelect = document.getElementById('domain');
+    let domainSelectValue = domainSelect.options[domainSelect.selectedIndex].value;
+    let etcDomain = document.querySelector('.etc_email');
+
+    let emailButton = document.getElementById('email_btn');
+
+    if(domainSelectValue == 'etc'){
+        etcDomain.style.display='block';
+        emailButton.classList.add('on');
+    }else{
+        etcDomain.style.display='none';
+        emailButton.classList.add('on');
+    }
+}
+
+// 회원가입란 전체 입력되었다면 다음버튼 on
+let InputFieldValue = false;
+let SelectFieldValue = false;
+let CheckFieldValue = false;
+
+// 입력
+function myInformation(){
+    let inputField = document.querySelectorAll('input[required]')
+
+    inputField.forEach(function(Field, idx){
+        // console.log(Field.value, idx)
+
+        if(!Field.value){
+            // console.log('false')
+        }else{
+            InputFieldValue = true;
+            // console.log('true')
+        }
+    })
+
+    checkFormNext();
+
+}
+
+// 셀렉트
+function myInformation2(){
+    let inputField = document.querySelectorAll('select[required]')
+
+    inputField.forEach(function(Field, idx){
+        // console.log(Field.value, idx)
+        if(!Field.value){
+            // console.log('false')
+        }else{
+            SelectFieldValue = true;
+            // console.log('true')
+        }
+    })
+
+    checkFormNext();
+}
+
+//모두동의
+$(document).ready(function() {
+    $("#all_chk").click(function() {
+        var Checked = $(this).is(':checked');
+        $('.chk').prop("checked", Checked);
+    });
+
+    $(".chk_login .chk").click(function() {
+        var total = $(".chk_login .chk").length;
+        var checked = $(".chk_login .chk:checked").length;
+
+        $("#all_chk").prop("checked", total === checked);
+    });
+});
+
+// 전체동의
+document.getElementById('all_chk').onclick = function() {
+    let allChecked = this.checked;
+    let requireCheckboxes = document.querySelectorAll('.require_chk');
+    requireCheckboxes.forEach(function(checkbox) {
+        checkbox.checked = allChecked;
+    });
+    requireChk();
+};
+
+// 동의체크박스
+function requireChk(){
+    let requireCheckboxes = document.querySelectorAll('.require_chk');
+    let AllCheckbox = document.getElementById('all_chk');
+    let nextButton = document.getElementById('nextButton');
+    CheckFieldValue = true;
+
+    //필수동의
+    for(let i = 0; i < requireCheckboxes.length; i++){
+        if (!requireCheckboxes[i].checked) {
+            CheckFieldValue = false;
+            break;
+        }
+    }
+
+    if(AllCheckbox.checked && CheckFieldValue){
+        CheckFieldValue = true;
+    }
+
+    checkFormNext();
+}
+
+// 다음버튼 활성화
+function checkFormNext(){
+    let nextButton = document.getElementById('nextButton');
+    if(InputFieldValue && SelectFieldValue && CheckFieldValue){
+        nextButton.classList.add('on')
+    }else{
+        nextButton.classList.remove('on')
+    }
+}
+
+// 회원가입 완료페이지 이동
+function joinNext(){
+    location.href='/area_map_join_complete.php';
+}
+
+</script>
