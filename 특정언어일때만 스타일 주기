@@ -1,0 +1,23 @@
+    if($_base_use_lang=='KR') {
+        $select_lang = 'KR';
+    } else if($_base_use_lang=='EN') {
+        $select_lang = 'EN';
+        $style_class = 'visualFont'; // visualFont라는 클래스를 지정해주기 스타일 적용
+    } else if($_base_use_lang=='JP') {
+        $select_lang = 'JP';
+    } else if($_base_use_lang=='CN') {
+        $select_lang = 'CN';
+    } else if($_base_use_lang=='CN2') {
+        $select_lang = 'TW';
+    } else if($_base_use_lang=='TH') {
+        $select_lang = 'TH';
+    }
+
+
+
+
+<div class="visual_ment <?php echo isset($style_class) ? $style_class : ''; ?>"> //해당 div로 가서 php코드를 클래스에 넣어주면 영어일때만 visualFont 클래스가 붙음
+    <?=$themeList['theme_title'][$i]?>
+</div>
+
+*** isset() 함수는 주어진 변수가 정의되었는지(즉, 선언되었고 값이 할당되었는지) 그리고 null이 아닌지를 체크합니다. 
