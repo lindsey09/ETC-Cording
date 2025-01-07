@@ -1,0 +1,194 @@
+<div class="naver_blog" style="">
+
+            <ul class="social_box">
+                <li class="social_cont">
+                    <h3 onclick="location.href='https://m.blog.naver.com/wou1103/223576681671'">일본 도쿄 <b>아카사카</b> 맛집 <b>마루요시</b> 솔직 후기</h3>
+                    <div class="bloger">
+                        <p class="name">매일이 여행인 복승아네 집</p>
+                        <p class="date">2024-09-08</p>  
+                    </div>
+                    <p onclick="location.href='https://m.blog.naver.com/wou1103/223576681671'">아래 포스팅에선 도쿄 아카사카 맛집인 마루요시에 대해 솔직한 후기 남겨볼게요! 일본 도쿄 아카사카 맛집 <b>마루요시 아카사카</b> 비아인 프리미엄 숙소에서 지냈기 때문에 근처에 있는 식당들을 몇 곳... </p>
+                    <div class="blog_btn_wrap">
+                        <button type="button" class="blog_btn" onclick="location.href='rest_index.php?no=349456'">지도 보기 선택</button>
+                        <button type="button" class="blog_btn" onclick="window.open('https://m.blog.naver.com/wou1103/223576681671');">블로그보기</button>
+                        
+                    </div>
+                </li>
+                <li class="social_img">
+                    <img src="https://image.surf.menu/2024/09/11/blog/thumb/thumb-172600074966e0ae6d512de_300x.jpg">
+                </li>
+            </ul>
+        </div>
+                  <div class="naver_blog" style="">
+
+            <ul class="social_box">
+                <li class="social_cont">
+                    <h3 onclick="location.href='https://m.blog.naver.com/wou1103/223576681671'">일본 도쿄 <b>아카사카</b> 맛집 <b>마루요시</b> 솔직 후기</h3>
+                    <div class="bloger">
+                        <p class="name">매일이 여행인 복승아네 집</p>
+                        <p class="date">2024-09-08</p>  
+                    </div>
+                    <p onclick="location.href='https://m.blog.naver.com/wou1103/223576681671'">아래 포스팅에선 도쿄 아카사카 맛집인 마루요시에 대해 솔직한 후기 남겨볼게요! 일본 도쿄 아카사카 맛집 <b>마루요시 아카사카</b> 비아인 프리미엄 숙소에서 지냈기 때문에 근처에 있는 식당들을 몇 곳... </p>
+                    <div class="blog_btn_wrap">
+                        <button type="button" class="blog_btn" onclick="location.href='rest_index.php?no=349456'">지도 보기 선택</button>
+                        <button type="button" class="blog_btn" onclick="window.open('https://m.blog.naver.com/wou1103/223576681671');">블로그보기</button>
+                        
+                    </div>
+                </li>
+                <li class="social_img">
+                    <img src="https://image.surf.menu/2024/09/11/blog/thumb/thumb-172600074966e0ae6d512de_300x.jpg">
+                </li>
+            </ul>
+        </div>
+                  <div class="naver_blog" style="">
+
+            <ul class="social_box">
+                <li class="social_cont">
+                    <h3 onclick="location.href='https://m.blog.naver.com/wou1103/223576681671'">일본 도쿄 <b>아카사카</b> 맛집 <b>마루요시</b> 솔직 후기</h3>
+                    <div class="bloger">
+                        <p class="name">매일이 여행인 복승아네 집</p>
+                        <p class="date">2024-09-08</p>  
+                    </div>
+                    <p onclick="location.href='https://m.blog.naver.com/wou1103/223576681671'">아래 포스팅에선 도쿄 아카사카 맛집인 마루요시에 대해 솔직한 후기 남겨볼게요! 일본 도쿄 아카사카 맛집 <b>마루요시 아카사카</b> 비아인 프리미엄 숙소에서 지냈기 때문에 근처에 있는 식당들을 몇 곳... </p>
+                    <div class="blog_btn_wrap">
+                        <button type="button" class="blog_btn" onclick="location.href='rest_index.php?no=349456'">지도 보기 선택</button>
+                        <button type="button" class="blog_btn" onclick="window.open('https://m.blog.naver.com/wou1103/223576681671');">블로그보기</button>
+                        
+                    </div>
+                </li>
+                <li class="social_img">
+                    <img src="https://image.surf.menu/2024/09/11/blog/thumb/thumb-172600074966e0ae6d512de_300x.jpg">
+                </li>
+            </ul>
+        </div>
+<div class="pagination mb30">
+    <i class="arrow_surfCircle_L"></i>
+    <ul id="numbers">
+        <!-- <li><a href="">1</a></li>  -->
+    </ul>
+    <i class="arrow_surfCircle_R"></i>
+</div>
+
+//페이지네이션
+const rowsPerPage = 10;
+const rows = document.querySelectorAll('.naver_blog');
+const rowsCount = rows.length 
+// console.log(rows); //112
+const pageCount = Math.ceil(rowsCount/rowsPerPage); 
+// console.log(pageCount); //12
+const numbers = document.querySelector('#numbers');
+//이전 다음 버튼
+const prevPageBtn = document.querySelector('.pagination .arrow_surfCircle_L');
+const nextPageBtn = document.querySelector('.pagination .arrow_surfCircle_R');
+let pageActiveIdx = 0 //현재 보고있는 페이지 그룹 번호
+let currentPageNum = 0 //현재 보고있는 페이지네이션 번호       
+let maxPageNum = 5; //페이지 그룹의 최대 개수
+
+
+for(let i = 1; i<=pageCount; i++){
+    numbers.innerHTML += `<li><a href="">${i}</a></li>`;
+}
+const numberBtn = numbers.querySelectorAll('a');
+// console.log(numberBtn) //nodelist 12
+// numberBtn.forEach(function(item,idx){});
+
+
+
+//페이지네이션 번호 감추기
+for(nb of numberBtn){
+    nb.style.display='none'
+}
+
+
+//페이지 10개씩 보여주기
+numberBtn.forEach((item,idx) => {
+        item.addEventListener('click', (e)=>{ 
+            e.preventDefault()
+            
+            // console.log(idx)
+            displayRow(idx);
+                window.scrollTo({top:0, behavior:'smooth'}); //페이지 이동 시 스크롤탑으로 올리기
+        })    
+    });
+    //상단의idx와 달라도되고 같아도 됨. function안에 idx는 지역번수임
+    function displayRow(idx){
+        
+        let start = idx * rowsPerPage;
+        let end = start + rowsPerPage;
+
+        let rowsArray = [...rows];
+        // console.log(rowsArray);
+
+        
+        for(ra of rowsArray){
+            ra.style.display='none';
+        }   //모든 tr을 display:none해라
+
+
+        //tr 혹은 게시글이 하나도 없으면 좌 우 화살표 없애기    
+        if(rowsArray.length == '0'){        
+            prevPageBtn.style.display='none';
+            nextPageBtn.style.display='none';
+        }
+
+        let newRows = rowsArray.slice(start, end);
+        for(nr of newRows){
+            nr.style.display='';
+        } //해당되는 스타일에 display:none을 없애라
+
+        for(nb of numberBtn){
+            // nb.ClassList.remove('active');
+            nb.classList.remove("active");
+        }
+        numberBtn[idx].classList.add('active'); //해당 번호에 active
+
+    } //displayRow
+    displayRow(0); //처음 화면 표시가 idx가 0일때부터 나와라   
+
+    //페이지네이션 그룹 표시 함수
+    function displayPage(num){
+            //페이지 네이션 번호 감추기
+        for(nb of numberBtn){
+            nb.style.display="none"
+        }
+        let totalPageCount = Math.ceil(pageCount/maxPageNum);
+
+        let pageArr = [...numberBtn];
+        let start = num * maxPageNum;
+        let end = start + maxPageNum;
+        let pageListArr = pageArr.slice(start, end);
+
+        for(let item of pageListArr){
+            item.style.display='block';
+        }
+
+        if(pageActiveIdx === 0){
+            prevPageBtn.style.display='none'
+        }else{
+            prevPageBtn.style.display='block'
+        }
+
+        if(pageActiveIdx === totalPageCount - 1){
+            nextPageBtn.style.display='none'
+        }else{
+            nextPageBtn.style.display='block'
+        }
+
+    }
+    displayPage(0);
+
+    nextPageBtn.addEventListener('click', () => {
+        let nextPageNum = pageActiveIdx * maxPageNum + maxPageNum;
+        displayRow(nextPageNum);
+        ++pageActiveIdx;
+        displayPage(pageActiveIdx);
+        window.scrollTo({top:0, behavior:'smooth'});
+    });
+    
+    prevPageBtn.addEventListener('click', () => {
+        let prevPageNum = pageActiveIdx * maxPageNum - 1;
+        displayRow(prevPageNum);
+        --pageActiveIdx;
+        displayPage(pageActiveIdx);
+        window.scrollTo({top:0, behavior:'smooth'});
+    });  
