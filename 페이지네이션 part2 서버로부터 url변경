@@ -2,8 +2,8 @@
 데이타가 많거나 url이 변하거나,
 보통은 해당방법을 많이 사용함.
 
-
-
+어드민 > 회원관리 > 회원리스트 참조
+surfMember_list.php
 
 <dl>
             <dt>1P출력수</dt>
@@ -213,3 +213,597 @@
         displayPage(pageActiveIdx);
     }
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==================================================================================================================================
+<?php
+    // 필수 값 include
+    include_once "../_common.php";
+    $_SUB_MENU_CHECK = 10;
+    $_TITLE_ = "회원 관리 > 회원 리스트";
+    include_once "../inc/head.php";
+
+    $memberList = array();
+    $newMemberCount = 0;
+
+    // 회원 리스트 & 카운팅
+    if ($_GET["limit"]){
+        $memberList = $newMember->getNewMemberList($_GET, $_base_use_lang);
+        $newMemberCount = $newMember->getNewMemberListCount($_GET);
+    }
+    
+    // 필터용 국적 정보
+    $nationality = $newMember->getChildCodeList("3371", $_base_use_lang);
+?>
+
+<link rel="stylesheet" href="/css/member.css" type="text/css">
+
+<!-- 테이블정렬 -->
+<script src="/js/tablesort.min.js"></script>
+<script src="/js/tablesort.number.min.js"></script>
+<script src="/js/tablesort.date.min.js"></script>
+<!-- //테이블정렬 -->
+
+<form class="poiListWrap" id="surfMemberList" onsubmit="">
+    <input type="hidden" name="sort_by" id="sort_by" value="<?=$_GET['sort_by']?>">
+    <input type="hidden" name="offset" id="offset" value="0"/>
+
+    <div class="form01 surfMember">
+        <dl>
+            <dt>
+                <?=$language['1782'];//검색어?>
+            </dt>
+            <dd>
+                <select name="search_type">
+                    <option value="login_id" <?=$_GET["search_type"] == "login_id" ? "selected" : ''?>><?=$language['2'];//아이디?></option>
+                    <option value="email" <?=$_GET["search_type"] == "email" ? "selected" : ''?>><?=$language['1073'];//이메일?></option>
+                    <option value="mobile_phone_number" <?=$_GET["search_type"] == "mobile_phone_number" ? "selected" : ''?>><?=$language['97'];//전화번호?></option>
+                </select>
+                <input type="text" name="search_value" id="search_value" placeholder="<?=$language['25'];//검색어를 입력해주세요?>" class="max-width300" value="<?=$_GET["search_value"]?>">
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <?=$language['909'];//국적?>
+            </dt>
+            <dd>
+                <select name="nationality" id="countrySelect">
+                    <option value=""><?=$language['24'];//선택?></option>
+                    <?php
+                    for($i = 0; $i < $nationality["resultRows"]; $i++){?>
+                        <option value='<?=$nationality["code_list_idx"][$i]?>' <?=$_GET["nationality"] == $nationality["code_list_idx"][$i] ? "selected" : ''?>><?=$nationality["name"][$i]?></option>
+                    <?}?>
+                </select>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <?=$language['196'];//성별?>
+            </dt>
+            <dd>
+                <select name="gender">
+                    <option value=""><?=$language['24'];//선택?></option>
+                    <option value="man" <?=$_GET["gender"] == "man" ? "selected" : ''?>><?=$language['907'];//남자?></option>
+                    <option value="woman" <?=$_GET["gender"] == "woman" ? "selected" : ''?>><?=$language['908'];//여자?></option>
+                </select>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <?=$language['2714'];//가입구분?>
+            </dt>
+            <dd>
+                <select name="member_type">
+                    <option value=""><?=$language['24'];//선택?></option>
+                    <option value="surf" <?=$_GET["member_type"] == "surf" ? "selected" : ''?>>신규 회원</option>
+                    <option value="old_surf" <?=$_GET["member_type"] == "old_surf" ? "selected" : ''?>>기존 회원</option>
+                </select>
+            </dd>
+        </dl>
+    </div>
+    <div class="form01 surfMember">
+        <dl style="width:25%; flex:none;">
+            <dt>
+            <?=$language['2804'];//가입채널?>
+            </dt>
+            <dd>
+                <select name="" id="">
+                    <option value="">google</option>
+                    <option value="">kakao</option>
+                    <option value="">e-mail</option>
+                </select>
+            </dd>
+        </dl>
+        <dl style="width:25%; flex:none;">
+            <dt>
+            <?=$language['3165'];//채널구분?>
+            </dt>
+            <dd>
+                <select name="" id="">
+                    <option value="">써프재팬</option>
+                    <option value="">호텔잇츠</option>
+                    <option value="">디스커버</option>
+                </select>
+            </dd>
+        </dl>
+        <dl style="width:25%; flex:none;">
+            <dt>
+                <?=$language['3166'];//채널상세?>
+            </dt>
+            <dd>
+                <select name="" id="" style="max-width:max-content">
+                    <option value="">아카사카</option>
+                    <option value="">긴자</option>
+                </select>
+                <select name="" id="" style="max-width:max-content">
+                    <option value="">수퍼호텔 프리미엄 아카사카</option>
+                    <option value="">호텔 뉴 오타니 도쿄</option>
+                    <option value="">더 비 아카사카</option>
+                </select>
+            </dd>
+        </dl>
+    </div>
+    <div class="form01 surfMember dateFilter">
+        <dl style="width:100%">
+            <dt><?=$language['2501'];//가입일?></dt>
+            <dd class="flex_align_center">
+                <div class="member_period">
+                    <select name="selectRegistraion" id="selectRegistraion" onchange="changeRegistrationDatetime(this.value)">
+                        <option value="none" id="none" <?=$_GET['selectRegistraion']=='none'?'selected':''?>>검색안함</option>
+                        <option value="today" id="today" <?=$_GET['selectRegistraion']=='today'?'selected':''?>>오늘</option>
+                        <option value="week" id="week" <?=$_GET['selectRegistraion']=='week'?'selected':''?>>1주일</option>
+                        <option value="month" id="month" <?=$_GET['selectRegistraion']=='month'?'selected':''?>>1개월</option>
+                        <option value="year" id="year" <?=$_GET['selectRegistraion']=='year'?'selected':''?>>1년</option>
+                        <option value="etc" id="etc" <?=$_GET['selectRegistraion']=='etc'?'selected':''?>>직접입력</option>
+                    </select>
+                </div>
+                <div class="calendar">
+                    <input type="text" id="registration_datetime_start" name="registration_datetime_start" class="calendar_bg width120" value="<?=$_GET["registration_datetime_start"]?>" onchange="changeEtc('registration')"> ~ 
+                    <input type="text" id="registration_datetime_end" name="registration_datetime_end" class="calendar_bg width120" value="<?=$_GET["registration_datetime_end"]?>" onchange="changeEtc('registration')">
+                </div>
+            </dd>
+        </dl>
+        <dl style="width:calc(100% - 190px)">
+            <dt><?=$language['2502'];//접속일?></dt>
+            <dd class="flex_align_center">
+                <div class="member_period">
+                    <select name="selectLogin" id="selectLogin" onchange="changeLoginDatetime(this.value)">
+                        <option value="none" id="noneLogin" <?=$_GET['selectLogin']=='none'?'selected':''?>>검색안함</option>
+                        <option value="today" id="todayLogin" <?=$_GET['selectLogin']=='today'?'selected':''?>>오늘</option>
+                        <option value="week" id="weekLogin" <?=$_GET['selectLogin']=='week'?'selected':''?>>1주일</option>
+                        <option value="month" id="monmthLogin" <?=$_GET['selectLogin']=='month'?'selected':''?>>1개월</option>
+                        <option value="year" id="yearLogin" <?=$_GET['selectLogin']=='year'?'selected':''?>>1년</option>
+                        <option value="etc" id="etcLogin" <?=$_GET['selectLogin']=='etc'?'selected':''?>>직접입력</option>
+                    </select>
+                </div>
+                <div class="calendar">
+                    <input type="text" id="last_login_datetime_start" name="last_login_datetime_start" class="calendar_bg width120" value="<?=$_GET["last_login_datetime_start"]?>" onchange="changeEtc('login')"> ~ 
+                    <input type="text" id="last_login_datetime_end" name="last_login_datetime_end" class="calendar_bg width120" value="<?=$_GET["last_login_datetime_end"]?>" onchange="changeEtc('login')">
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>1P출력수</dt>
+            <dd>
+                <div class="flex justify_between ">
+                    <select name="limit" id="sortCount" class="select" onchange="limitChange(this.value)">
+                        <!-- <option value="10" <?=$_GET["limit"] == "10" ? "selected" : ''?>>10</option>
+                        <option value="20" <?=$_GET["limit"] == "20" ? "selected" : ''?>>20</option> -->
+                        <option value="50" <?=$_GET["limit"] == "50" ? "selected" : ''?>>50</option>
+                        <option value="100" <?=$_GET["limit"] == "100" ? "selected" : ''?>>100</option>
+                        <option value="300" <?=$_GET["limit"] == "300" ? "selected" : ''?>>300</option>
+                        <option value="500" <?=$_GET["limit"] == "500" ? "selected" : ''?>>500</option>
+                    </select>
+                </div>
+            </dd>
+        </dl>
+        <div class="btn_box">
+            <button type="submit" class="btn btn-lg btn-success"><?=$language['40'];//검색?></button>
+            <button type="button" onclick="locationReset()" class="btn btn-lg btn-dark"><?=$language['810'];//초기화?></button>
+        </div>
+    </div>
+</form>
+
+<div class="flex justify_between ">
+    <p class="total">Total: <?=number_format($newMemberCount["count"], 0)?></p>
+</div>
+
+<div class="table_Xscroll">
+    <table class="list_tb" id="myTable">
+        <colgroup>
+            <col style="width:5%">
+            <col style="width:5%">
+            <col style="width:5%">
+            <col style="width:7%">
+            <col style="width:8%">
+            <col style="width:8%">
+            <col style="width:8%">
+            <col style="width:5%">
+            <col style="width:5%">
+            <col style="width:7%">
+            <col style="width:6%">
+            <col style="width:5%">
+            <col style="width:8%">
+            <col style="width:8%">
+            <col style="width:5%">
+            <col style="width:5%">
+        </colgroup>
+        <thead style="position:sticky; top:0;">
+            <tr>
+                <th><?=$language['2552'];//회원번호?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['2804'];//가입채널?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['3165'];//채널구분?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['3166'];//채널상세?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['2'];//ID?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['900'];//이름(닉네임)?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['1073'];//이메일?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['2695'];//회원구분?><img src="/img/ico-down.svg"></th>
+                <th><?=$language['1201'];//국가?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['97'];//전화번호?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['909'];//국적?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['196'];//성별?> <img src="/img/ico-down.svg"></th>
+                <th><?=$language['2501'];//가입일?> <a href="#" onclick="sortBy('join_datetime asc')">▲</a><a href="#" onclick="sortBy('join_datetime desc')">▼</a></th>
+                <th><?=$language['2502'];//접속일?> <a href="#" onclick="sortBy('last_login_datetime asc')">▲</a><a href="#" onclick="sortBy('last_login_datetime desc')">▼</a></th>
+                <th><?=$language['587'];//상태?> <img src="/img/ico-down.svg"></th>
+                <th class="not_Event"><?=$language['482'];//관리?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php for($i = 0; $i < $memberList["resultRows"]; $i++){
+                $sns_type_list = $newMember->getSnsMemberList($memberList["member_no"][$i]);
+                $sns_type_str = "";
+
+                if ($sns_type_list){
+                    $sns_type_str = implode(",", $sns_type_list["sns_type"]);
+                }
+                ?>
+                <?php
+                    // 국가 -> 나중에 이것도 쿼리로 빼야함
+                    $nationality = $newMember->getCodeList($memberList["nationality"][$i], $_base_use_lang);
+                ?>
+                <tr>
+                    <td><?=$memberList["member_no"][$i]?></td>
+                    <td class="left"><?=$sns_type_str?></td>
+                    <td class="left">호텔잇츠</td>
+                    <td class="left">수퍼호텔 프리미엄 아카사카</td>
+                    <td class="left"><?=$memberList["login_id"][$i]?></td>
+                    <td class="left"><a href="/member/surfMember_detail.php?member_no=<?=$memberList["member_no"][$i]?>" target="_blank"><?=$memberList["last_name"][$i]." ".$memberList["first_name"][$i]?></a></td>
+                    <td class="left"><?=$memberList["email"][$i]?></td>
+                    <td><?=$memberList["member_type"][$i]?></td>
+                    <td><?=$memberList["international_calling_country_code"][$i]?></td>
+                    <td><?=$memberList["mobile_phone_number"][$i]?></td>
+                    <td class="left"><?=$nationality["name"]?></td>
+                    <td><?=$memberList["gender"][$i]?></td>
+                    <td><?=date("Y-m-d H:i", strtotime($memberList["join_datetime"][$i]))?></td>
+                    <td><?=date("Y-m-d H:i", strtotime($memberList["last_login_datetime"][$i]))?></td>
+                    <td><?=$memberList["delete_yn"][$i]?></td>
+                    <td>
+                        <button type="button" class="del" onclick="deleteMember('<?=$memberList['member_no'][$i]?>')"><?=$language['253'];//삭제?></button>
+                    </td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+
+    <div class="pagination" style="display: none;" id="pagination">
+        <i class="fa-solid fa-angle-left" width="20px" height="20px" style="cursor:pointer;" onclick="prevPageCheck();"></i>
+        <ul id="numbers" class="numbers"></ul>
+        <i class="fa-solid fa-angle-right" width="20px" height="20px" style="cursor:pointer;" onclick="nextPageCheck();"></i>
+    </div>    
+</div>
+
+<script>
+    //가입일, 접속일 초기 셋팅
+    $( function() {
+        <? if ($_GET["selectRegistraion"] != 'none' && !$_GET["selectLogin"]){ ?>
+            $("#selectRegistraion").val('week');
+            $("#selectLogin").val('week');
+            changeRegistrationDatetime('week');
+            changeLoginDatetime('week');
+
+            
+            <? if (!$_GET["serach"]){ ?>
+                $('#surfMemberList').submit();
+            <? } ?>  
+        <? } ?>  
+        <? if ($_GET["selectRegistraion"] == 'none'){ ?>
+            changeRegistrationDatetime('none');
+        <? } ?>      
+        <? if ($_GET["selectLogin"] == 'none'){ ?>
+            changeLoginDatetime('none'); 
+        <? } ?>  
+    });
+
+
+    //가입일, 접속일 Datepicker
+    $( function() {
+        const today = new Date();
+
+        $( "#registration_datetime_start,#registration_datetime_end,#last_login_datetime_start,#last_login_datetime_end" ).datepicker({
+            dateFormat: "yy-mm-dd",
+            currentText: "오늘",
+        });
+    });
+
+
+    // 페이지 당 수 변경
+    function limitChange(value){
+        $('#surfMemberList').submit();
+    }
+
+    //테이블정렬
+    new Tablesort(document.getElementById('myTable'));
+    $('.list_tb th').click(function(){
+        // $('.review_tb th img').toggleClass('active');
+        $(this).find('img').toggleClass('active');
+    });
+
+    // 필터링 초기화
+    function locationReset(){
+        location.href = '/member/surfMember_list.php';
+    }
+
+    // 멤버 삭제
+    function deleteMember(member_no){
+        if(confirm('<?=$language['620'];//삭제하시겠습니까??>')){
+            $.ajax({
+                type: "POST",
+                url: "./_ajax_login_check.php",
+                data: {
+                    mode: 'deleteMember',
+                    member_no: member_no,
+                    delete_yn: 'Y',
+                },
+                cache: false,
+                async: false,
+                success: function(data) {
+                    if ($.trim(data) == 'S') {
+                        alert("<?=$language['1009'];//완료?>");
+                        location.reload();
+                    } else {
+                        alert("<?=$language['1091'];//저장에 실패하였습니다.?>");
+                    }
+                }
+            });
+        }
+    }
+
+    // 정렬 순서 변경
+    function sortBy(sort) {
+        $('#sort_by').val(sort);
+        $('#surfMemberList').submit();
+    }
+
+    // 가입일 변경
+    function changeRegistrationDatetime(value){
+        let today = new Date();
+        let tom = new Date(today);
+        tom.setDate(today.getDate() + 1);
+        let weekAgo = new Date(today);
+        weekAgo.setDate(today.getDate() - 7);
+        let monthAgo = new Date(today);
+        monthAgo.setMonth(today.getMonth() - 1);
+        let yearAgo = new Date(today);
+        yearAgo.setFullYear(today.getFullYear() - 1);
+
+        let start = formatDate(tom);
+        let end = formatDate(today);
+
+        if(value == "today"){
+            
+        }else if(value == "week"){
+            end = formatDate(weekAgo);
+        }else if(value == "month"){
+            end = formatDate(monthAgo);
+        }else if(value == "year"){
+            end = formatDate(yearAgo);
+        }else if(value == "etc"){
+            start = '';
+            end = '';
+        }else if(value == "none"){
+            start = '';
+            end = '';
+        }
+
+        $("#registration_datetime_start").val(end);
+        $("#registration_datetime_end").val(start);
+    }
+
+    // 접속일 변경
+    function changeLoginDatetime(value){
+        if ($("#selectLogin").val() == 'none' && $("#selectRegistraion").val() == 'none'){
+            $("#selectLogin").val('today');
+            $("#selectRegistraion").val('today');
+            alert('가입일과 접속일은 동시에 검색안함으로 검색할 수 없습니다.');
+            return false;
+        }
+
+
+        let today = new Date();
+        let tom = new Date(today);
+        tom.setDate(today.getDate() + 1);
+        let weekAgo = new Date(today);
+        weekAgo.setDate(today.getDate() - 7);
+        let monthAgo = new Date(today);
+        monthAgo.setMonth(today.getMonth() - 1);
+        let yearAgo = new Date(today);
+        yearAgo.setFullYear(today.getFullYear() - 1);
+
+        let start = formatDate(tom);
+        let end = formatDate(today);
+
+        if(value == "today"){
+            
+        }else if(value == "week"){
+            end = formatDate(weekAgo);
+        }else if(value == "month"){
+            end = formatDate(monthAgo);
+        }else if(value == "year"){
+            end = formatDate(yearAgo);
+        }else if(value == "etc"){
+            start = '';
+            end = '';
+        }else if(value == "none"){
+            start = '';
+            end = '';
+        }
+
+        $("#last_login_datetime_start").val(end);
+        $("#last_login_datetime_end").val(start);
+    }
+
+    // 날짜 수동으로 변경
+    function changeEtc(type){
+        if (type == "registration"){
+            $("#selectRegistraion").val('etc');
+        }else{
+            $("#selectLogin").val('etc');
+        }
+    }
+
+    // 아래부터는 페이징 처리 추가 수정 필요
+
+    // 셀렉트박스값
+    var selectElement = document.getElementById('sortCount');
+
+    function getSelectedValue() {
+        var selectedValue = selectElement.options[selectElement.selectedIndex].value;
+        return selectedValue;
+    }
+    var selectedLimit = getSelectedValue();
+
+    // 총 페이지 개수 = Math.ceil(전체 컨텐츠 개수 / 한 페이지에 보여줄 컨텐츠의 개수)
+    // 화면에 보여질 페이지 그룹 = Math.ceil(현재 페이지 번호 / 한 화면에 보여줄 페이지의 개수)
+    // 화면에 보여질 페이지의 첫번째 페이지 번호 = ((페이지 그룹 번호 - 1) * 한 화면에 보여줄 페이지의 개수) + 1
+    // 화면에 보여질 페이지의 마지막 페이지 번호 = 페이지 그룹 번호 * 한 화면에 보여줄 페이지의 개수
+    // 단, 페이지 그룹 번호 * 한 화면에 보여줄 페이지의 개수가 전체 페이지 개수보다 크다면 전체 페이지가 된다
+
+    let listTotal = <?=$newMemberCount["count"] ? $newMemberCount["count"] : 0 ?>; //총 리스트 수 
+    const rowsPerPage = selectedLimit; //한페이지에 보여지는 갯수 
+    const rows = document.querySelectorAll('.list_tb tbody tr');
+    const pageCount = Math.ceil(listTotal/selectedLimit);  // 총몇라인 / 한페이지갯수 = 총 페이지 수 
+    const numbers = document.querySelector('#numbers');
+    const prevPageBtn = document.querySelector('.pagination .fa-angle-left');
+    const nextPageBtn = document.querySelector('.pagination .fa-angle-right');
+    const numberBtn = numbers.querySelectorAll('#numbers li');
+    let pageActiveIdx = 0 //현재 보고있는 페이지 그룹 번호
+    let maxPageNum = <?=!$_GET["limit"] ? 10 : $_GET["limit"]?>; //보여지는 페이지 그룹의 최대 개수
+    let limit= <?=!$_GET["limit"] ? 10 : $_GET["limit"]?>; //한페이지당 나타낼 아이템 갯
+    let offset = <?=!$_GET["offset"] ? 0 : $_GET["offset"]?>;
+    let nowPage = Math.ceil(offset / limit);
+
+    // 페이징 처리
+    $(function() {
+        if (pageCount > 0){
+            $("#pagination").show();      
+                
+            for(let i = 1; i<=pageCount; i++){ 
+                numbers.innerHTML += `<li><a href="" id="page_${i}">${i}</a></li>`;
+            }
+
+            numberBtn.forEach((item, idx) => {
+                item.addEventListener("click", (e)=>{
+                    e.preventDefault();
+                    for(nb of numberBtn){
+                        nb.classList.remove("active");
+                    }
+                    e.target.classList.add("active");
+                    displayRow(idx);
+                    window.scrollTop({top:0, behavior:'smooth'}); //페이지 이동 시 스크롤탑으로 올리기
+                });
+            });
+
+            if (offset == 0 || offset == ''){
+                $("#page_1").addClass("active");    
+            }else{
+                $("#page_"+offset).addClass("active");
+            }
+
+            //페이징클릭 시 보여주기
+            $('#numbers').on('click', 'li', function(e) {
+                e.preventDefault();
+                $('#numbers li').removeClass('active');
+                $(this).addClass('active');
+
+                let pageOffset = $(this).text();
+                let pageNumber = Math.ceil(pageOffset * selectedLimit); //선택된페이지번호 * 페이지리스트갯수 2*50 보여지는갯수
+                let offsetInput = $('#offset'); //오프셋 클릭된 넘버값
+                let pageFixed = Math.ceil(selectedLimit / offset); // 클릭된넘버 값 / 셀렉트갯수
+                let presentPage = Math.ceil(offset / limit); //현재페이지
+                let value = Math.ceil(pageNumber * offset);
+                let pageValue = Math.ceil(offset / limit);
+
+                $('#offset').val(pageOffset);                
+                $('#surfMemberList').submit();
+            });
+        }
+    });
+
+
+    //페이지네이션 그룹 표시 함수
+    function displayPage(num){
+        //페이지 네이션 번호 감추기
+        for(nb of numberBtn){
+            nb.style.display="none"
+        }
+        let totalPageCount = Math.ceil(pageCount/maxPageNum); //2449/ 10
+        let pageArr = [...numberBtn];
+        let start = num * maxPageNum;
+        let end = start + maxPageNum;
+        let pageListArr = pageArr.slice(start, end);
+
+        for(let item of pageListArr){
+            item.style.display='block';
+        }
+
+        if(pageActiveIdx === 0){
+            prevPageBtn.style.display='none'
+        }else{
+            prevPageBtn.style.display='block'
+        }
+
+        if(pageActiveIdx === totalPageCount - 1){
+            nextPageBtn.style.display='none'
+        }else{
+            nextPageBtn.style.display='block'
+        }
+
+    }
+
+    function nextPageCheck(){
+        let nextPageNum = pageActiveIdx * maxPageNum + maxPageNum;
+        displayRow(nextPageNum);
+        ++pageActiveIdx;
+        displayPage(pageActiveIdx);
+        
+    }
+
+    function prevPageCheck(){
+        let prevPageNum = pageActiveIdx * maxPageNum - maxPageNum;
+        displayRow(prevPageNum);
+        --pageActiveIdx;
+        displayPage(pageActiveIdx);
+    }
+</script>
+
+<?php
+    include_once "../inc/foot.php";
+?>
+
+==============================================================================
+
