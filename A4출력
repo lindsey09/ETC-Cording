@@ -1,0 +1,26 @@
+스타일에 이렇게 설정해주어야함
+@media print {
+ @page {
+      size: A4 portrait;
+      margin: 0;
+  }
+  body {
+      margin:auto;
+      max-width:794px;
+      width:100%;
+      height:100%;
+      padding:20px;;
+  }
+  #container{
+    padding:50px 0;
+  }
+}
+
+가로로 출력하고 싶을 떄
+
+@page {
+size: A4 landscape;
+margin:0
+}
+
+으로 바꿔주면 됨!! 
