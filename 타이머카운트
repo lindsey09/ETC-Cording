@@ -1,0 +1,31 @@
+    function startCountdown() {
+        function updateCountdown() {
+            const now = new Date();
+            const midnight = new Date();
+            midnight.setHours(24, 0, 0, 0); // 오늘 자정
+
+            const totalSeconds = 24 * 60 * 60; // 하루 전체 초
+            const remainingTime = midnight - now;
+
+            if (remainingTime <= 0) {
+                midnight.setDate(midnight.getDate() + 1); // 다음 날로 설정
+            }
+
+            const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+            const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+            document.getElementById("hours").textContent = String(hours).padStart(2, "0");
+            document.getElementById("minutes").textContent = String(minutes).padStart(2, "0");
+            document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
+
+            // Update progress bar
+            const elapsedSeconds = totalSeconds - Math.floor(remainingTime / 1000);
+            const progressPercentage = (elapsedSeconds / totalSeconds) * 100;
+            document.getElementById("progress").style.width = `${progressPercentage}%`;
+        }
+
+        setInterval(updateCountdown, 1000); // 1초마다 갱신
+    }
+
+    window.onload = startCountdown;
