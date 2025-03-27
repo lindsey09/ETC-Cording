@@ -1,0 +1,149 @@
+<style>
+  /* 객실 수 인원 팝업 */
+.roomPerson_pop{
+  .person{
+    display:flex;
+    justify-content: space-between;
+
+    & h5{
+      font-size:16px;
+      font-weight:500;
+      margin-bottom:10px;
+      text-align: left;;
+
+      span{
+        display:block;
+        font-size:13px;
+        margin-top:5px;
+      }
+    }
+    .cal{
+      display:flex;
+      .count_btn{
+        width:30px;
+        height:30px;
+        border-radius: 50%;
+        border:2px solid var(--surfcolor);
+        padding:0;
+        &:disabled {
+          background-color: #f9f9f9; 
+          border:2px solid #ddd;
+          color: #999;
+        }
+        
+      }
+      
+      
+      input[type="text"]{
+        width:30px;
+        height:30px;
+        text-align: center;
+      }
+    }
+  }
+}
+
+</style>
+
+  <!-- 객실 수 인원 -->
+<div class="roomPerson_pop pop">
+    <span class="close"></span>
+    <h3>객실 인원 선택</h3>
+    <div class="person mb30">
+        <h5>성인 <span>만 12세이상</span></h5>
+        <div class="cal">
+            <button type="button" class="count_btn minus" id="adultMinusBtn" onclick="decrement_adult('adult')">-</button>
+            <input type="text" id="adultInput" value="2">
+            <button type="button" class="count_btn plus" onclick="increment('adult')">+</button>
+        </div>
+    </div>
+    <div class="person mb30">
+        <h5>아동 <span>만 0세 ~ 12세미만</span></h5>
+        <div class="cal">
+            <button type="button" class="count_btn minus" id="childMinusBtn" disabled onclick="decrement('child')">-</button>
+            <input type="text" id="childInput" value="0"/>
+            <button type="button" class="count_btn plus" onclick="increment('child')">+</button>
+        </div>
+    </div>
+
+    <div class="btn_box">
+        <button type="button" class="black_btn" id="roomPersonBtn">성인 2 / 아동 0 · 적용</button>
+    </div>
+</div>
+<div class="black_bg"></div>
+
+  
+<script>
+
+/* 객식인원선택 팝업 S */
+// 인원수 증가
+function increment(type) {
+    var input = document.getElementById(type + 'Input');
+    var currentValue = parseInt(input.value);
+    input.value = currentValue + 1;
+    enableMinusButton(type);
+    updateButtonText(); 
+}
+
+// 어른인원수 감소
+function decrement_adult(type){
+    var input = document.getElementById(type + 'Input');
+    var currentValue = parseInt(input.value);
+    var minusButton = document.getElementById('adultMinusBtn'); 
+
+    // 값이 1 이상 감소
+    if (currentValue > 1) {
+        input.value = currentValue - 1;
+    }
+    if (currentValue <= 2) {
+        minusButton.setAttribute("disabled", "true");
+    }
+    updateButtonText(); 
+}
+
+// 아동인원수 감소
+function decrement(type) {
+    var input = document.getElementById(type + 'Input');
+    var currentValue = parseInt(input.value);
+    var minusButton = document.getElementById('childMinusBtn'); 
+
+    // 값이 1 이상 감소
+    if (currentValue > 0) {
+        input.value = currentValue - 1;
+    }
+    if (currentValue <= 1) {
+        minusButton.setAttribute("disabled", "true");
+    }
+    updateButtonText(); 
+}
+
+// 감소 버튼 비활성화 
+function enableMinusButton(type) {
+    var input = document.getElementById(type + 'Input');
+    var minusButton = document.getElementById(type + 'MinusBtn');
+
+    if (parseInt(input.value) > 0) {
+        minusButton.removeAttribute("disabled");
+    }
+}
+
+//버튼 숫자 업데이트
+function updateButtonText() {
+    var adultValue = document.getElementById('adultInput').value;
+    var childValue = document.getElementById('childInput').value;
+    var button = document.getElementById('roomPersonBtn');
+
+    button.textContent = '성인 ' + adultValue + ' / 아동 ' + childValue + ' · 적용';
+}
+
+// 버튼초기화
+window.onload = function() {
+    updateButtonText();
+    toggleMinusButton('adult');
+    toggleMinusButton('child');
+}; 
+
+/* 객식인원선택 팝업 E */
+</script>
+  
+  
