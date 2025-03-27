@@ -1,0 +1,71 @@
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+-------------------flatpickr 라이브러리 필요-----------------------------
+
+<style>
+.search_hotel {
+  width: 100%;
+  
+  .date, .room_person {
+    flex: 1;
+    font-size: 14px;
+    color: #555;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding-left: 27px;
+    height: 35px;
+    line-height: 30px;
+  }
+  
+  .date {
+    background: url(../images/search_icon02.jpg) 3px center no-repeat;
+    background-size: 20px;
+  }
+
+  .room_person {
+    background: url(../images/ico-user.svg) 3px center no-repeat;
+    background-size: 21px;
+  }
+}
+
+</style>
+ <div class="date">
+      <input type="text" id="calendarInput" placeholder="2025.03.27 ~ 2025.03.28">
+  </div>
+<Script>
+// 날짜보기
+flatpickr("#calendarInput", {
+    mode: "range", // 범위 선택 모드
+    dateFormat: "Y-m-d", // 날짜 형식
+    locale: "ko", // 한글로 로케일 설정
+    defaultDate: [new Date(), new Date().fp_incr(1)], // 오늘부터 내일까지 설정
+    altInput: true, // 대체 입력 필드를 사용
+    altFormat: "Y-m-d", // 대체 입력 필드에서 표시할 날짜 형식
+    onChange: function(selectedDates, dateStr, instance) {
+        if (selectedDates.length === 2) {
+            const startDate = selectedDates[0];
+            const endDate = selectedDates[1];
+            
+            // 날짜 범위 구분을 "~"로 표시
+            const formattedRange = `${startDate.getFullYear()}-${(startDate.getMonth() + 1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')} ~ ${endDate.getFullYear()}-${(endDate.getMonth() + 1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`;
+            
+            // "altInput"을 사용하여 "~"로 구분한 날짜 범위 설정
+            instance.altInput.value = formattedRange;
+        }
+    },
+    // 기본 표시 시 "to" 대신 "~"로 구분된 값을 대체 입력 필드에 설정
+    onReady: function(selectedDates, dateStr, instance) {
+        if (selectedDates.length === 2) {
+            const startDate = selectedDates[0];
+            const endDate = selectedDates[1];
+            
+            // 초기 표시 시에도 "~"로 날짜 범위 표시
+            const formattedRange = `${startDate.getFullYear()}-${(startDate.getMonth() + 1).toString().padStart(2, '0')}-${startDate.getDate().toString().padStart(2, '0')} ~ ${endDate.getFullYear()}-${(endDate.getMonth() + 1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')}`;
+            
+            instance.altInput.value = formattedRange;
+        }
+    }
+});
+
+</script>
