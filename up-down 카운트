@@ -1,0 +1,74 @@
+style
+  
+.alcohol__setting .stock__updown{
+    width:50%;
+    display: flex;
+    gap:5px;
+    flex-wrap: wrap;
+}
+.alcohol__setting .stock__updown button{
+    width:25px;
+    height:27px;
+    text-align: center;
+    border:1px solid #ddd;
+    border-radius: 5px;
+}
+.alcohol__setting .stock__updown button.soldout{
+    width:80px;
+    height:30px;
+    background:#666;
+    color:#fff;
+    font-size:14px;
+    text-align: center;
+    line-height: 35px;;
+}
+.alcohol__setting .stock__updown button.down{
+    color:#4C8EF0;
+}
+.alcohol__setting .stock__updown button.up{
+    color:#EC463D;
+}
+.alcohol__setting .stock__updown button.disa{
+    background:#ddd;
+    pointer-events: none;
+}
+.alcohol__setting .stock__updown input{
+    width:40px;
+    height:27px;
+    border:1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+}
+
+  <li class="stock__updown">
+      <button type="button" class="down" onclick="decrement();">-</button>
+      <input type="text" id="numberInput" placeholder="0" value="<?=$info['info']['jaego_number']?>" name="stock_num" inputmode="numberic" pattern="[0-9]*" onkeyup="inputNumberFormat(this)" >
+      <button type="button" class="up" onclick="increment()">+</button>
+  </li>
+
+// 재고수량 +/- 카운트
+let downBtn = document.querySelector('.stock__updown button.down');
+let upBtn = document.querySelector('.stock__updown button.up');
+let inputBox = document.querySelector('.stock__updown input');
+let soldOut = document.querySelector('.stock__updown .soldout');
+let count = 0;
+
+function increment(){
+    // alert()
+    var input = document.getElementById('numberInput');
+    var Invalue = parseInt(input.value);
+    input.value = Invalue + 1;
+    if(Invalue >= 0) {
+        downBtn.classList.remove('disa');
+    }
+}
+
+function decrement(){
+    var input = document.getElementById('numberInput');
+    var Invalue = parseInt(input.value);
+    input.value = Invalue - 1;
+    if(Invalue <= 1) {
+        input.value = 0;
+        downBtn.classList.add('disa');
+    }
+}
