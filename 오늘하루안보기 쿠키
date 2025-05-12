@@ -1,0 +1,85 @@
+<div class="intro_pop pop">
+    <div class="img" onclick="window.open('https://youtu.be/DDmM7SCrFrc?si=j4AbYa7bDscQhyzP')">
+        <img src="/common/images/youtube_hokuoka.jpg?v=1" alt="">
+    </div>
+    <div class="go_youtube" onclick="window.open('https://youtu.be/DDmM7SCrFrc?si=j4AbYa7bDscQhyzP')">
+        <img src="/common/images/icon_youtube.png" alt="">
+        <p>YouTube에서 확인</p>
+    </div>
+    <ul class="chk_btn_wrap">
+        <li class="close">
+            닫기
+        </li>
+        <li class="today_noShow">
+            오늘하루안보기
+        </li>
+    </ul>
+</div>
+<div class="black_bg"></div>
+
+
+
+
+let myPopup = document.querySelector('.intro_pop'),
+    todayNoShowBtn = document.querySelector('.today_noShow'),
+    popupClose = document.querySelector('.close');
+
+// 쿠키 생성 함수
+function setCookie(name, value, days) {
+    let date = new Date();
+    date.setDate(date.getDate() + days);
+    let cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
+    document.cookie = cookie;
+}
+
+// 쿠키 삭제 함수
+function delCookie(name) {
+    let date = new Date();
+    date.setDate(date.getDate() - 1);
+    let cookie = `${name}=; expires=${date.toUTCString()}; path=/`;
+    document.cookie = cookie;
+}
+
+// 쿠키 확인 함수
+function checkCookie(name) {
+    let cookies = document.cookie.split(';');
+    let visited = false;
+
+    for (let i in cookies) {
+        if (cookies[i].trim().startsWith(name + '=')) {
+            visited = true;
+            break;
+        }
+    }
+
+    if (visited) {
+        // 재방문 - 팝업 숨김
+        myPopup.style.display = 'none';
+        document.querySelector('.intro_pop + .black_bg').style.display = 'none';
+    } else {
+        // 신규방문 - 팝업 보임
+        myPopup.style.display = 'block';
+        document.querySelector('.intro_pop + .black_bg').style.display = 'block';
+        document.body.classList.add('not_scroll');
+    }
+}
+
+// 닫기 버튼 클릭 시 (단순히 팝업만 닫음, 쿠키 없음)
+popupClose.addEventListener('click', function () {
+    myPopup.style.display = 'none';
+    document.querySelector('.intro_pop + .black_bg').style.display = 'none';
+    document.body.classList.remove('not_scroll');
+});
+
+// "오늘 하루 안보기" 클릭 시 (쿠키 생성)
+todayNoShowBtn.addEventListener('click', function () {
+    setCookie('surfChannel', 'main', 1); // 1일간 저장
+    myPopup.style.display = 'none';
+    document.querySelector('.intro_pop + .black_bg').style.display = 'none';
+    document.body.classList.remove('not_scroll');
+});
+
+// 페이지 로딩 시 쿠키 검사
+document.addEventListener('DOMContentLoaded', function () {
+    checkCookie('surfChannel');
+});
