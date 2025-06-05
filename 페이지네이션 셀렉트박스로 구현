@@ -1,4 +1,7 @@
- <select name="" id="listCount" class="selectBox">
+https://newpartner.surf.menu/rest_management.php#none
+페이지 참조
+
+<select name="" id="listCount" class="selectBox">
     <option value="10" selected>10</option>
     <option value="20">20</option>
     <option value="30">30</option>
