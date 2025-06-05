@@ -1,0 +1,213 @@
+ <select name="" id="listCount" class="selectBox">
+    <option value="10" selected>10</option>
+    <option value="20">20</option>
+    <option value="30">30</option>
+    <option value="50">50</option>
+</select>
+
+<table class="list_tb" id="myTable">
+                    <colgroup>
+                        <col style="width:3%">
+                        <col style="width:3%">
+                        <col style="width:6%">
+                        <col style="width:24%">
+                        <col style="width:6%">
+                        <col style="width:6%">
+                        <col style="width:8%">
+                        <col style="width:8%">
+                        <col style="width:8%">
+                        <col style="width:28%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="all_chk"><label for="all_chk"></label></th>
+                            <th class="not_Event">No</th>
+                            <th class="not_Event"><?=$language['417'];//사진?></th>
+                            <th><?=$language['95'];//식당명?> <img src="/common/images/ico-down.svg"></th>
+                            <th><?=$language['3615'];//플로어?> <img src="/common/images/ico-down.svg"></th>
+                            <th class="not_Event"><?=$language['3616'];//파트너신청?></th>
+                            <th class="not_Event"><?=$language['1862'];//QR코드?> </th>
+                            <th class="not_Event"><?=$language['1951'];//음식메뉴?> </th>
+                            <th class="not_Event"><?=$language['1952'];//주류메뉴?> </th>
+                            <th class="not_Event"><?=$language['3617'];//담당자정보?> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                            <td><input type="checkbox" class="item_chk" id="chk_1"><label for="chk_1"></label></td>
+                            <td>1</td>
+                            <td>
+                                <div class="thumb" onclick="imgView();">
+                                    <img src="https://image.surf.menu/2025/05/02/poi/thumb/thumb-1746180030681497be38e63_600x.jpg" alt="">
+                                </div>
+                            </td>
+                            <td class="left">갓포 다이닝 하리</td>
+                            <td>5F</td>
+                            <td>
+                                <button type="button" class="btn btn_incomplete"><?=$language['2265'];//미등록?> </button>
+                            </td>
+                            <td>
+                                <div class="thumb" onclick="qrView();">
+                                    <img src="/common/images/qr_img.png" alt="">
+                                </div>
+                            </td>
+                            <td>
+                                <?=$language['387'];//등록?> 3 / 
+                                <?=$language['3618'];//신청?> 2
+                            </td>
+                            <td>
+                                <?=$language['387'];//등록?> 1 / 
+                                <?=$language['3618'];//신청?> 4
+                            </td>
+                            <td class="left">
+                                公文正人 / 점장 / 02-1233-3333
+                            </td>
+                          </tr>
+                          <tr>
+                            <td><input type="checkbox" class="item_chk" id="chk_2"><label for="chk_2"></label></td>
+                            <td>2</td>
+                            <td>
+                                <div class="thumb" onclick="imgView();">
+                                    <img src="https://image.surf.menu/2025/05/08/poi/thumb/thumb-1746687547681c563bf3dc9_600x.jpg" alt="">
+                                </div>
+                            </td>
+                            <td class="left">뉴욕 비스트로 바이 노코드</td>
+                            <td>7F</td>
+                            <td>
+                                <button type="button" class="btn btn_success"><?=$language['1009'];//완료?> </button>
+                            </td>
+                            <td>
+                                <div class="thumb" onclick="qrView();">
+                                    <img src="/common/images/qr_img.png" alt="">
+                                </div>
+                            </td>
+                            
+                            <td>
+                                <?=$language['387'];//등록?> 3 / 
+                                <?=$language['3618'];//신청?> 2
+                            </td>
+                            <td>
+                                <?=$language['387'];//등록?> 1 / 
+                                <?=$language['3618'];//신청?> 4
+                            </td>
+                            <td class="left">
+                                公文正人 / 점장 / 02-1233-3333
+                            </td>
+                          </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 테이블페이지네이션 S -->
+            <div class="pagination">
+                <i class="xi-arrow-left"></i>
+                <ul id="numbers">
+                    <!-- <li><a href="">1</a></li>     -->
+                </ul>
+                <i class="xi-arrow-right"></i>
+            </div>
+            <!-- 테이블페이지네이션 E -->
+
+스트립트 
+
+// 테이블페이지네이션
+const listCountSelect = document.getElementById('listCount');
+const rows = document.querySelectorAll('.list_tb tbody tr');
+const numbers = document.getElementById('numbers');
+const prevPageBtn = document.querySelector('.pagination .xi-arrow-left');
+const nextPageBtn = document.querySelector('.pagination .xi-arrow-right');
+
+let rowsPerPage = parseInt(listCountSelect.value, 10);
+let pageCount = Math.ceil(rows.length / rowsPerPage);
+let currentPage = 0;
+
+// 페이지네이션 생성 및 이벤트 연결
+function createPagination() {
+  numbers.innerHTML = '';
+  for(let i=0; i < pageCount; i++) {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = "#";
+    a.textContent = i + 1;
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      currentPage = i;
+      displayRows(currentPage);
+      updatePagination();
+      scrollToTop();
+    });
+    li.appendChild(a);
+    numbers.appendChild(li);
+  }
+}
+
+// 행 표시 및 페이드 인 효과
+function displayRows(page) {
+const start = page * rowsPerPage;
+const end = start + rowsPerPage;
+
+// tbody 전체 숨기기
+const tbody = document.querySelector('.list_tb tbody');
+tbody.style.opacity = 0;
+
+rows.forEach((row, idx) => {
+  row.style.display = (idx >= start && idx < end) ? '' : 'none';
+});
+
+// tbody 페이드 인
+setTimeout(() => {
+  tbody.style.transition = 'opacity 0.5s ease';
+  tbody.style.opacity = 1;
+}, 100);
+}
+// 현재 페이지네이션 활성화 표시
+function updatePagination() {
+  const pageLinks = numbers.querySelectorAll('a');
+  pageLinks.forEach((a, idx) => {
+    if(idx === currentPage) a.classList.add('active');
+    else a.classList.remove('active');
+  });
+  // 이전/다음 버튼 활성화 상태 처리
+  prevPageBtn.style.visibility = currentPage === 0 ? 'hidden' : 'visible';
+  nextPageBtn.style.visibility = currentPage === pageCount -1 ? 'hidden' : 'visible';
+}
+
+// 스크롤 부드럽게 맨 위로 이동
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// 이전 다음 버튼 이벤트
+prevPageBtn.addEventListener('click', () => {
+  if(currentPage > 0) {
+    currentPage--;
+    displayRows(currentPage);
+    updatePagination();
+    scrollToTop();
+  }
+});
+nextPageBtn.addEventListener('click', () => {
+  if(currentPage < pageCount - 1) {
+    currentPage++;
+    displayRows(currentPage);
+    updatePagination();
+    scrollToTop();
+  }
+});
+
+// 셀렉트박스 변경 이벤트
+listCountSelect.addEventListener('change', () => {
+  rowsPerPage = parseInt(listCountSelect.value, 10);
+  pageCount = Math.ceil(rows.length / rowsPerPage);
+  currentPage = 0;
+  createPagination();
+  displayRows(currentPage);
+  updatePagination();
+  scrollToTop();
+});
+
+// 초기 실행
+createPagination();
+displayRows(currentPage);
+updatePagination();
+
+
