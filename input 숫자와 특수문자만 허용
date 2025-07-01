@@ -1,3 +1,16 @@
+   
+   // input 숫자만 입력
+<input type="text" class="price"  placeholder="0" value="" inputmode="numeric" pattern="[0-9]*"  name="numCheck" value="" id="numCheck" onkeyup="inputNumberFormat(this)"  />
+function inputNumberFormat(obj) {
+    //콤마
+    obj.value = comma(uncomma(obj.value));
+    //  숫자만입력
+    $(this).val($(this).val().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1'));
+}
+
+   ------------------------------------------------------------------------
+   
+
 <input type="text" class="price" placeholder="0" value="" inputmode="numeric" pattern="[0-9]*"  name="numCheck" value="" id="numCheck" />
     function nCheck(){
        var numCheck = document.getElementById("numCheck");
