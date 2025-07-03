@@ -1,0 +1,473 @@
+ <div class="cal_wrap">
+          <div class="cal_nav">
+              <a href="#none" class="prev nav_btn">prev</a>
+              <div class="year_month"><p>2023</p><h3>12</h3></div>
+              <a href="#none" class="next nav_btn">next</a>
+          </div>
+
+          <div class="days">
+              <!-- 요일 -->
+              <div class="days week_days">
+                  <div class="day sun">S</div>
+                  <div class="day">M</div>
+                  <div class="day">T</div>
+                  <div class="day">W</div>
+                  <div class="day">T</div>
+                  <div class="day">F</div>
+                  <div class="day">S</div>
+              </div>
+              
+              <!-- 1달 달력 -->
+              <div class="days days_day">
+              </div>             
+
+          </div>
+      </div>
+
+
+
+$(document).ready(function () {
+  calendarInit();
+});
+
+function calendarInit() {
+  // 현재 날짜
+  var date = new Date();
+  var utc = date.getTime() + date.getTimezoneOffset() * 60 * 1000;
+  var kstGap = 9 * 60 * 60 * 1000;
+  var today = new Date(utc + kstGap);
+
+  var thisMonth = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  var currentYear = thisMonth.getFullYear();
+  var currentMonth = thisMonth.getMonth();
+  var currentDate = thisMonth.getDate();
+
+  renderCalendar(thisMonth);
+
+  function renderCalendar(thisMonth) {
+    currentYear = thisMonth.getFullYear();
+    currentMonth = thisMonth.getMonth();
+    currentDate = thisMonth.getDate();
+
+    // 달력에 현재 년/월 표시
+    $('.year_month').html(`<p>${currentYear}</p><h3>${(currentMonth + 1).toString().padStart(2, '0')}</h3>`);
+
+    // 달력 렌더링 영역 초기화
+    const calendar = document.querySelector('.days_day');
+    calendar.innerHTML = '';
+
+    // 날짜 계산
+    let firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay(); // 0 (일) ~ 6 (토)
+    let lastDateOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    let prevMonthLastDate = new Date(currentYear, currentMonth, 0).getDate();
+
+    let totalCells = 35; // 5주 고정
+    let dayCount = 1;
+
+    for (let i = 0; i < totalCells; i++) {
+      if (i < firstDayOfMonth) {
+        // 이전달 날짜
+        let prevDate = prevMonthLastDate - (firstDayOfMonth - 1 - i);
+        calendar.innerHTML += `<div class="day prev disable"><span>${prevDate}</span></div>`;
+      } else if (dayCount <= lastDateOfMonth) {
+        // 이번달 날짜
+        calendar.innerHTML += `<div class="day current"><span>${dayCount}</span></div>`;
+        dayCount++;
+      } else {
+        // 다음달 날짜
+        let nextDate = i - (firstDayOfMonth + lastDateOfMonth) + 1;
+        calendar.innerHTML += `<div class="day next disable"><span>${nextDate}</span></div>`;
+      }
+    }
+
+    // 오늘 날짜 표시
+    if (today.getFullYear() === currentYear && today.getMonth() === currentMonth) {
+      const todayIndex = today.getDate();
+      const currentMonthDate = document.querySelectorAll('.days_day .current');
+      if (currentMonthDate[todayIndex - 1]) {
+        currentMonthDate[todayIndex - 1].classList.add('today');
+      }
+    }
+
+    // 현재 주 표시용 (옵션)
+    renderCurrentWeek(today);
+  }
+
+  function renderCurrentWeek(today) {
+    let currentWeekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+    let currentWeekEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 6);
+
+    $('.weekend').html('');
+    for (let i = currentWeekStart.getDate(); i <= currentWeekEnd.getDate(); i++) {
+      $('.weekend').append('<div class="day current"><span>' + i + '</span></div>');
+    }
+  }
+
+  // 이전달
+  $('.prev').on('click', function () {
+    thisMonth = new Date(currentYear, currentMonth - 1, 1);
+    renderCalendar(thisMonth);
+  });
+
+  // 다음달
+  $('.next').on('click', function () {
+    thisMonth = new Date(currentYear, currentMonth + 1, 1);
+    renderCalendar(thisMonth);
+  });
+}
+
+
+
+
+css
+
+
+/* 달력 */
+.cal_wrap{
+    width:80%;
+    max-width:400px !important; 
+    margin:auto;
+}
+.cal_wrap .cal_nav{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    width:100%;
+    margin:0 auto 20px;
+}
+.cal_nav{
+    max-width:300px;
+}
+.cal_wrap .cal_nav .nav_btn{
+    width:24px;
+    height:24px;
+    font-size:0;
+    margin-top:10px;
+}
+.cal_wrap .cal_nav .nav_btn.prev{
+    background:url(/img/ico-prev.svg?v=1) center no-repeat;
+    background-size:23px;
+}
+.cal_wrap .cal_nav .nav_btn.next{
+    background:url(/img/ico-next.svg?v=1) center no-repeat;
+    background-size:23px;
+}
+.cal_wrap .cal_nav .year_month{
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin:auto;
+}
+.cal_wrap .cal_nav .year_month p{
+    font-size:21px;
+    color:#222;
+    font-weight: 700;
+    margin:0 10px 0 0;
+    position:relative;
+}
+.cal_wrap .cal_nav .year_month p:after{
+    content:".";
+    position:absolute;
+    right:-8px;
+    bottom:0;
+    font-size:21px;
+}
+.cal_wrap .cal_nav .year_month h3{
+    font-size:21px;
+    font-weight: 700;
+    color:#222;
+    margin-bottom:0;
+    border-bottom:0;
+    padding-bottom:0;
+}
+.cal_wrap .days{
+    width:100%;
+    display:flex;
+    flex-wrap:wrap;
+}
+.cal_wrap .week_days div.day,
+.cal_wrap .days_day div.day{
+    width:calc(100% / 7);
+    font-size:15px;
+    color:#222;
+    font-weight: 500;
+    text-align:center;
+    padding:8px 0;;
+    cursor: pointer;
+}
+
+.cal_wrap .days div.day.disable{
+    opacity: .3;
+}
+.cal_wrap .days div.day.rest,
+.cal_wrap .days div.day.sun{
+    color:#fc3b30!important;
+}
+
+/* .cal_wrap .days{
+    display:block;
+} */
+.cal_wrap .week_days{
+    width:100%;
+    display:flex;
+}
+.cal_wrap .days .day span{
+    width:26px;
+    height:26px;
+    line-height:24px;
+    display:block;
+    margin:auto;
+    border-radius: 50%;;
+}
+.cal_wrap .days .day.today{}
+.cal_wrap .days .day.today span{
+    color:#222;
+    background:#fff;
+    position:relative;
+}
+.cal_wrap .days .day.today span:after{
+    content:"";
+    width:100%;
+    height:4px;
+    background:#388cff;
+    position:absolute;
+    left:0;
+    bottom:-5px;
+}
+
+/* .cal_wrap .days_day div.day.on span
+{
+    background:#f47321;
+    color:#fff;
+}
+.cal_wrap .days .day.holiday span,
+.cal_wrap .days .day.rest span{
+    color:#fc3b30;
+    background:#fdedec;
+}
+ */
+
+.cal_wrap .rest_day{
+    display:flex;
+    justify-content: flex-end;
+    gap:10px;
+    width:100%;
+    margin-top:10px;
+    padding-right:20px;
+}
+.cal_wrap .rest_day li{
+    font-size:13px;
+    color:#555;
+}
+.cal_wrap .rest_day li span{  
+    display:inline-block;
+    width:8px;
+    height:8px;
+    border-radius: 50%;;
+}
+.cal_wrap .rest_day li.today span{
+    background:#388cff;
+}
+.cal_wrap .rest_day li.holiday span{
+    background:#fc3b30;
+}
+.calendarBox{
+    margin-bottom:20px;
+}
+/* //달력 */
+
+/* 적용기간선택날짜 */
+.selected-range {
+  background-color:rgb(255 236 225);
+  border-radius: 50%;
+}
+.selected-start,
+.selected-end {
+  background-color: #f47321;
+  color: white;
+  border-radius: 50%;
+}
+
+.popWrap_scroll{
+    height:70vh;
+    overflow-y: scroll;
+}
+.popWrap_scroll::-webkit-scrollbar{
+    width:5px;
+}
+.popWrap_scroll::-webkit-scrollbar-thumb{
+    background:var(--graydd);
+    border-radius: 5px;;
+}
+
+.holidayBox{
+    width:100%;
+}
+.holidayBox .holiday_list{
+    padding:20px;
+    text-align: center;
+    background:var(--whitef1);
+    border-radius: 20px;
+}
+.holidayBox .holiday_list h4{
+    font-size:15px;
+    color: var(--gray44);
+    margin-bottom:5px;
+}
+.holidayBox .holiday_list p{
+    font-size:15px;
+    color: var(--gray44);
+    line-height: 1.3;
+}
+.holidayBox .holiday_list p span{
+    display:inline-block;
+}
+.holidayBox .holiday_detail{
+    margin-bottom:20px;
+}
+.holidayBox .holiday_detail li.holiday_tit{
+    font-size:15px;
+    color:var(--black22);
+    margin-bottom:8px;
+    font-weight: 500;
+    position:relative;
+    padding:0 0 0 12px;
+    text-align: left;
+    word-break: keep-all;
+    line-height: 1.3;
+}
+.holidayBox .holiday_detail li.holiday_tit:before{
+    content:'';
+    width:8px;
+    height:8px;
+    border-radius: 4px;;
+    background:var(--black22);
+    position:absolute;
+    left:0;
+    top:12px;
+    transform: translateY(-50%);
+}
+.holidayBox .holiday_detail li:last-of-type dl.noneGap{
+    gap:0;
+}
+.holidayBox .holiday_detail li dl,
+.holidayBox .holiday_detail li:last-of-type dl{
+    display: flex;
+    align-items: center;
+    gap:0px;
+    flex-wrap:wrap;
+}
+.holidayBox .holiday_detail li dl dt,
+.holidayBox .holiday_detail li:last-of-type dl dt{
+    /* width:80px; */
+    width:auto;
+    font-size:14px;
+    color:var(--balck22);
+    font-weight: 500;
+    margin-bottom:0px;
+    line-height:1.3;
+    margin-right:5px;
+}
+.holidayBox .holiday_detail li dl dd,
+.holidayBox .holiday_detail li:last-of-type dl dd{
+    width: auto;
+    font-size:14px;
+    color: var(--gray44);
+    line-height: 1.3;
+    text-align: left;
+    display: flex;;
+}
+<<<<<<< HEAD
+=======
+.holidayBox .holiday_detail li dl dd .non_fixed p{
+    margin-right:5px;
+}
+>>>>>>> 9fd6194ca48f390d3dceda1b50454b65ce6148b0
+.holidayBox .holiday_detail li dl dd p,
+.holidayBox .holiday_detail li:last-of-type dl dd p{
+    display:inline-block;
+    font-size:14px;
+    color: var(--gray66);
+    line-height: 1.5;
+}
+.holidayBox .holiday_detail li dl dd span,
+.holidayBox .holiday_detail li:last-of-type dl dd span{
+    margin-left:6px;
+    display: inline-block;
+    line-height: 1.5;
+}
+.holidayBox .holiday_detail li.pd_left{
+    padding-left:12px;
+}
+.holidayBox .holiday_detail li.pd_left.flex{
+    align-items: center;
+    flex-wrap:wrap;
+    gap:5px;
+}
+
+.holidayBox .holiday_detail li.pd_left dl{
+
+    margin-bottom:0;
+
+}
+.holidayBox .holiday_detail li.holidayMark.holiday_tit:before{
+    display:none;
+}
+.holidayMark{
+    position:relative;
+}
+.holidayBox .holiday_detail.holidayMark li dl dd .non_fixed p,
+.holidayBox .holiday_detail.holidayMark li.pd_left dl dd{
+    color: #fc3b30 !important;
+}
+.holidayBox .holiday_detail.holidayMark li.holiday_tit{
+    font-size:15px;
+    color:var(--black22);
+    margin-bottom:8px;
+    font-weight: 500;
+    position:relative;
+    padding:0 0 0 12px;
+    text-align: left;
+    word-break: keep-all;
+    line-height: 1.3;
+}
+.holidayBox .holiday_detail.holidayMark li.holiday_tit:before{
+    content:'';
+    width:8px;
+    height:8px;
+    border-radius: 4px;;
+    background:#fc3b30;
+    position:absolute;
+    left:0;
+    top:12px;
+    transform: translateY(-50%);
+}
+.holidayBox .holiday_detail.holidayMark li.holiday_tit p{
+    font-size:13px;
+    text-decoration: underline;
+}
+.holidaylink{
+    font-size:13px !important;
+    text-decoration: underline;
+    margin-left:8px;
+    color: var(--gray8e);
+}
+.allHoliday{
+    height:310px;
+    overflow-y: scroll;
+}
+.allHoliday h4{
+    font-size:16px;
+    color: var(--balck22);
+    font-weight: 600;
+    margin-bottom:20px;
+    padding-bottom:5px;
+    text-align: center;
+    border-bottom:1px solid var(--graydd);
+}
+.allHoliday_list li{
+    font-size:15px;
+    margin-bottom:20px;
+}
+
+
