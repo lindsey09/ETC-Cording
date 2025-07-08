@@ -3,7 +3,7 @@ Modal API 사용법
 
 <link href="/js/remodal-default-theme.css" rel="stylesheet">
 <link href="/js/remodal.css" rel="stylesheet">
-<script src="/js/remodal.js>"></script>
+<script src="/js/remodal.js"></script>
 <script>window.jQuery || document.write('<script src="/js/jquery-1.12.4.min.js"><\/script>')</script>
 
 이렇게 불러오고
