@@ -1,0 +1,51 @@
+<p class="mt10 desc">
+                          씨사이드 코스라서 바람은 조금 있었지만 전반적으로 평이한 코스이고 몇몇 홀에서는 블라인드 홀이라 앞팀과의 거리를 조심해야 합니다
+                          씨사이드 코스라서 바람은 조금 있었지만 전반적으로 평이한 코스이고 몇몇 홀에서는 블라인드 홀이라 앞팀과의 거리를 조심해야 합니다
+                          씨사이드 코스라서 바람은 조금 있었지만 전반적으로 평이한 코스이고 몇몇 홀에서는 블라인드 홀이라 앞팀과의 거리를 조심해야 합니다
+                          씨사이드 코스라서 바람은 조금 있었지만 전반적으로 평이한 코스이고 몇몇 홀에서는 블라인드 홀이라 앞팀과의 거리를 조심해야 합니다
+                          <a href="javascript:void(0)" class="readmore">더보기</a>
+                        </p>
+
+//글씨더보기 
+$(document).ready(function(){
+    $('.day_cont_box dd .desc').each(function(){
+        var $this = $(this);
+        var $existingBtn = $this.find('.readmore');
+        
+        // 기존 더보기 버튼 제거
+        $existingBtn.remove();
+        
+        // 텍스트 내용 가져오기
+        var content_txt = $this.text().trim();
+        
+        // 150자 이상일 때만 처리
+        if(content_txt.length > 100){
+            var content_txt_short = content_txt.substring(0, 100) + "...";
+            
+            // 새로운 더보기 버튼 생성
+            var btn_more = $('<a href="javascript:void(0)" class="readmore">더보기</a>');
+            
+            // 처음엔 짧은 텍스트 표시
+            $this.html(content_txt_short + ' ').append(btn_more);
+            
+            // 이벤트 위임 방식으로 변경
+            $this.off('click', '.readmore').on('click', '.readmore', function(e){
+                e.preventDefault();
+                var $btn = $(this);
+                var $parent = $btn.parent();
+                
+                if($btn.hasClass('expanded')){
+                    // 접기 상태
+                    $btn.html('더보기').removeClass('expanded');
+                    $parent.html(content_txt_short + ' ');
+                    $parent.append($btn);
+                } else {
+                    // 더보기 상태
+                    $btn.html('접기').addClass('expanded');
+                    $parent.html(content_txt + ' ');
+                    $parent.append($btn);
+                }
+            });
+        }
+    });
+});
