@@ -1,0 +1,48 @@
+<label for="is_show34526" class="privacyChk">
+    <input type="checkbox" class="showBox" id="is_show34526" checked="" onclick="showChange('34526','1')">
+    <span class="ball"></span>
+</label>
+
+
+/* 공개/비공개버튼 */
+.privacyChk{
+  position:relative;
+  width:60px;
+  height:25px;
+  display: block;
+  left:50%;
+  transform:translateX(-50%);
+}
+.privacyChk input[type="checkbox"]{
+  display:none;
+}
+.privacyChk .ball{
+  position:absolute;
+  cursor: pointer;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:var(--graydd);
+  transition:.4s;
+  border-radius: 34px;;  
+}
+.privacyChk .ball:before{
+  position:absolute;
+  content:"";
+  height:19px;
+  width:19px;
+  left:4px;
+  bottom:3px;
+  background:var(--whiteff);
+  transition:.4s;
+  border-radius: 50%;;
+}
+.privacyChk input[type="checkbox"]:checked + span.ball{
+  background:var(--surfcolor);
+}
+.privacyChk input[type="checkbox"]:checked + span.ball:before{
+  background:var(--whiteff);
+  transform:translateX(33px);
+}
+
