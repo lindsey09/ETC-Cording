@@ -1,0 +1,83 @@
+1. 먼저 라이브러리 추가
+<!-- html2canvas 라이브러리 -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+2. 다운받을 이미지 생성
+    <!-- 다운로드QR -->
+    <div class="download_qr hidden" id="download_qr">
+        <div class="logo flex gap10 align_center mb20">
+            <img src="/common/images/surf_logo.jpg" alt="">
+            <span><?=$language['3933'];//사케나비?></span>
+        </div>
+        <div class="qr_cont">
+            <h3 class="title"><?=$language['3857'];//예약 QR 코드?></h3>
+            <div class="qr_img">
+                <img src="<?=$qr_image_url?>" alt="예약 QR 코드">
+            </div>
+            <div class="qr_info">
+                <dl>
+                    <dt><?=$language['1259'];//예약번호?></dt>
+                    <dd><?=$reservation_info['reservation_number']?></dd>
+                </dl>
+                <dl>
+                    <dt><?=$language['3545'];//판매숍?></dt>
+                    <dd><?=$reservation_info['poi_name']?></dd>
+                </dl>
+                <dl>
+                    <dt><?=$language['2702'];//예약자?></dt>
+                    <dd><?=$reservation_info['name_en']?></dd>
+                </dl>
+                <dl>
+                    <dt><?=$language['3492'];//방문일?></dt>
+                    <dd><?=date('Y-m-d', strtotime($reservation_info['visit_date']))?></dd>
+                </dl>
+                <dl>
+                    <dt><?=$language['587'];//상태?></dt>
+                    <dd><?=$reservation_info['status_name']?></dd>
+                </dl>
+                 <?php if ($reservation_info['phone']): ?>
+                <dl>
+                    <dt><?=$language['2881'];//연락처?></dt>
+                    <dd><?=$reservation_info['phone']?></dd>
+                </dl>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+3. 다운로드 버튼 생성
+       <div class="qr_download flex gap5 align_center justify_center" onclick="downloadAsImage()">
+            <img src="/common/images/simple_qr.png" alt=""> 
+            <span><?=$language['4318'];//QR이미지 다운로드?></span>
+        </div>
+
+4. 다운로드 스크립트 추가
+        // 큐알코드 이미지 다운로드
+        function downloadAsImage() {
+            const target = document.getElementById("download_qr");
+
+            target.classList.remove("hidden");
+
+            html2canvas(target).then(canvas => {
+                const dataUrl = canvas.toDataURL("image/png");
+
+                // iOS Safari는 download 속성 지원 안 함
+                const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+                if (isIOS) {
+                    // 새 탭에서 이미지 열기 → 유저가 직접 저장
+                    window.open(dataUrl, "_blank");
+                } else {
+                    // PC/안드로이드 크롬 → 바로 다운로드
+                    const link = document.createElement("a");
+                    link.href = dataUrl;
+                    link.download = "qr_and_text.png";
+                    link.click();
+                }
+
+                target.classList.add("hidden");
+            });
+        }
+
+
+
