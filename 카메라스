@@ -1,0 +1,172 @@
+<script>
+let video = document.getElementById('video');
+let canvas = document.createElement('canvas');
+let ctx = canvas.getContext('2d');
+let stream = null;
+let scanning = false;
+let currentFacingMode = 'environment'; // 후면 카메라 우선
+
+// 카메라 시작
+async function startCamera() {
+    try {
+        const constraints = {
+            video: {
+                facingMode: currentFacingMode,
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            }
+        };
+        
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = stream;
+        
+        document.getElementById('startBtn').style.display = 'none';
+        document.getElementById('stopBtn').style.display = 'inline-block';
+        document.getElementById('switchBtn').style.display = 'inline-block';
+        
+        document.getElementById('status').textContent = '<?=$language['3821'];//카메라가 시작되었습니다. QR 코드를 스캔해주세요.?>';
+        
+        // 스캔 시작
+        setTimeout(() => {
+            scanQR();
+        }, 1000);
+        
+    } catch (error) {
+        console.error('<?=$language['3822'];//카메라 시작 실패.?>:', error);
+        document.getElementById('status').innerHTML = '<div class="error-message"><?=$language['3823'];//카메라에 접근할 수 없습니다. 브라우저 설정을 확인해주세요..?></div>';
+    }
+}
+
+// 카메라 중지
+function stopCamera() {
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+    }
+    
+    document.getElementById('startBtn').style.display = 'inline-block';
+    document.getElementById('stopBtn').style.display = 'none';
+    document.getElementById('switchBtn').style.display = 'none';
+    document.getElementById('status').textContent = '';
+    
+    scanning = false;
+}
+
+// 카메라 전환
+async function switchCamera() {
+    stopCamera();
+    currentFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
+    setTimeout(() => {
+        startCamera();
+    }, 500);
+}
+</script>
+
+<div class="qr-scan-container">
+    <div class="scan-section">
+        <h2 style="text-align: center; margin-bottom: 30px; color: #333;"><?=$language['3816'];//QR 코드 스캔.?></h2>
+        
+        <div class="camera-container">
+            <video id="video" autoplay playsinline></video>
+            <div class="scan-overlay">
+                <div class="scan-line"></div>
+            </div>
+        </div>
+        
+        <div class="scan-controls">
+            <button id="startBtn" class="btn"><?=$language['4001'];//스캔을 시작해주세요?></button>
+            <button id="stopBtn" class="btn btn-danger" style="display: none;"><?=$language['3818'];//카메라 중지.?></button>
+            <button id="switchBtn" class="btn" style="display: none;"><?=$language['3819'];//카메라 전환.?></button>
+        </div>
+        
+        <div id="status" style="text-align: center; margin-top: 15px; color: #666;"></div>
+    </div>
+    
+    <div id="resultSection" class="result-section">
+        <!-- <h3 style="text-align: center; margin-bottom: 20px; color: #333;"><?=$language['3820'];//스캔 결과.?></h3> -->
+        <div id="resultContent"></div>
+    </div>
+</div>
+
+
+
+이건 스캔 후 데이터처리
+
+// QR 코드 스캔
+function scanQR() {
+    if (!stream || scanning) return;
+    
+    scanning = true;
+    
+    function scan() {
+        if (!stream || !scanning) return;
+        
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+            canvas.height = video.videoHeight;
+            canvas.width = video.videoWidth;
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height, {
+                inversionAttempts: "dontInvert",
+            });
+            
+            if (code) {
+                // QR 코드 감지됨
+                document.getElementById('status').innerHTML = '<div class="success-message"><?=$language['4002'];//	예약정보를 검색했습니다.?></div>';
+                stopCamera();
+                processQRCode(code.data);
+                return;
+            }
+        }
+        
+        requestAnimationFrame(scan);
+    }
+    
+    scan();
+}
+
+// QR 코드 데이터 처리
+async function processQRCode(qrData) {
+    try {
+        document.getElementById('status').innerHTML = '<div class="loading"><?=$language['3825'];//데이터를 조회하는 중..?></div>';
+        
+        // QR 데이터에서 예약 번호 추출
+        const url = new URL(qrData);
+        const reservationKey = url.searchParams.get('qr');
+        
+        if (!reservationKey) {
+            throw new Error('<?=$language['3826'];//유효하지 않은 QR 코드입니다..?>');
+        }
+
+        // AJAX로 예약 정보 조회
+        $.ajax({
+            url: '_ajax_qr_scan.php',
+            type: 'POST',
+            data: {
+                mode: 'scan',
+                qr_key: reservationKey,
+                lang: '<?=$_base_use_lang?>',
+                poi_no: '<?=$_partnerInfo['partner_no']?>'
+            },
+            success: function(response) {
+                response = JSON.parse(response);
+                if(response.code == '200') {
+                    displayReservationInfo(response.data, response.data_liquor);
+                    document.getElementById('status').innerHTML = '<div class="success-message"><?=$language['3824'];//QR 코드를 감지했습니다!?></div>';
+                }
+            }
+        });
+        
+    } catch (error) {
+        console.error('<?=$language['3828'];//QR 코드 처리 오류?>:', error);
+        document.getElementById('status').innerHTML = `<div class="error-message">ERROR: ${error.message}</div>`;
+        
+        // 3초 후 다시 스캔 가능하도록
+        setTimeout(() => {
+            document.getElementById('status').textContent = '';
+            document.getElementById('startBtn').style.display = 'inline-block';
+        }, 3000);
+    }
+}
+
