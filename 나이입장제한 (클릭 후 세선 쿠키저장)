@@ -1,0 +1,62 @@
+
+<div class="pop ageCut">
+    <h4 class="mb20"><?=$language['3484'];//연령 확인?></h4>
+    <p class="mb20"><?=$language['4332'];//	법에 따라 미성년자의 음주는 엄격히 금지되어 있습니다 齡확인을 위해, 아래에 생년월일을 입력하신 후, 구매 페이지로 가시면 됩니다.법에 따라 미성년자의 음주는 엄격히 금지되어 있습니다 나이확인을 위해, 아래에 생년월일을 입력하신 후, 구매 페이지로 가시면 됩니다.?></p>
+    <ul class="flex gap5 select_day mb20">
+        <li> <select id="yearSelect"></select></li>
+        <li> <select id="monthSelect"></select></li>
+        <li> <select id="daySelect"></select></li>
+    </ul>
+     <div class="button">
+      <button type="button" id="outButton" class="black_btn"><?=$language['708'];//나가기?></button>
+      <button type="button" id="goButton" class="black_btn_line" onclick="location.href='https://shopping.surfjapan.net'"><?=$language['337'];//홈페이지?></button>
+    </div>
+</div>
+<div class="black_bg"></div>
+
+
+
+// 나이제한 입장 팝업
+$(document).ready(function(){
+    if (sessionStorage.getItem('ageVerified') !== 'true') {
+        $('.ageCut, .ageCut + .black_bg').css('display', 'block');
+        $('body').addClass('not_scroll');
+    }
+});
+$('#outButton').click(function(){
+   if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.close();
+    }
+})
+$('#goButton').click(function(){
+  sessionStorage.setItem('ageVerified', 'true');
+  $('.ageCut, .ageCut + .black_bg').css('display', 'none');
+  $('body').removeClass('not_scroll'); 
+})
+
+  
+// 년월일출력
+const yearSelect = document.getElementById("yearSelect");
+for (let year = 2005; year >= 1940; year--) {
+    const option = document.createElement("option");
+    option.value = year;
+    option.text = year;
+    yearSelect.appendChild(option);
+}
+const monthSelect = document.getElementById("monthSelect");
+for (let month = 1; month <= 12; month++) {
+const optionMonth = document.createElement("option");
+optionMonth.value = month;
+optionMonth.text = month;
+monthSelect.appendChild(optionMonth);
+}
+const daySelect = document.getElementById("daySelect");
+for (let day = 1; day <= 31; day++) {
+const optionDay = document.createElement("option");
+optionDay.value = day;
+optionDay.text = day;
+daySelect.appendChild(optionDay);
+}
+
