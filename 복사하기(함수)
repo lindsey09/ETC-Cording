@@ -1,0 +1,19 @@
+"<h2>".$info['name']['JP']."<span class='copy_add' onclick='copyToClipboard()'>COPY</span></h2>";
+
+<script>
+// 식당명복사하기
+function copyToClipboard() {
+    const h2 = event.target.closest('h2');
+    if (!h2) return;
+
+    const text = h2.childNodes[0].textContent.trim();
+
+    navigator.clipboard.writeText(text)
+        .then(() => {
+            alert('<?= $language['1330'];//복사되었습니다 ?>');
+        })
+        .catch(err => {
+            console.error('<?= $language['2180'];//오류 ?> :', err);
+        });
+}
+</script>
