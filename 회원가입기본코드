@@ -1,5 +1,197 @@
 
 
+.join_container{
+  .inner{
+    width:1000px;
+    margin:auto;
+  }
+}
+.join {
+  margin-top: 30px;
+  width:100%;
+  >h3{
+    font-size:18px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--black22);
+  }
+  select {
+      background: #fff url(/common/images/ico-arrow-down-black.svg) no-repeat calc(100% - 5px) 50% / 9px;
+  }
+  .require_ment{
+    font-size:13px;
+    color:var(--redec);
+    text-align: right;
+  }
+  .require{
+    position:relative;
+    &::after{
+      content:"*";
+      color:var(--redec);
+    }
+  }
+  .box{
+    h4.join_tit{
+      font-size: 15px;
+      font-weight: 400;
+    }
+    .input_line{
+      width:100%;
+      position: relative;
+      box-sizing: border-box;
+      width: 100%;
+      border-radius: 5px;
+      overflow: hidden;
+      input[type="text"],
+      input[type="tel"],
+      select{
+        border:1px solid var(--graydd);
+        height:35px;
+        width:100%;
+        padding:5px;
+        border-radius:5px;
+        padding:5px;
+        font-size: 14px;
+      }
+      .view_btn{
+        width:20px;
+        height:20px;
+        background:url(../images/ic_eye.svg) center no-repeat;
+        background-size:100%;
+        font-size:0;
+        opacity:.3;
+        &.on{
+          opacity: 1;
+        }
+      }
+      .input_box_line{
+        width: 100%;
+        align-items: center;
+        gap: 5px;
+        font-size:14px;
+        border: 0;;
+        
+        #etc_email, 
+        #domain {
+            border: 1px solid #ddd;
+            height: 35px;
+            border-radius: 5px;
+            font-size:14px;
+        }
+        &.email_code {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid var(--graydd);
+            border-radius: 5px;
+            padding-right: 10px;
+        }
+      }
+    }
+    .password_input{
+      border:1px solid var(--graydd);
+      height:35px;
+      input[type="password"]{
+        width:calc(100% - 40px);
+        padding:5px;
+        font-size: 14px;
+      }
+    }
+    textarea{
+      border:1px solid var(--graydd);
+      width:100%;
+      height:100px;
+      resize: none;
+      border-radius: 5px;
+      font-size: 14px;
+      line-height: 1.5;
+      padding:5px;
+    }
+  }
+  
+  .regist_btn {
+      display: block;
+      width: 100%;
+      height: 40px;
+      border-radius: 4px;
+      background: #e6e6e6;
+      font-size: 15px;
+      color: #bfbfbf;
+      font-weight: 500;
+      &.on{
+        background: var(--black22);
+        color: var(--whiteff);
+      }
+  }
+}
+.time_count{
+  font-size:13px;
+  color: var(--redec);
+}
+.errorMent{
+  font-size:13px;
+  color: var(--redec);
+  margin-top:5px;
+}
+.sns_list{
+  >dl{
+    display:flex;
+    align-items: center;
+    margin-bottom:10px;
+    dt{
+      width:100px;
+      font-size:15px;
+    }
+    dd{
+      width:calc(100% - 110px);
+      input[type="text"]{
+        width:100%;
+        height:35px;
+        border:1px solid var(--graydd);
+        border-radius:5px;
+        font-size: 14px;
+        padding:5px;
+      }
+    }
+  }
+}
+
+.chk_login{
+  >p{
+    input[type="checkbox"]{
+      display:none;
+      &+label{
+        display:block;
+        height:30px;
+        line-height:30px;
+        font-size:14px;
+        background:url("../images/chk1_bg.svg") left center no-repeat;
+        background-size:18px;
+        padding-left:24px;
+      }
+      &:checked + label{
+        background:url("../images/chk1_bg_on.svg") left center no-repeat;
+        background-size:18px;
+      }
+    }
+  }
+}
+
+ .join_submit{
+  width:100%;
+  height:100vh;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  p{
+    font-size:16px;
+    font-weight: 500;
+    color: var(--gray44);
+  }
+ }
+
 <div class="login">
     <div id="titleArea">
         <a href="javascript:void(0)" onclick="history.back();" class="prev"></a>
