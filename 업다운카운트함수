@@ -1,0 +1,134 @@
+// 남성 증가
+function incrementMan(btn) {
+  const input = btn.parentElement.querySelector('input.numberInput');
+  let value = parseInt(input.value) || 0;
+  value += 1;
+  input.value = value;
+
+  // 감소 버튼 활성화
+  btn.parentElement.querySelector('.down').classList.remove('disa');
+}
+
+// 남성 감소
+function decrementMan(btn) {
+  const input = btn.parentElement.querySelector('input.numberInput');
+  let value = parseInt(input.value) || 0;
+
+  if (value > 1) { // 남성은 기본 1명에서 시작
+    value -= 1;
+    input.value = value;
+  }
+
+  // 1 이하일 때 버튼 비활성화
+  if (value <= 1) {
+    btn.classList.add('disa');
+  } else {
+    btn.classList.remove('disa');
+  }
+}
+
+// 여성 증가
+function incrementWoman(btn) {
+  const input = btn.parentElement.querySelector('input.numberInput');
+  let value = parseInt(input.value) || 0;
+  value += 1;
+  input.value = value;
+
+  // 감소 버튼 활성화
+  btn.parentElement.querySelector('.down').classList.remove('disa');
+}
+
+// 여성 감소
+function decrementWoman(btn) {
+  const input = btn.parentElement.querySelector('input.numberInput');
+  let value = parseInt(input.value) || 0;
+
+  if (value > 0) {
+    value -= 1;
+    input.value = value;
+  }
+
+  // 0 이하일 때 비활성화
+  if (value <= 0) {
+    input.value = 0;
+    btn.classList.add('disa');
+  } else {
+    btn.classList.remove('disa');
+  }
+}
+
+<div class="form_data mb30 personCount form_box">
+        <h4 class="mb15">인원수</h4>
+        <div class="flex gap20 person_cnt_wrap">
+            <!-- 남성 -->
+            <div class="flex room_cnt adult_cnt align_center">
+              <p class="person">남성</p>
+              <div class="button_updown">
+                <button type="button" class="down disa" onclick="decrementMan(this)">-</button>
+                <input type="text" class="numberInput" value="1">
+                <button type="button" class="up" onclick="incrementMan(this)">+</button>
+              </div>
+            </div>
+
+            <!-- 여성 -->
+            <div class="flex room_cnt child_cnt align_center">
+              <p class="person">여성</p>
+              <div class="button_updown">
+                <button type="button" class="down disa" onclick="decrementWoman(this)">-</button>
+                <input type="text" class="numberInput" value="0">
+                <button type="button" class="up" onclick="incrementWoman(this)">+</button>
+              </div>
+            </div>
+        </div>
+      </div>
+
+style
+  .personCount{
+  .person{
+    font-size:15px;
+    font-weight: 500;
+    color:var(--gray66);
+    width:55px;
+    @media(max-width:540px){
+      font-size:14px;
+    }
+  }
+  .button_updown{
+    width:auto;
+    display: flex;
+    gap:5px;
+    input[type="text"]{
+      width:auto;
+      max-width:120px;
+      height:40px;
+      border:1px solid #ddd;
+      border-radius: 5px;
+      text-align: center;
+      @media(max-width:480px){
+        width:40px;
+        height:35px;
+      }
+    }
+    button{
+      width:35px;
+      height:40px;
+      text-align: center;
+      border:1px solid var(--graydd);
+      border-radius: 5px;
+      background:var(--whiteff);
+      &.down{
+        color:#EC463D;              
+      }
+      &.up{
+        color:#4C8EF0;
+      }
+      &.disa{
+        background:#f1f1f1;
+        pointer-events: none;
+      }
+      @media (max-width:480px){
+        height:35px;
+      }
+    }
+  }
+}
