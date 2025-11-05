@@ -1,0 +1,130 @@
+<?php
+    // 상수 정의
+    define('_GOOGLE_MAP_API_', 'AIzaSyDHSgiZlow1XbxoSsv4fxCY3YBzCv6PXfc');
+?>
+상단에 상수정의를 하고
+  <div class="map_view" id="google_map">
+    <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2928.9227495541363!2d141.4000423967896!3d42.76883900000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5f753b22cf1616d9%3A0x8df5b749ad96109!2sKyukamura%20Shikotsuko%20(Hotel%20and%20onsen)!5e0!3m2!1sen!2skr!4v1761557367670!5m2!1sen!2skr" style="width:100%; height:100%;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
+  </div>
+지도뷰 공간을 만들어줌
+
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=<?=_GOOGLE_MAP_API_?>&callback=initMap"
+  async defer
+></script>
+async 와 defer를 넣어서 구글api를 불러오고
+
+지도커스텀 하면됨.
+<script>
+  // 지도커스텀
+  function initMap() {
+    const amaneMu = { lat: 34.292540373067373, lng: 136.7969604 }; 
+    const map = new google.maps.Map(document.getElementById("google_map"), {
+      zoom: 14,
+      center: amaneMu,
+      styles: [
+        // 땅 색상
+        {
+          elementType: "geometry",
+          stylers: [{ color: "#f5f5f5" }]
+        },
+
+        // 물 색상
+        {
+          featureType: "water",
+          elementType: "geometry",
+          stylers: [{ color: "#d0eafc" }]
+        },
+
+        // 도로 색상
+        {
+          featureType: "road",
+          elementType: "geometry",
+          stylers: [{ color: "#dddddd" }]
+        },
+
+        // POI 텍스트 (명칭) 보이기, 테두리 없이 회색 글씨
+        {
+          featureType: "poi",
+          elementType: "labels.text.fill",
+          stylers: [{ color: "#999999" }]
+        },
+        {
+          featureType: "poi",
+          elementType: "labels.text.stroke",
+          stylers: [{ visibility: "off" }]
+        },
+        // POI 아이콘 보이기, 채도 낮추고 밝게
+        {
+          featureType: "poi",
+          elementType: "labels.icon",
+          stylers: [
+            { visibility: "on" },
+            { saturation: -100 },
+            { lightness: 50 }
+          ]
+        },
+        // 도시명, 지역명 텍스트 - 색상 #666666, 테두리 없음 서울특별시 
+        {
+          featureType: "administrative.locality",
+          elementType: "labels.text.fill",
+          stylers: [{ color: "#666666" }]
+        },
+        {
+          featureType: "administrative.locality",
+          elementType: "labels.text.stroke",
+          stylers: [{ visibility: "on" }]
+        },
+        // 지역명 (강남구, 해운대구 등)
+         {
+          featureType: "administrative.subLocality",
+          elementType: "labels",
+          stylers: [{ visibility: "on" }]
+        },
+        {
+          featureType: "administrative.subLocality",
+          elementType: "labels.text.stroke",
+          stylers: [{ visibility: "off" }]
+        },
+        // 동네명 (역삼동, 중동 등) 숨기기
+        {
+          featureType: "administrative.neighborhood",
+          elementType: "labels",
+          stylers: [{ visibility: "off" }]
+        },
+        {
+          featureType: "administrative.land_parcel",
+          elementType: "labels",
+          stylers: [{ visibility: "off" }]
+        },
+        // 도로명 위 숫자 아이콘 (도로 번호 표기) 안 보이게
+        {
+          featureType: "road",
+          elementType: "labels.icon",
+          stylers: [{ visibility: "off" }]
+        }
+      ],
+
+  //지도에보이는 여러가지 버튼
+      // disableDefaultUI: true, 
+      streetViewControl: false,
+      disableDefaultUI: false,
+      zoomControl: true,
+      fullscreenControl: true,
+      mapTypeControl: false,
+      gestureHandling: "cooperative" // 사용자 스크롤 제어
+      });
+
+    //마커정의
+      new google.maps.Marker({
+        position: amaneMu,
+        map: map,
+        title: "Amanemu",
+        icon: {
+          url: "/common/images/marker_black.svg?v=2", //선택된 마커
+          // url: "/common/images/marker_gray.svg?v=1", //리스트에 뿌려지는 구루메 마커
+          scaledSize: new google.maps.Size(60, 60), // 크기 조정
+          anchor: new google.maps.Point(28, 48) //위치 조정 좌우 위아래, 커질수록 왼쪽 위
+        }
+      });
+    }
