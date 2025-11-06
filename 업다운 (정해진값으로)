@@ -1,0 +1,188 @@
+ https://www.yoosazzo.com/ryokan_list.php 예산 참고
+
+<div class="input_box budget">
+  <span class="label">예산</span>
+  <p class="budget_text" onclick="budget(event, this)"></p>
+  <div class="budgetRange mb20 hidden">
+    <h4 class="mb20">1인 예산(원)</h4>
+    <dl>
+      <dt>Min</dt>
+      <dd>
+        <button type="button" class="minus">-</button>
+        <p class="range_text">1,000,000</p>
+        <button type="button" class="plus">+</button>
+      </dd>
+    </dl>
+    <dl>
+      <dt>Max</dt>
+      <dd>
+        <button type="button" class="minus">-</button>
+        <p class="range_text">1,000,000</p>
+        <button type="button" class="plus">+</button>
+      </dd>
+    </dl>
+    <div class="btn_box gap5">
+      <button type="button" class="graydd_btn" onclick="typeCancel(this);">취소</button>
+      <button type="button" class="black_btn" onclick="budgetSelect(this)">적용</button>
+    </div>
+  </div>
+  <div class="overlay"></div>
+</div>
+
+  
+// 예산팝업
+function budget(event, el) {
+  event.stopPropagation(); 
+
+  // 다른 팝업 닫기
+  $('.budgetRange, .ryokanTypeSelect').addClass('hidden');
+  $('.overlay').hide();
+
+  // el은 .budget_text → 상위 .input_box.budget을 찾아야 함
+  const box = $(el).closest('.input_box.budget');
+  const selectBox = box.find('.budgetRange');
+  const overlay = box.find('.overlay');
+
+  // 팝업 toggle
+  const isHidden = selectBox.hasClass('hidden');
+  selectBox.toggleClass('hidden');
+
+  // 모바일 대응 (768px 이하)
+  if (window.innerWidth <= 768) {
+    if (isHidden) overlay.show();
+    else overlay.hide();
+  }
+
+  // overlay 클릭 시 닫기
+  overlay.off('click').on('click', function () {
+    selectBox.addClass('hidden');
+    overlay.hide();
+  });
+}
+
+// 사용할 값 리스트
+const values = [1000000, 1300000, 1500000, 1800000, 2000000, 2500000, 3000000, 4000000, 5000000];
+// 숫자 포맷 
+function formatNumber(num) {
+  return num.toLocaleString();
+}
+// 모든 dd 요소를 순회
+document.querySelectorAll('.budgetRange dd').forEach(dd => {
+  const minusBtn = dd.querySelector('.minus');
+  const plusBtn = dd.querySelector('.plus');
+  const p = dd.querySelector('.range_text');
+
+  // 초기 값
+  let currentIndex = values.indexOf(
+    parseInt(p.textContent.replace(/,/g, ''))
+  );
+  if (currentIndex === -1) currentIndex = 0;
+
+  // 상태 업데이트
+  function updateUI() {
+    p.textContent = formatNumber(values[currentIndex]);
+
+    // 버튼 상태
+    minusBtn.disabled = currentIndex === 0;
+    plusBtn.disabled = currentIndex === values.length - 1;
+  }
+
+  // 초기 설정
+  updateUI();
+
+  plusBtn.addEventListener('click', () => {
+    if (currentIndex < values.length - 1) {
+      currentIndex++;
+      updateUI();
+    }
+  });
+
+  minusBtn.addEventListener('click', () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateUI();
+    }
+  });
+});
+
+// Min - Max 출력
+function budgetSelect() {
+  let min = '', max = '';
+
+  $('dl').each(function () {
+    const dt = $(this).find('dt').text().trim().toLowerCase();
+    const value = $(this).find('.range_text').text().trim();
+
+    if (dt === 'min') min = value;
+    if (dt === 'max') max = value;
+  });
+
+  if (min && max) {
+    $('.budget_text').text(`${min}원 ~ ${max}원`);
+  }
+  $('.budgetRange').addClass('hidden');
+  $('.overlay').hide();
+}
+
+style
+
+  .budgetRange{
+  width:100%;
+  max-width:250px;
+  background:var(--whiteff);
+  padding:20px;
+  margin-top:7px;
+  position:absolute;
+  @media(max-width:768px){
+    content:"";
+    position:fixed;
+    left:50%;
+    top:50%;
+    transform:translate(-50%, -50%);
+    z-index: 9;
+  }
+  >h4{
+    font-size:15px;
+    font-weight: 500;
+  }
+  > dl{
+    display:flex;
+    gap:10px;
+    align-items: center;
+    margin-bottom:10px;;
+    >dt{
+      font-size:15px;
+      font-weight: 500;
+      width:50px;;
+    }
+    >dd{
+      display: flex;
+      width:100%;
+      >button{
+        width:30px;
+        height:30px;
+        border:1px solid var(--graydd);
+        border-radius:5px;
+        font-size:15px;
+        text-align: center;
+        line-height:25px;;
+        &:disabled{
+          background:var(--whitef1);
+        }
+        &.minus{
+          color: var(--redec);
+        }
+        &.plus{
+          color: var(--blue00);
+        }
+      }
+      .range_text{
+        font-size:14px;
+        color: var(--gray44);
+        width: calc(100% - 70px);
+        line-height: 30px;
+        text-align: center;
+      }
+    }
+  }
+}
