@@ -1,8 +1,73 @@
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0"> <!-- 뷰포트 -->
-    <meta name="format-detection" content="telephone=no, address=no, email=no" /> <!-- 자동전화걸기 등 방지 -->
-    <meta name="apple-mobile-web-app-capable" content="yes" /> <!-- 주소줄 없애기 아이폰 -->
-    <meta name="mobile-web-app-capable" content="yes" /> <!-- 주소줄 없애기 안드로이드 -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <!-- 상태바 모습 바꾸기 애플만 적용 black-translucent / black / default -->
-    <link rel="apple-touch-icon" href="/common/images/iphone.jpg"> <!-- 네이티브앱 같은 아이콘 애플 -->
-    <link rel="shortcut icon" href="/common/images/android.jpg"> <!-- 네이티브앱 같은 아이콘 안드로이드 -->
+-------모바일환경태그-------
+<!-- 반응형 기본 세팅 -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<!-- 전화번호/이메일 자동링크 방지 -->
+<meta name="format-detection" content="telephone=no, email=no, address=no">
+<!-- 모바일 웹앱처럼 보이게 (전체화면 모드) -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<!-- 상태바 스타일 (iOS 전용) -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- 값: default | black | black-translucent -->
+<!-- 홈 화면에 추가 시 이름 (iOS/Android 공통) -->
+<meta name="apple-mobile-web-app-title" content="내 웹앱 이름">
+
+
+-------아이콘관련-------
+<!-- iOS 홈화면 아이콘 -->
+<link rel="apple-touch-icon" href="/common/images/iphone-icon.png">
+<!-- 여러 해상도 대응 -->
+<link rel="apple-touch-icon" sizes="120x120" href="/icons/icon-120.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png">
+<!-- Android/일반 파비콘 -->
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/android-icon-192.png">
+<link rel="shortcut icon" href="/common/images/favicon.ico">
+<!-- PWA manifest -->
+<link rel="manifest" href="/manifest.json">
+
+
+-------웹앱 시작화면 / 테마 색상-------
+<!-- 시작화면 배경색 (iOS) -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- 테마 색상 (주소창 색상 등) -->
+<meta name="theme-color" content="#ffffff">
+<!-- 안드로이드 Chrome 주소창 색 -->
+<meta name="msapplication-TileColor" content="#2b5797">
+<meta name="msapplication-TileImage" content="/icons/mstile-144x144.png">
+
+
+
+-------SEO / 소셜 공유용 메타 태그-------
+<!-- 기본 SEO -->
+<meta name="description" content="이 웹사이트의 간단한 설명">
+<meta name="keywords" content="키워드, 웹앱, 반응형">
+<meta name="author" content="사이트 제작자 이름">
+
+<!-- Open Graph (페이스북, 카카오톡 등) -->
+<meta property="og:title" content="페이지 제목">
+<meta property="og:description" content="공유 시 보여질 설명">
+<meta property="og:image" content="https://example.com/og-image.jpg">
+<meta property="og:url" content="https://example.com">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="페이지 제목">
+<meta name="twitter:description" content="트위터용 설명">
+<meta name="twitter:image" content="https://example.com/twitter-image.jpg">
+
+
+
+-------기타 유용한태그----------
+<!-- 캐시 방지 -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<!-- IE 호환성 -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!-- 다국어 지원 -->
+<meta http-equiv="content-language" content="ko">
+<!-- robots (검색 엔진 인덱싱 제어) -->
+<meta name="robots" content="index, follow">
