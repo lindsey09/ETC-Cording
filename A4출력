@@ -24,3 +24,19 @@ margin:0
 }
 
 으로 바꿔주면 됨!! 
+
+@media screen  > 화면용
+@media print > 프린트용
+
+@page: 실제 인쇄 페이지의 설정을 지정합니다.
+size: A4 portrait; → A4 용지, 세로 방향(세로형) 으로 인쇄.
+size: A4 landscape; → A4 용지, 가로 방향(가로형) 으로 인쇄.
+margin: 0; → 페이지 여백을 없앰 (페이지 끝까지 인쇄하려는 설정).
+
+max-width: 794px; → A4 용지의 실제 인쇄 가능한 너비에 맞춤
+(A4 세로 기준: 약 210mm = 794px 정도)
+
+ #container {
+  padding: 50px 0;
+ }
+인쇄 시 내용이 너무 위나 아래에 붙지 않도록 하는 용도입니다.
