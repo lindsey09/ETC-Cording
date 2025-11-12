@@ -1,0 +1,42 @@
+로딩바 상단에서 쭈-욱
+
+<style>
+#loading_bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background-color: #29d;
+  transition: width 0.3s ease;
+  z-index: 9999;
+}
+</style>
+
+<div id="loading_bar"></div>
+
+<script>
+function startLoading() {
+  const bar = document.getElementById('loading_bar');
+  bar.style.width = '0%';
+  bar.style.display = 'block';
+
+  let progress = 0;
+  const interval = setInterval(() => {
+    if (progress >= 90) return; // 90%까지만 자동 증가
+    progress += Math.random() * 10;
+    bar.style.width = progress + '%';
+  }, 200);
+
+  window.addEventListener('load', () => {
+    clearInterval(interval);
+    bar.style.width = '100%';
+    setTimeout(() => {
+      bar.style.display = 'none';
+    }, 300);
+  });
+}
+
+startLoading();
+
+</script>
