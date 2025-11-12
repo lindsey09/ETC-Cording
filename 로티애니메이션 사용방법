@@ -1,0 +1,15 @@
+<script>  
+  // 애니메이션 로드
+  var animation = lottie.loadAnimation({
+    container: document.getElementById('lottie-container'), // 표시할 요소
+    renderer: 'svg', // 'svg', 'canvas', 'html' 중 선택 가능
+    loop: true,      // 반복 재생 여부
+    autoplay: true,  // 자동 재생 여부
+    path: 'https://lottie.host/60850e1d-e162-42f1-97c5-83ddf5d2c1d8/wbJzfd7nGu.json' // 로티 JSON 파일 경로
+  });
+</script>
+
+<div id="lottie-container" style="width: 300px; height: 300px; margin: auto;"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.2/lottie.min.js"></script>
+
