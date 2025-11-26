@@ -1,0 +1,48 @@
+summernote
+
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+
+ <form method="post">
+    <div class="mb20">
+        <label class="form-label mb10">제목</label>
+        <input type="text" name="title" class="form-control" required>
+    </div>
+    <div class="mb20">
+        <label class="form-label mb10">내용</label>
+        <textarea id="summernote" name="content"></textarea>
+    </div>
+    
+    <div class="btn_box">
+        <button type="button" class="btn btn-sm btn-primary">저장</button>
+        <button type="button" class="btn btn-sm btn-danger" onclick="window.close()">취소</button>
+    </div>
+</form>
+
+
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-ko-KR.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#summernote').summernote({
+        height: 400,
+        lang: 'ko-KR',
+        placeholder: '내용을 입력하세요.',
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'italic', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ],
+    });
+});
+</script>
+
+여기까지만 하면 됨. 이미지 업로드 등 나머지는 백단에서 구현함...
+
+백단까지하는거 어렵네.;;; 나 혼자  게시판 만들기 힘들게따ㅠ
