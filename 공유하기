@@ -56,3 +56,32 @@ script==========================================================================
     }
 }
 
+================================
+
+공유하기 미지원 브라우저 및 ios 포함
+
+//공유
+function share() {
+    const data = {
+        title: '<?= $_PAGE_TITLE_ ?>',
+        url: location.href,
+    };
+
+    if (navigator.share) {
+        navigator.share(data).catch(() => {
+            fallbackCopy();
+        });
+    } else {
+        fallbackCopy();
+    }
+}
+
+// 미지원 공유
+
+ <p class="share" onclick="share()"></p> <!-- 해당 페이지 공유 -->
+function fallbackCopy() {
+    navigator.clipboard?.writeText(location.href)
+        .then(() => alert('링크가 복사되었습니다!'))
+        .catch(() => alert('주소창의 URL을 복사해주세요.'));
+}
+
