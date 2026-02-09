@@ -145,5 +145,46 @@ window.onload = function() {
 
 /* 객식인원선택 팝업 E */
 </script>
-  
+
+
+
+
+
+<div class="person_cnt">
+  <button type="button" class="cnt_btn minus" onclick="personDescrese(this)"> - </button>
+  <span class="cnt_display">
+    <i class="person"></i>
+    <input type="text" id="person_count" value="2" readonly/>
+  </span>  
+  <button type="button" class="cnt_btn plus" onclick="personIncrease(this)"> + </button>
+</div>
+
+// 증가
+function personIncrease(btn) {
+  const wrap = btn.closest('.person_cnt');
+  const input = wrap.querySelector('input');
+  const minusBtn = wrap.querySelector('.minus');
+
+  let val = parseInt(input.value) || 0;
+  input.value = val + 1;
+
+  minusBtn.disabled = false;
+}
+// 감소
+function personDescrese(btn) {
+  const wrap = btn.closest('.person_cnt');
+  const input = wrap.querySelector('input');
+
+  let val = parseInt(input.value) || 0;
+  if (val > 1) input.value = val - 1;
+
+  if (parseInt(input.value) <= 1) {
+    btn.disabled = true;
+  }
+}
+
+
+
+
+
   
