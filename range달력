@@ -1,0 +1,37 @@
+<input type="text" id="daterange" value="2025/10/25 - 2025/10/30" autocomplete="off" inputmode="none" disabled/>
+
+const picker = new easepick.create({
+  element: document.getElementById('daterange'),
+  css: [
+    'https://cdn.jsdelivr.net/npm/@easepick/core@1.2.1/dist/index.css',
+    'https://cdn.jsdelivr.net/npm/@easepick/base-plugin@1.2.1/dist/index.css',
+    'https://cdn.jsdelivr.net/npm/@easepick/range-plugin@1.2.1/dist/index.css',
+    'https://cdn.jsdelivr.net/npm/@easepick/lock-plugin@1.2.1/dist/index.css',
+  ],
+  plugins: ['RangePlugin', 'LockPlugin'],
+  RangePlugin: {
+    tooltip: true,
+  },
+  LockPlugin: {
+    minDate: new Date(),
+  },
+  format: 'YYYY/MM/DD',
+  lang: 'ko',
+  calendars: 2,
+  autoApply: true,
+  grid: 2,
+
+});
+
+
+<!-- easepick datepicker 시작 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@easepick/core@1.2.1/dist/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@easepick/range-plugin@1.2.1/dist/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@easepick/lock-plugin@1.2.1/dist/index.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@easepick/datetime@1.2.1/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@easepick/core@1.2.1/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@easepick/base-plugin@1.2.1/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@easepick/range-plugin@1.2.1/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@easepick/lock-plugin@1.2.1/dist/index.umd.min.js"></script>
+<!-- easepick datepicker 끝 -->
