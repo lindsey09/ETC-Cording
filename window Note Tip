@@ -1,0 +1,1728 @@
+공유 오픈그래프 이미지 미리보기
+https://developers.kakao.com/tool/debugger/sharing
+
+css 변경되었을때만 불러오기
+<link rel="stylesheet" href="/css/member.css?v=<?= filemtime($_SERVER['DOCUMENT_ROOT'].'/css/member.css') ?>" type="text/css">
+
+하위자식에 따라 부모 스타일 변경
+.parent:has(.child.on) {
+  background: red;
+}
+
+부모조건
+form:has(input:invalid) {
+  border: 2px solid red;
+}
+
+:is(.btn, .link, .card):hover {
+  color: blue;
+}
+
+:where(.btn) {
+  color: black;
+}
+
+컴포넌트 기준 반응형
+@container (min-width: 300px) {
+  .card {
+    flex-direction: row;
+  }
+}
+
+특정 클래스만 기준
+'li:nth-child(2n of .active) {
+  color: red;
+}
+
+제외, 
+button:not(.primary, .secondary) {
+  opacity: 0.5;
+}
+
+슬라이드 대체
+https://splidejs.com/premium/
+
+스크롤바 스타일
+&::-webkit-scrollbar {
+          width: 5px;
+          border-radius: 5px;
+        }
+        &::-webkit-scrollbar-thumb {
+          background: #ddd;
+          border-radius: 5px;
+        }
+        &::-webkit-scrollbar-track {
+          border-radius: 5px;
+          background: #eee;
+        }
+
+ jQuery or Phublising Tip 모음
+
+slidesOffsetBefore: 20,
+slidesOffsetAfter: 20,
+slidesPerView: 1,
+slidesPerView: 'auto',
+spaceBetween: 30,
+loop: true,
+centeredSlides: true, //중앙정렬
+팝업으로 슬라이드 작동시킬때 사용
+observer: true,	// 추가
+observeParents: true,	// 추가
+
+ios 때문이라도 앞으로 
+overflow:scroll 사용시 
+-webkit-overflow-scrolling: touch; 
+를 꼭 사용해야겠다
+
+button / onclick="document.location.href='tel:011-1111-1111'"
+이렇게 하면 전화걸림
+
+ touch-action: pan-x; == 한 화면에서 스크롤 안 됨
+
+.swiper-pagination-bullet / .swiper-pagination-bullet-active
+
+    <!-- AOS스크립트 -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- 폰트어썸스크립트 -->
+    <script src="https://kit.fontawesome.com/e5f5574d6c.js"></script>
+
+파비콘/안드로이드/아이폰 앱아이콘
+<link link rel="shortcut icon" href="https://restaurant.omakase-global.com/common/images/favicon.ico"/>
+<link rel="apple-touch-icon" href="https://restaurant.omakase-global.com/common/images/homeicon_ios.jpg" />
+<link rel="shortcut icon" href="https://restaurant.omakase-global.com/common/images/homeicon_adroid.jpg" />
+<!-- <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon"> -->
+
+caret-color: #fff; --커서색상
+user-select:none; --선택안되게
+-- input file css 선택자 --
+input[type=file]::file-selector-button{}
+
+링크 새창크기조절 window.open
+<a href="#" onclick='window.open("http://pf.kakao.com/_YxgYxhxj","kakao","width=600, height=800")'></a>
+새창 크기 고정
+<a href="#" onclick="window.open('../sub/pop.php','tistory','width=400, height=400, scrollbars=no, resizable=no, toolbars=no, menubar=no')">
+
+location = 주소표시줄
+menubar = 메뉴바
+scrollbar = 스크롤바생성
+resizable = ㅇ사이즈조절
+status = 상태표시줄
+titlebar =타이틀바
+toolbars = 툴바
+
+
+대문자,소문자,숫자,특수문자포함 8자리 정규식
+var pw = ()
+var reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[a-zA-Z\d!@#$%^&*()]{8,}$/;
+받은값이랑 맞는지 확인하려면 match사용
+
+
+모달창팝업 스크립트
+<link href="/js/remodal-default-theme.css" rel="stylesheet">
+<link href="/js/remodal.css" rel="stylesheet">
+<script src="/js/remodal.js"></script>
+<script>window.jQuery || document.write('<script src="/js/jquery-1.12.4.min.js"><\/script>')</script>
+
+
+안드로이드폰에서 스크롤 경계를 칠 때 바운스 효과 비활성화 하는 방법
+body{
+overscroll-behavior-y: none.
+}
+
+경고창 바로띄우기;
+<a href="javascript:void(0)" onclick="alert(' ')"></a>
+
+페이지 접속하면 팝업창 바로띄우기
+window.open('/product/coupon','pop','width=800, height=600');
+
+
+button onclick
+ onclick="location.href='riew.php'"
+뒤로가기
+<a href="javascript:history.back();" >
+<a href="javascript:history.go();" > //현재페이지 리로드
+<a href="javascript:history.go(-1);" > //한페이지 뒤로가기 괄호안 페이지 수만큼 이동하기 +/- 앞, 뒤 모두 됨
+<a href="javascript:history.forward();" > //앞으로가기
+
+
+열린창 닫기
+<button type="button" class="close"
+                 onclick="opener.document.location.reload();self.close()"></button>
+
+table tr에 클릭 적용
+<tr onclick="javascript:location.href='riew.php'">
+
+
+
+
+a태그로 /mypage_likes.php#rest 이렇게 페이지 이동할 때 상단에 메뉴바가 있다면 하기와 같은 방법으로 띄울 수 있다.
+html{
+        scroll-padding-top: 8rem;
+        /* 스크롤시 페이지 상단 띄우기 */
+    }
+----------------------------------------------------------------------------
+
+php코드 , 나열을 줄나열로 바꾸기
+ <p class="font12_style">
+<?php foreach ($arr as $item): ?>
+- <?php echo $item; ?><br>
+<?php endforeach; ?>
+</p> 
+<!-- <p class="font12_style"><?='('.implode(' , ',$arr).')'?></p> -->
+
+-----------------------------------------------------------------------------
+
+슬라이드on/off
+ <label for="privacyChk" class="privacyChk">
+                                                    <input type="checkbox" id="privacyChk" />
+                                                    <span class="ball"></span>
+                                                </label>
+
+/* 공개/비공개버튼 */
+.privacyChk{
+  position:relative;
+  width:60px;
+  height:25px;
+  display: block;
+  left:50%;
+  transform:translateX(-50%);
+}
+#privacyChk{
+  display:none;
+}
+.privacyChk .ball{
+  position:absolute;
+  cursor: pointer;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:var(--graydd);
+  transition:.4s;
+  border-radius: 34px;;  
+}
+.privacyChk .ball:before{
+  position:absolute;
+  content:"";
+  height:19px;
+  width:19px;
+  left:4px;
+  bottom:3px;
+  background:var(--whiteff);
+  transition:.4s;
+  border-radius: 50%;;
+}
+#privacyChk:checked + span.ball{
+  background:var(--surfcolor);
+}
+#privacyChk:checked + span.ball:before{
+  background:var(--whiteff);
+  transform:translateX(33px);
+}
+
+----------------------------------------------------------------------------
+
+테이블정렬시 멀티해더유지
+document.querySelectorAll('#myTable thead th').forEach(th => {
+    th.addEventListener('click', () => {
+        new Tablesort(document.getElementById('myTable'));
+    });
+});
+
+-----------------------------------------------------------------------------
+body,html{
+    /*텍스트 선택 불가*/
+    -webkit-user-select: none !important; 
+    -moz-user-select: -moz-none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+이미지 반응형 처리
+<picture>
+  <source media="(min-width:650px)" srcset="img_pink_flowers.jpg">
+  <source media="(min-width:465px)" srcset="img_white_flower.jpg">
+  <img src="img_orange_flowers.jpg" alt="Flowers" style="width:auto;">
+</picture>
+  <picture>
+    <source media="(min-width: 769px)" srcset="/common/images/visu01.jpg?V=3">
+     <source media="(max-width: 768px)" srcset="/common/images/m_visu01.jpg?V=1">
+     <img src="/common/images/visu01.jpg?v=3" />
+ </picture>
+
+이미지 로딩 에러시 
+<img src="없는이미지.png" alt="이미지" onerror="this.style.display='none'">
+onerror="this.style.display='none'"추가
+로딩에러시 기본이미지 출력
+onerror="this.onerror=null; this.src='/common/images/default.png';" 추가
+
+이미지위에 글씨
+<figure>
+  <img
+    src="/shared-assets/images/examples/elephant.jpg"
+    alt="Elephant at sunset" />
+  <figcaption>An elephant at sunset</figcaption>
+</figure>
+
+
+
+
+//inpyt type  email
+<input type="email" id="email" pattern=".+@globex\.com" size="30" required />
+//input type range
+  <input type="range" id="cowbell" name="cowbell" min="0" max="100" value="90" step="10" />
+  <label for="cowbell">Cowbell</label>
+//input type tel
+<input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required />
+
+
+스크립트 미디어쿼리
+if (window.matchMedia("(max-width: 768px)").matches) {
+  // 1024px 미만에서 사용할 스크립트
+} else {
+  // 1024px 이상에서 사용할 스크립트
+}
+
+============
+//값이 없을 때 노출시키지 말자
+ <?php if (!empty($pic)) { ?>
+                <dt> 
+                    <img src="<?=$pic?>">
+                 
+                </dt>
+                <?php }?>
+============
+
+클릭안되게막기
+pointer-events: none;
+16:9 이미지 비율
+padding-bottom:56.25%
+이미지 비율 구하기 
+padding-bottom:calc(세로 / 가로 * 100%);
+1:1 1/1 padding-top:100%;
+4:3 3/4=0.75 padding-top:75%;
+3:2 2/3=0.666 padding-top:66.67%;
+16:9 9/16=0.5625 padding-top:56/25%;
+
+
+.bath div{
+    width:100%;
+    height:0;
+    padding-bottom:56.26%;
+    overflow: hidden;
+    position:relative;
+}
+
+.bath div img{
+    width:100%;
+    height:100%;
+    position:absolute;
+    top:0; left:0;
+}
+
+
+<input type="number" pattern="[0-9]*" inputmode="numeric" />
+
+*------------------------------------------------------------------------*
+
+체크박스 클릭 시 해당영역보이게
+$(".travel_type").change(function(){
+    let type = $(this).attr('id');
+
+    if($(this).is(":checked")){
+        $('.type_value').hide();
+        $('.'+type).css('display', 'block');
+    }else{
+        $('.'+type).css('display', 'none');;
+    }
+})
+
+
+*--------------------------------------------------------------------------*
+
+유니코드 특수문자 모음
+https://snskeyboard.com/lib/
+*--------------------------------------------------------------------------*
+스마트에디터 사용
+
+ <textarea id="txtEditor" style='width:100%;height:400px' name="content" required placeholder="내용을 입력해주세요"></textarea>
+
+<script src="https://yoosazzo630830.surf.menu/smarteditor/js/HuskyEZCreator.js"></script>
+<script>
+  var oEditors = [];
+  nhn.husky.EZCreator.createInIFrame({
+    oAppRef: oEditors,
+    elPlaceHolder: "txtEditor",
+    sSkinURI: "https://yoosazzo630830.surf.menu/smarteditor/SmartEditor2Skin.html"
+  });
+</script>
+
+*--------------------------------------------------------------------------*
+리다이렉트 페이지 구성
+<!-- <meta http-equiv="refresh" content="5;url=/index.php" /> -->
+상기는 좀 느리고
+하기는 좀 빠름
+<?php
+header("Location: index.php");
+exit; 
+?>
+
+*--------------------------------------------------------------------------*
+
+if (matchMedia("screen and (min-width: 1024px)").matches) {
+  // 1024px 이상에서 사용할 JavaScript
+} else {
+  // 1024px 미만에서 사용할 JavaScript
+}
+
+*---------------------------------------------------------------------------*
+JS 미디어쿼리 사용할 떄
+if($(window).width() <= 768) { } //768px 이하일떄 적용
+
+    const media = matchMedia("all and (max-width: 1024px)")
+        //제외 영역 클릭 시 수정모달 hide 230411 
+        media.addListener((e) => {
+        console.log(e)
+        $('.service_detail .chair_info th .btn_more').click(function(e){
+                e.stopPropagation();
+            })
+
+        $('body').click(function(){
+            if(!$('.service_detail .chair_info th .btn_more').hasClass('active')){
+                $('.service_detail .chair_info .btn_area').hide();
+            }
+            
+        })
+
+    })
+
+*-----------------------------------------------------------------------------*
+
+document.location.reload(); 새로고침
+opener.document.location.reload(); 팝업창을 띄운 부모창 새로고침
+opener.opener.parent.location.reload(''); 팝업창을 띄울 부모의 부모창 새로고침
+
+1. opener.parent.location=’부모창주소(원하는주소)’;
+2. opener.parent.location.reload();
+window.close();
+
+*----------------------------------------------------------------------------------------------------------*
+
+// 외부영역 클릭 시 팝업 닫기
+        $(document).mouseup(function (e){
+            var LayerPopup = $(".calendar__popup");
+            if(LayerPopup.has(e.target).length === 0){
+                LayerPopup.removeClass("active");
+            }
+        });
+
+*----------------------------------------------------------------------------------------------------------*
+
+//말줄임
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+overflow: hidden;
+/*white-space: nowrap;*/
+
+//말줄임 1줄
+width:100%;
+text-overflow: ellipsis;
+overflow: hidden;
+white-space: nowrap
+
+//input값에 아무것도 없다면 노출 비노출, 있을 경우 닫기 노출
+ $(document).ready(function(){
+                                            if($('.search__box input').val()=='')
+                                                $('.search__box__close').css('display','none');
+                                                else
+                                            $('.search__box__close').css('display','inline-block');
+                                           
+                                        });
+
+*----------------------------------------------------------------------------------------------------------*
+
+swipe slide
+slidesPerView: 'auto', //슬라이드 한개의 너비
+freeMode : false, // 슬라이드 넘길 때 위치 고정 여부
+autoHeight : true,  // 현재 활성 슬라이드높이 맞게 높이조정
+a11y : false, // 접근성 매개변수(접근성 관련 대체 텍스트 설정이 가능) 
+resistance : false, // 슬라이드 터치 저항 여부
+slideToClickedSlide : true, // 해당 슬라이드 클릭시 슬라이드 위치로 이동
+allowTouchMove : true, // (false-스와이핑안됨)버튼으로만 슬라이드 조작이 가능
+watchOverflow : true // 슬라이드가 1개 일 때 pager, button 숨김 여부 설정
+slidesOffsetBefore : number, // 슬라이드 시작 부분 여백
+slidesOffsetAfter : number, 
+
+*----------------------------------------------------------------------------------------------------------*
+
+php코득값 없으면 노춣하지 않기
+
+<?php if(!empty($info['info']['scientific_name'])) { ?> <?php }?>
+
+
+ <?php if (trim($from_str) !== '' || trim($to_str) !== '') { ?>  <?php }?>
+
+
+
+
+
+*----------------------------------------------------------------------------------------------------------*
+// 다국어 설명추가
+
+    $('#detail_lang').change(function(){
+        if($(this).val()=='detail_lang01'){
+            $('.lang_selec').addClass('hidden');
+            $(".lang_en").removeClass("hidden");
+        }else if($(this).val()=='detail_lang02')
+        {
+            $('.lang_selec').addClass('hidden');
+            $(".lang_jp").removeClass("hidden");    
+        }else if($(this).val()=='detail_lang03')
+        {
+            $('.lang_selec').addClass('hidden');
+            $(".lang_cn2").removeClass("hidden");  
+        }else if($(this).val()=='detail_lang04')
+        {
+            $('.lang_selec').addClass('hidden');
+            $(".lang_cn").removeClass("hidden"); 
+        }else if($(this).val()=='detail_lang05')
+        {
+            $('.lang_selec').addClass('hidden');
+            $(".lang_ta").removeClass("hidden"); 
+        }else if($(this).val()=='detail_lang')
+        {
+            $('.lang_selec').addClass('hidden');
+            $(".lang_kr").removeClass("hidden"); 
+        }
+
+    });
+
+*----------------------------------------------------------------------------------------------------------*
+
+//메뉴 위 아래 변경 
+$('.menu_up').click(function(){
+                var $menu_move = $(this).parent().parent(); // 클릭한 버튼이 속한 this 요소
+                $menu_move.prev().before($menu_move); // 현재 this 의 이전 this 앞에 선택한 this 넣기
+            })
+                
+            $('.menu_down').click(function(){
+                var $menu_move = $(this).parent().parent(); // 클릭한 버튼이 속한 this 요소
+                $menu_move.next().after($menu_move); // 현재 this 의 다음 this 뒤에 선택한 this 넣기
+            
+            })
+
+*----------------------------------------------------------------------------------------------------------*
+
+모달팝업
+모달스크립트 필요
+
+<div class="remodal mailme-modal" id='reqQrViewModal' data-remodal-id="reqQrViewModal">
+    <div class='menuConfigOption'>
+        <img id='_qr_img_'>
+    </div>
+</div>
+function viewQr(_this_)
+{
+    var inst = $('[data-remodal-id=reqQrViewModal]').remodal();
+    inst.open();
+}
+
+
+*----------------------------------------------------------------------------------------------------------*
+
+[jquery] select  box 선택값 가져오기
+
+
+select:focus, 
+ input[type="text"]:not(:placeholder-shown)
+
+// Select box ID 로 접근하여 선택된 값 읽기
+$('#Select box ID option:selected').val();
+
+// Select box Name 으로 접근하여 선택된 값 읽기
+$('select[name=Select box Name]').val();
+
+// span 과 같은 다른 태그 접근하기
+$('span[name=Name값]').text();
+
+// 선택된 값의 index 불러오기
+var index = $('#Select box ID option').index($('#Select box ID option:selected'));
+
+// Select box에 option 값 추가하기
+$('#Select box ID').append('<option value='1'>1번</option>');
+
+// Select box option 의 맨 앞에 추가 하기
+$('#Select box ID').prepend('<option value='0'>0번</option>');
+
+// Select box의 html 전체를 변경하기
+$('#Select box ID').html('<option value='1'>1차</option><option value='2'>2차</option>');
+
+// Select box의 index 별 replace 하기
+// 해당 객체를 가져오게 되면, option이 다수가 되므로 배열 객체가 되어 eq에 index를 넣어, 개별 개체를 선택할 수 있다.
+$('#Select box ID option:eq(1)').replaceWith('<option value='1'>1차</option>');
+
+// 직접 index 값을 주어 selected 속성 주기
+$('#셀렉트ID option:eq(1)').attr('selected', 'selected');
+
+// text 값으로 selected 속성 주기(첫 번째 방법)
+$('#Select box ID')val('1번').attr('selected', 'selected');
+
+// text 값으로 selected 속성 주기(두 번째 방법)
+$('#Select box ID').text('1번').attr('selected', 'selected');
+
+// value 값으로 selected 속성 주기(첫 번째 방법)
+$('#Select box ID').val('1');
+
+// value 값으로 selected 속성 주기(두 번째 방법)
+$('#id').val('1').prop('selected', true);
+
+// 해당 index item 삭제하기
+$('#Select box ID option:eq(0)').remove();
+
+// 첫번째, 마지막 item 삭제하기
+$('#Select box ID option:first').remove();
+$('#Select box ID option:last').remove();
+
+// 선택된 옵션의 text, value 구하기
+$('#Select box ID option:selected').text();
+$('#Select box ID option:selected').val();
+
+// 선택된 옵션의 index 구하기
+$('#Select box ID option').index($('#Select box ID option:selected'));
+
+// Select box 의 아이템 갯수 구하기
+$('#Select box ID option').size();
+
+// 선택된 옵션 전 까지의 item 갯수 구하기
+$('#Select box ID option:selected').prevAll().size();
+
+// 선택된 옵션 후의 item 갯수 구하기
+$('#Select box ID option:selected').nextAll().size();
+
+// 해당 index item 이후에 option item 추가 하기
+$('#Select box ID option:eq(0)').after('<option value='3'>3번</option>');
+
+// 해당 index item 전에 option item 추가하기
+$('#Select box ID option:eq(3)').before('<option value='2'>2번</option>');
+
+// 해당 Select box 에 change event binding 하기
+$('#Select box ID').change(function() {
+  alert($(this).val());
+  alert($(this).children('option:selected').text());
+});
+
+*----------------------------------------------------------------------------------------------------------*
+
+모바일 웹에서 마켓 이동하기
+플레이스토어 혹은 앱스토어
+var userAgent = navigator.userAgent;
+if(userAgent.match(".*Android.*")){
+	location.href = "https://play.google.com/store/apps/details?id=com.xxxxxx.m";
+}else if(userAgent.match(".*iPhone.*") || userAgent.match(".*iPad.*")){
+	location.href = "https://itunes.apple.com/app/id1234567890";
+}
+
+*---------------------------------------------------------------------------------------------------------*
+
+//탭 누르면 각각 해당 내용 보여주기
+$(".room_type li").click(function() {
+        $(".room_type li").removeClass("active");
+        $(this).addClass("active");
+        console.log($(this))
+        let tab = $(this).attr('data-tab');
+        console.log(tab);
+
+		$('.room_list').removeClass('active');
+
+		$(this).addClass('active');
+		$("#"+tab).addClass('active');
+
+        //전체일떄 다 보여주기
+        if(tab =='tab-0'){
+            $(".room_list").addClass('active');
+        }
+    });
+ 
+
+해당 html에 li에 data-tab이라는 속성값을 주고, 해당 내용에 id값을 속성값과 일치시킨다. ex) data-tab='tab-1'. id='tab-1'
+
+*---------------------------------------------------------------------------------------------------------*
+
+//체크박스 하나만 선택
+function checkOnlyOne(element) {
+    const checkboxes 
+      = document.getElementsByName("chef_img");
+    checkboxes.forEach((cb) => {
+    cb.checked = false;
+  })
+    element.checked = true;
+}
+wjdrb
+해당 태그에  onclick='checkOnlyOne(this)'  설정
+
+
+*---------------------------------------------------------------------------------------------------------*
+input 박스 콤마
+해당 태그에  onkeyup="inputNumberFormat(this)"  설정
+//입력값 자동 콤마사용
+function inputNumberFormat(obj) {
+     obj.value = comma(uncomma(obj.value));
+ }
+
+-----------------------------------------------------------------
+<input type="text" name="num_neighbor" class="numberInt " inputmode="numeric" 
+                        mode="numberic" onkeyup="inputNumberFormat(this)" placeholder="4,030" required/>
+<script>
+    function inputNumberFormat(obj) {
+        //콤마
+        obj.value = comma(uncomma(obj.value));
+        //  숫자만입력
+        $(this).val($(this).val().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1'));
+    }
+</script>
+-----------------------------------------------------------------
+
+ function comma(str) {
+     str = String(str);
+     return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+ }
+
+ function uncomma(str) {
+     str = String(str);
+     return str.replace(/[^\d]+/g, '');
+ }
+
+*---------------------------------------------------------------------------------------------------------*
+이미지 없을떄 노 이미지 삽입 태그
+<img src="<?=$poi_image ? $poi_image : "common/images/no_storeimg.svg?v=1";?>">
+<img src="<?=$_img['thumb_url'] ? $_img['thumb_url'] : "common/images/no_image.svg?v=1";?>">
+
+img 자체에서 이미지 없을때 안보이게 
+<img src='abc.jpg' onerror="this.style.display='none'" alt='' />
+대체이미지 보여주기
+<img src='abc.jpg' onerror="this.src='no_img.jpg'" alt='' />
+*---------------------------------------------------------------------------------------------------------*
+//숫자만 입력
+$("._only_number_").on('input',function() {
+        $(this).val($(this).val().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')); 
+    });
+
+// 영문만 입력
+$('.FirstName, .LastName').bind('keyup blur',function(){ 
+    var node = $(this);
+    node.val(node.val().replace(/[^a-z]/g,'') ); }
+);
+
+
+
+function inputNumberFormat(obj) {
+    //콤마
+     obj.value = comma(uncomma(obj.value));
+
+    //  숫자만입력
+     $(this).val($(this).val().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')); 
+ }
+
+//숫자만입력에 콤마마
+$(document).on("keyup", ".__size_type__, .__size_price__", function() {
+    var val= $(this).val();
+    
+    var numericValue = val.replace(/[^\d]/g, '');
+    var formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    $(this).val(formattedValue);
+});
+
+
+
+<input maxlength="숫자">
+숫자 키패드
+ inputmode="numeric" pattern="[0-9]*" 
+
+    /*숫자만 입력*/                               
+해당 input에 oninput="onlyNumber();" 삽입 
+     function onlyNumber(){
+        console.log(event.type, event.target.value);
+        const regexp = /\D/g;
+        event.target.value = event.target.value.replace(regexp, "");
+     }      
+
+숫자 입력제한
+<input type="number"  inputmode="numberic" pattern="[0-9]*"  maxlength="4" oninput="numberMaxLength(this);" >
+
+<script>
+//숫자 입력제한
+    function numberMaxLength(e){
+        if(e.value.length > e.maxLength){
+            e.value = e.value.slice(0, e.maxLength);
+        }
+    }
+</script>
+
+// //숫자만 입력
+$(document).on("keyup", "input[name=stock_num]", function() {
+    var val= $(this).val();
+
+    if(val.replace(/[0-9]/g, "").length > 0) {
+        alert("숫자만 입력해 주십시오.");
+        $(this).val('');
+    }
+
+});
+
+//정규식 숫자만 입력
+$("._only_number_").on('input',function() {
+         $(this).val($(this).val().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1')); 
+ });
+
+//인풋박스 두자리까지만  입력 
+$(document).on("keyup", "input[name^=wr_1]", function() {
+    var val= $(this).val();
+
+    if(val.replace(/[0-9]/g, "").length > 0) {
+        alert("숫자만 입력해 주십시오.");
+        $(this).val('');
+    }
+
+    if(val < 1 || val > 100) {
+        alert("1~100 범위로 입력해 주십시오.");
+        $(this).val('');
+    }
+});
+
+//숫자와 ~ 만 입력
+    function characterCheck(obj){
+        var replaceChar = /[!@\#$%^&*\()\-=+_'\;<>\/.\`:\"\\,\[\]?|{}]/gi;
+        var pattern2 = /[a-zA-Z]/; //영어
+        var pattern3 = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/; //한글
+
+        if( replaceChar.test(obj.value) || pattern2.test(obj.value) || pattern3.test(obj.value)){
+            alert("<?=$language['728'];//추천?>숫자와 특수문자 ~만 입력가능합니다.");
+            obj.value = obj.value.substring( 0 , obj.value.length - 1 );
+        }
+    }
+
+
+숫자 천단위 콤마
+1. toLocaleString() 함수이용
+$(".price").on("keyup", function(){
+    $(this).val($(this).val().toLocaleString("ko-KR"));
+});
+
+2. 정규식 방법
+    //천의자리마다 콤마 찍기
+$(".price").on("keyup", function(){
+    $(this).val($(this).val().replace(/\,/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,'));
+});
+
+    //천의자리마다 콤마찍는 함수
+    function numberWithCommas(number){
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+
+정규식 코드 
+1. 암호 :
+조건1. 6~20 영문 대소문자
+조건2. 최소 1개의 숫자 혹은 특수 문자를 포함해야 함
+/^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{6,20}$/
+
+2. 전자우편 주소 :
+/^[a-z0-9_+.-]+@([a-z0-9-]+\.)+[a-z0-9]{2,4}$/
+
+3. URL :
+/^(file|gopher|news|nntp|telnet|https?|ftps?|sftp):\/\/([a-z0-9-]+\.)+[a-z0-9]{2,4}.*$/
+
+4. HTML 태그 – HTML tags :
+/\<(/?[^\>]+)\>/
+
+5. 전화 번호 – 예, 123-123-2344 혹은 123-1234-1234 :
+/(\d{3}).*(\d{3}).*(\d{4})/
+
+6. 날짜 – 예, 3/28/2007 혹은 3/28/07 :
+/^\d{1,2}\/\d{1,2}\/\d{2,4}$/
+
+7. jpg, gif 또는 png 확장자를 가진 그림 파일명 :
+/([^\s]+(?=\.(jpg|gif|png))\.\2)/
+
+8. 1부터 50 사이의 번호 – 1과 50 포함 :
+/^[1-9]{1}$|^[1-4]{1}[0-9]{1}$|^50$/
+
+9. 16 진수로 된 색깔 번호 :
+/#?([A-Fa-f0-9]){3}(([A-Fa-f0-9]){3})?/
+
+10. 키보드에 있는 모든 특수문자 :
+[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"] 
+(?=.*\W)) <- 이건 키보드에 있는 모든 특수문자 가능 (심지어 한문까지. 별의 별 특수문자 다 되나부다) 
+
+
+/--------------------------------------------------------------------------------/
+
+    //모바일 탭 내렸을 때 식당 이름 표시 
+    $(window).scroll(function(){
+        console.log('스크롤탑' + $(window).scrollTop());
+        console.log('오프셋탑' + $('.store_detail .tit').offset().top);
+
+        if (window.innerWidth < 1024) { 
+
+            if ($(window).scrollTop() > $('.store_detail .tit').offset().top){
+                $('#titleArea.m_title').addClass('active');
+            }else{
+                $('#titleArea.m_title').removeClass('active');
+            }
+
+        }
+    });
+
+
+ //스크롤 탑 이벤트
+    $(window).scroll(function(){
+        if (window.innerWidth < 1024) { 
+            if ($(window).scrollTop() > 100){
+                $('.scroll_top').addClass('on');
+            }else{
+                $('.scroll_top').removeClass('on');
+            }
+        }
+    });
+
+    $(function() {
+      $(".scroll_top").on("click", function() {
+          $("html, body").animate({scrollTop:0}, '500');
+          return false;
+      });
+    });
+
+
+// 페이지 스크롤탑
+let currentState = null;
+$(window).on('scroll', function () {
+    const scrollTop = $(window).scrollTop();
+
+    // 이상일 때만 'down' 상태로 전환
+    if (scrollTop >= 150 && currentState !== 'down') {
+        $('.headSub').hide();
+        $('.headSubNav').css('display','flex');
+        currentState = 'down';
+    } 
+    // 이하일 때만 'up' 상태로 전환
+    else if (scrollTop <= 100 && currentState !== 'up') {
+        $('.headSub').css('display','flex');
+        $('.headSubNav').hide();
+        currentState = 'up';
+    }
+
+});
+
+
+//#링크 부드럽게 이동
+혹은 scroll-behavior: smooth;
+
+    $(".detail_tab a").click(function (e) {
+        $(".detail_tab a").removeClass("active");
+        $(this).addClass("active");
+
+        e.preventDefault();
+        var thisTarget = $(this).attr("href");
+        $( 'html, body' ).stop().animate( { scrollTop : $(thisTarget).offset().top -50 } );
+    });
+
+    //스크롤 시 감추고 멈추면 보임.
+    let stickySelect = document.getElementById('sticky_select');
+    let isScrolling;
+
+    window.addEventListener('scroll', function() {
+        if ($(window).scrollTop() > 500){
+
+            stickySelect.style.opacity = 0; 
+
+            window.clearTimeout(isScrolling);
+            
+            isScrolling = setTimeout(function() {
+                stickySelect.style.opacity = 1; 
+            }, 500);
+        }
+    });
+/--------------------------------------------------------------------------/
+
+글씨더보기는 앞으로 이게 좋을 것 같음.
+
+//글씨더보기 
+$(document).ready(function(){
+    $('.rest_desc01 .border_bottom').each(function(){
+        var content = $(this).children('.desc');
+        var content_txt;
+
+        if (content.is('textarea')) {
+            // textarea의 내용을 가져옴
+            content_txt = content.val();
+        } else {
+            // 일반적인 요소의 텍스트를 가져옴
+            var content_html = content.html();
+            content_txt = content_html.replace(/<br\s*[\/]?>/gi, "\n");
+        }
+
+        console.log(content_txt);
+        var content_txt_short = content_txt.substring(0,200) + "...";
+        
+        var btn_more = $('<a href="javascript:void(0)" class="readmore">더보기</a>');
+        $(this).append(btn_more);
+
+        if(content_txt.length >= 130){
+            content.html(content_txt_short.replace(/\n/g, "<br>"));
+        } else {
+            btn_more.hide();
+        }
+
+        btn_more.click(toggle_content);
+
+        function toggle_content(){
+            if($(this).hasClass('short')){
+                // 접기 상태
+                $(this).html('더보기');
+                content.html(content_txt_short.replace(/\n/g, "<br>"));
+                $(this).removeClass('short');
+            } else {
+                // 더보기 상태
+                $(this).html('접기');
+                content.html(content_txt.replace(/\n/g, "<br>"));
+                $(this).addClass('short');
+            }
+        }
+    });
+});
+
+-----------------------------------------------------------------------
+헷갈리지않는 더보기 접기
+//글씨더보기 
+$(document).ready(function(){
+    $('.day_cont_box dd .desc').each(function(){
+        var $this = $(this);
+        var $existingBtn = $this.find('.readmore');
+        
+        // 기존 더보기 버튼 제거
+        $existingBtn.remove();
+        
+        // 텍스트 내용 가져오기
+        var content_txt = $this.text().trim();
+        
+        // 150자 이상일 때만 처리
+        if(content_txt.length > 100){
+            var content_txt_short = content_txt.substring(0, 100) + "...";
+            
+            // 새로운 더보기 버튼 생성
+            var btn_more = $('<a href="javascript:void(0)" class="readmore">더보기</a>');
+            
+            // 처음엔 짧은 텍스트 표시
+            $this.html(content_txt_short + ' ').append(btn_more);
+            
+            // 이벤트 위임 방식으로 변경
+            $this.off('click', '.readmore').on('click', '.readmore', function(e){
+                e.preventDefault();
+                var $btn = $(this);
+                var $parent = $btn.parent();
+                
+                if($btn.hasClass('expanded')){
+                    // 접기 상태
+                    $btn.html('더보기').removeClass('expanded');
+                    $parent.html(content_txt_short + ' ');
+                    $parent.append($btn);
+                } else {
+                    // 더보기 상태
+                    $btn.html('접기').addClass('expanded');
+                    $parent.html(content_txt + ' ');
+                    $parent.append($btn);
+                }
+            });
+        }
+    });
+});
+
+/--------------------------------------------------------------------/
+textarea 쓴대로 늘어나게
+<textarea cols="10" rows="1"
+oninput='this.style.height = ""; this.style.height = this.scrollHeight + "px"'
+style="resize: none; max-height: 210px;" required placeholder="" onclick="this.select();" onfocus="this.select();"></textarea>
+
+/-----------------------------------------------------------------------/
+
+
+<script>
+    //230215 상단에 메뉴분류설정 있고 없고에 따라 top 높이 달라져서... 
+    let store = document.querySelector('.swiper-wrapper').clientHeight;
+
+    if(store === 0){
+        $('.store_menu .top').css('display','none');
+    }else{
+        $('.store_menu .top').css('display','block');
+    }
+
+    console.log(`값 ${store}`);
+
+
+</script>
+
+/--------------------------------------------------------------------------/
+
+//체크박스 전체선택
+$(document).on('click','#all_chk',function(){
+    if($('#all_chk').is(':checked')){
+       $('.item_chk').prop('checked',true);
+    }else{
+       $('.item_chk').prop('checked',false);
+    }
+});
+
+
+$('#all_chk').on('click', function(){
+    var isChecked = $(this).is(':checked');
+    $('.chk_box').prop('checked', isChecked);
+});
+
+
+//전체선택 및 반대로 체크 시 전체선택 활성화
+$(document).ready(function() {
+    $("#all_chk").click(function() {
+        var Checked = $(this).is(':checked');
+        $('.chk').prop("checked", Checked);
+    });
+
+    $(".chk_login .chk").click(function() {
+        var total = $(".chk_login .chk").length;
+        var checked = $(".chk_login .chk:checked").length;
+        
+        $("#all_chk").prop("checked", total === checked);
+    });
+});
+
+
+function selectAll(selectAll)  {
+  const checkboxes 
+     = document.querySelectorAll('input[type="checkbox"]');
+  
+  checkboxes.forEach((checkbox) => {
+    checkbox.checked = selectAll.checked
+  })
+}
+
+
+/--------------------------------------------------------------------------/
+
+
+/---------------------------------------------------------------------------/
+
+//인풋박스 입력 시 x표시 
+$(".brand_search input").on("propertychange change keyup paste input", function(){
+	// alert("change");
+    if($('.brand_search input').val()==''){
+        $('.brand_search button[type=button]').hide();
+    }else{
+        $('.brand_search button[type=button]').show();
+    }
+    
+});
+$('.brand_search button[type=button]').click(function(){
+    $(".brand_search input").val('');
+    $('.brand_search button[type=button]').hide();
+})
+
+
+//input 글자 하나라도 입력 시 x 출력
+
+let inputValue = document.getElementById('search_name');
+let closeBtn = document.querySelector('.words_del');
+
+inputValue.addEventListener('input', function() {
+    // console.log(inputValue.value);
+    // console.log(inputValue.value.length);
+    if(inputValue.value.length > 0){
+        closeBtn.style.display='inline-block';
+    }else{
+        closeBtn.style.display='none';
+    }
+})
+
+$('.words_del').click(function(){
+    let input = document.getElementById('search_name');
+
+    input.value = '';
+    $(this).hide();
+})
+
+/---------------------------------------------------------------------------/
+ url 출력하기
+전체 URLwindow.location.href	https://example.com/about.php
+도메인(호스트명)	window.location.hostname	example.com
+프로토콜	window.location.protocol	https:
+경로(path)만	window.location.pathname	/about.php
+쿼리스트링	window.location.search	?id=10
+
+/---------------------------------------------------------------------------/
+
+append, appendTo, prepend, prependTo 로 생성된 html은 동적으로 생성된 것
+동적으로 추가된 태그는 이벤트가 동작되지 않음. = 로드되었을 때 존재하지 않는 태그에 대해서는 이벤트를 걸 수 없는 것!!!
+이를 해결하기 위해서는
+1.  $(document).on('click / change  등등의 이벤트', '이벤트 적용할 타깃 태그', 동작 함수(){});
+2. $('.부모 이름').on('click', '.걸고 싶은 대상', function() {
+ 넣을 소스;
+}); 으로 처리하면 이벤트 동작 됨.
+
+
+/---------------------------------------------------------------------------/
+
+첨부파일 커스텀 이름표시
+
+//첨부파일 이름표시 2가지 방법
+1. 파일 이름만
+$("#file01").change(function(e){
+    // console.log(e.target.files);
+    // console.log(e.target.files[0].name);
+  let fileName = e.target.files[0].name;
+  $(".file_name01").text(fileName);
+});
+2. 파일 경로까지
+     $('#file').change(function(){
+                let fileName = $('#file').val();
+                console.log(fileName);
+                $('.filename').text(fileName);
+            });
+
+
+//첨부파일 미리보기
+
+html
+<label for="imageInput" class="imageInput">  이미지 선택 </label>
+ <input type="file" accept="image/*" id="imageInput" multiple />
+<div id="previewContainer"></div>
+
+script 
+  //첨부파일 미리보기
+    $('#imageInput').change(function() {
+    // 선택한 파일들을 가져옴
+    var files = $(this)[0].files;
+
+    // 파일을 하나씩 처리
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        var reader = new FileReader();
+
+        // 파일을 읽을 수 있을 때 실행되는 이벤트 핸들러
+        reader.onload = function(e) {
+        var imgSrc = e.target.result;
+
+        // 이미지, 버튼을 감싸는 div 요소 생성
+        var containerDiv = $('<div>');
+
+        
+        // 이미지 미리보기를 위한 img 요소 생성
+        var imgElement = $('<img>');
+        imgElement.attr('src', imgSrc);
+
+
+        // 삭제 버튼을 위한 button 요소 생성
+        var deleteButton = $('<button class="del">');
+        deleteButton.text('삭제');
+        deleteButton.click(function() {
+            $(this).prev('img').remove(); // 클릭한 삭제 버튼의 이전 sibling인 img 요소를 삭제
+            $(this).remove(); // 클릭한 삭제 버튼을 삭제
+            containerDiv.remove(); //div 삭제
+        });
+        // 미리보기 컨테이너에 이미지 추가
+        containerDiv.append(imgElement);
+        containerDiv.append(deleteButton);
+
+        $('#previewContainer').append(containerDiv);
+        }
+
+        // 파일을 읽기
+        reader.readAsDataURL(file);
+    }
+});
+
+
+
+//첨부파일 미리보기가 많을때
+for (let i = 1; i < 7; i++) {
+    // 첨부파일 미리보기
+    console.log(i);
+
+    $('#file' + i).change(function (index) {
+        return function () {
+            console.log(index);
+            // 선택한 파일들을 가져옴
+            var files = $(this)[0].files;
+
+            // 파일을 하나씩 처리
+            for (var j = 0; j < files.length; j++) {
+                var file = files[j];
+                var reader = new FileReader();
+
+                // 파일을 읽을 수 있을 때 실행되는 이벤트 핸들러
+                reader.onload = function (e) {
+                    var imgSrc = e.target.result;
+
+                    // 이미지, 버튼을 감싸는 div 요소 생성
+                    var containerDiv = $('<div>');
+
+                    // 이미지 미리보기를 위한 img 요소 생성
+                    var imgElement = $('<img>');
+                    imgElement.attr('src', imgSrc);
+
+                    // 삭제 버튼을 위한 button 요소 생성
+                    var deleteButton = $('<button class="del">');
+                    deleteButton.text('삭제');
+                    deleteButton.click(function () {
+                        $(this).prev('img').remove(); // 클릭한 삭제 버튼의 이전 sibling인 img 요소를 삭제
+                        $(this).remove(); // 클릭한 삭제 버튼을 삭제
+                        containerDiv.remove(); //div 삭제
+                    });
+                    // 미리보기 컨테이너에 이미지 추가
+                    containerDiv.append(imgElement);
+                    containerDiv.append(deleteButton);
+
+                    $('#previewContainer' + index).append(containerDiv);
+                };
+
+                // 파일을 읽기
+                reader.readAsDataURL(file);
+            }
+        };
+    }(i));
+}
+
+
+
+/---------------------------------------------------------------------------/
++/- up down 카운트
+
+function increment(){
+    var input = document.getElementById('numberInput');
+    var Invalue = parseInt(input.value);
+    input.value = Invalue + 1;
+}
+
+function decrement(){
+    var input = document.getElementById('numberInput');
+    var Invalue = parseInt(input.value);
+    input.value = Invalue - 1;
+    if(value < 0) {
+        alert("정수값을 입력해주세요");
+        input.value = 1;
+    }
+}
+
+/---------------------------------------------------------------------------/
+
+테이블정렬
+<!-- 테이블정렬 -->
+<script src="common/js/tablesort.min.js"></script>
+<script src="common/js/tablesort.number.min.js"></script>
+<script src="common/js/tablesort.date.min.js"></script>
+<!-- //테이블정렬 -->
+    //테이블정렬
+new Tablesort(document.getElementById('myTable'));
+$('.review_tb th').click(function(){
+    // alert();
+    // $('.review_tb th img').toggleClass('active');
+    $(this).find('img').toggleClass('active');
+});    
+
+
+/-----------------------------------------------------------------------------/
+
+    //제외 영역 클릭 시 수정모달 hide 230224
+        $('.reply__modify').click(function(e){
+           e.stopPropagation();
+        })
+
+        $('body').click(function(){
+            if(!$('.reply__modify').hasClass('active')){
+                $('.reply__modify ul').hide();
+            }
+            
+        })
+
+ps;;
+e.stopPropagation() 는 상위 요소가 이벤트를 감지할 수 없고 이벤트리스너가 가르키고 있는 요소만 이벤트를 감지한다.
+e.preventDefault() 는 등록되어 있는 이벤트 말고는 다른 이벤트를 작동하지 못하게 한다
+
+//
+// "복사" 버튼 클릭 시 해당 URL 값을 복사하는 함수
+function copyURL() {
+    // 버튼을 클릭한 요소를 찾습니다.
+    var button = event.target;
+    // console.log(button.parentNode.previousSibling)
+    // console.log(button.parentNode.previousElementSibling)
+    // 버튼과 동일한 레벨에 있는 참조된 URL 입력 요소를 찾습니다.
+    var urlInputElement = button.parentNode.previousElementSibling.querySelector(".urlInput");
+    // console.log(urlInputElement)
+
+    // 찾은 요소의 값을 복사합니다.
+    urlInputElement.select();
+    document.execCommand("copy");
+}
+
+// 모든 "복사" 버튼 요소를 선택합니다.
+var copyButtons = document.querySelectorAll(".copy_btn");
+
+// 각각의 "복사" 버튼에 이벤트 리스너를 추가합니다.
+for (var i = 0; i < copyButtons.length; i++) {
+    copyButtons[i].addEventListener("click", copyURL);
+}
+
+/---------------------------------------------------------------------------/
+
+// 테이블 좌,우 스크롤 버튼 
+document.getElementById('left_btn').addEventListener('click', function() {
+    // alert('left');
+  scrollTableHorizontally(-100); // 왼쪽으로 100px 스크롤
+});
+
+document.getElementById('right_btn').addEventListener('click', function() {
+    // alert('right');
+  scrollTableHorizontally(100); // 오른쪽으로 100px 스크롤
+});
+
+function scrollTableHorizontally(amount) {
+  var table = document.querySelector('.tb_wrap');
+//   console.log(amount)
+  // 현재 가로 스크롤 위치와 이동할 양(amount)을 계산하여 적용합니다.
+  table.scrollLeft += amount;
+}
+
+
+//------------------------------------------------------------------------//
+//메뉴탭이동
+$('.subMenu_tab li').click(function(){
+    $('.subMenu_tab li').removeClass('on')
+    $(this).addClass('on')
+
+    let datatab = $(this).attr('data-tab');
+    $('#'+datatab).removeClass('active');
+    $('.tab-conwrap section').slideUp();
+    $('#'+datatab).slideDown();
+    $('#'+datatab).addClass('active');
+})
+
+
+
+//------------------------------------------------------------------------//
+//아코디언 
+  $('.qna dl dt').click(function(e){
+    var content = $(this).next("dd");
+    if (!content.is(":visible")) {
+      $(".qna dl dd").slideUp();
+      content.slideDown();
+
+    }
+  })
+
+
+const qnaTitle = document.querySelectorAll('.qna dl dt');
+
+qnaTitle.forEach(function(tit){
+    tit.addEventListener("click", function(){
+        const cont = this.nextElementSibling;
+
+        if(cont.style.display ==='none' || cont.style.display === ""){
+            cont.style.display = "block";
+            this.classList.add('on');
+        }else{
+            cont.style.display = "none"
+            this.classList.remove('on');
+        }
+    })
+})
+
+
+//---------------------------------------------------------------------------//
+레이어팝업 전달값
+// 팝업에서 전달된 값 처리
+window.handleTaxValue = setTaxValue;
+
+// html코드도 같이필요할때는
+window.handleTaxValue = function(value) {
+    
+    $('.liquor_box').html('<span class="brand_nameTag">' + value + '</span>');
+    
+    // let liquorBox = document.querySelector('.liquor_box');
+    // let resultHTML = '';
+    
+    // for(let i = 0; i < value.length; i++){
+    //     resultHTML += '<span class="brand_nameTag">' + value[i] + '</span>';
+    //     liquorBox = resultHTML;
+    // }
+}
+
+
+//-----------------------------------------------------------------------//
+엔터키 클릭적용
+$('.number_box').on('keydown', function (e) {
+    if (e.key === 'Enter' && $(this).val().length === 6) {
+        $('.certi_btn').click();
+    }
+});
+
+
+ 텍스트 수정 및 저장
+// 라운딩파트너 정보변경 어드민 > 유사쪼 > 맞춤여행신청 상세 참고
+yoosazzo_recommend_detail_test.php 참고
+$(document).ready(function() {
+  let editMode = false;
+
+  $('#editBtn').click(function() {
+    if (!editMode) {
+      // ---- 수정 모드로 전환 ----
+      $('.list_tb tbody tr').each(function() {
+        // 성별
+        const gender = $(this).find('td:eq(1) p').text().trim();
+        $(this).find('td:eq(1)').html(`
+          <select>
+            <option value="남성" ${gender==='남성'?'selected':''}>남성</option>
+            <option value="여성" ${gender==='여성'?'selected':''}>여성</option>
+          </select>
+        `);
+
+        // 이름
+        const name = $(this).find('td:eq(2) p').text().trim();
+        $(this).find('td:eq(2)').html(`<input type="text" value="${name}" />`);
+
+        // 렌탈클럽
+        const club = $(this).find('td:eq(3) p').text().includes('필요') ? '필요' : '불필요';
+        $(this).find('td:eq(3)').html(`
+          <select>
+            <option value="필요" ${club==='필요'?'selected':''}>필요</option>
+            <option value="불필요" ${club==='불필요'?'selected':''}>불필요</option>
+          </select>
+        `);
+
+        // 렌탈슈즈
+        const shoes = $(this).find('td:eq(4) p').text().includes('필요') ? '필요' : '불필요';
+        $(this).find('td:eq(4)').html(`
+          <select>
+            <option value="필요" ${shoes==='필요'?'selected':''}>필요</option>
+            <option value="불필요" ${shoes==='불필요'?'selected':''}>불필요</option>
+          </select>
+        `);
+      });
+
+      $(this).text('저장');
+      editMode = true;
+
+    } else {
+      // ---- 저장 모드로 전환 ----
+      $('.list_tb tbody tr').each(function() {
+        // 성별
+        const genderVal = $(this).find('td:eq(1) select').val();
+        $(this).find('td:eq(1)').html(`<p>${genderVal}</p>`);
+
+        // 이름
+        const nameVal = $(this).find('td:eq(2) input').val();
+        $(this).find('td:eq(2)').html(`<p>${nameVal}</p>`);
+
+        // 렌탈클럽
+        const clubVal = $(this).find('td:eq(3) select').val();
+        $(this).find('td:eq(3)').html(`<p>렌탈클럽 ${clubVal}</p>`);
+
+        // 렌탈슈즈
+        const shoesVal = $(this).find('td:eq(4) select').val();
+        $(this).find('td:eq(4)').html(`<p>렌탈슈즈 ${shoesVal}</p>`);
+      });
+
+      $(this).text('수정');
+      editMode = false;
+    }
+  });
+});
+</script> 텍스트 수정 및 저장
+
+
+테이블정렬
+
+@media all and (max-width: 800px) {
+	.mTable caption {
+		font-size: 1.3em;
+	}
+
+	.mTable {
+		border: 0;
+	}
+
+	.mTable thead {
+		border: none;
+		clip: rect(0 0 0 0);
+		height: 1px;
+		margin: -1px;
+		overflow: hidden;
+		padding: 0;
+		position: absolute;
+		width: 1px;
+	}
+
+	.mTable th {
+		display: block;
+	}
+
+	.mTable tr {
+		border-top: 3px solid gray;
+		border-bottom: 3px solid #ddd;
+		display: block;
+		margin-bottom: .625em;
+	}
+
+	.mTable td {
+		border-bottom: 1px solid #ddd;
+		display: block;
+		font-size: .8em;
+		text-align: right;
+	}
+
+	.mTable td::before {
+		content: attr(data-label); /*data-label을 가상요소 표출*/
+		float: left;
+		font-weight: bold;
+		text-transform: uppercase;
+	}
+
+	.mTable td:last-child {
+		border-bottom: 0;
+	}
+}
+
+필드셋
+<form>
+	<fieldset>
+    	<legend>이거는 타이틀</legend>
+        <div>
+        	<label for="name">이름</label>
+            <input type="text" placeholder="홍길동" id="name"/>
+        </div>
+    </fieldset>
+</form>
+
+이미지와 제목 있을때
+<figure>
+  <img src="pic_trulli.jpg" alt="Trulli" style="width:100%">
+  <figcaption>이미지제목</figcaption>
+</figure>
+
+
+스크립트없이 열고닫기할때
+<details>
+  <summary>제목</summary>
+  <p>숨겨진 내용</p>
+</details>
+<details>
+  <summary>제목</summary>
+  <div>숨겨진 내용</div>
+</details>
+
+======================= 모바일 inputmode
+text : 기본키보드
+none : 키보드 노출안함
+tel : 전화번호 키패드 (번호특수기호)
+numeric : 숫자전용 0-9 (인증번호 및 수량)
+decimal : 소수점포함 숫자입력(금액, 소수)
+email : @, . 포함 이메일
+url : url용 / . , 포함
+search : 검색용키보드 검색 혹은 돋보기
+
+
+스크롤번튼 부드럽게 이동
+// 비주얼 스크롤 다운 부드럽게 컨텐츠 하단으로 이동
+const sections = document.querySelectorAll('.content');
+const buttons = document.querySelector('.scroll_down');
+let current = 0;
+// 스크롤부드럽게
+function scrollToSection(i) {
+  sections[i].scrollIntoView({ behavior: 'smooth' });
+}
+// 버튼클릭 후 실행
+if (buttons) {
+  buttons.addEventListener('click', () => {
+    if (current < sections.length - 1) {
+      current += 1;
+    } else {
+      current = 0;
+    }
+    scrollToSection(current);
+  });
+}
+
+
+        
+1024px 이하 → 큰 태블릿
+768px 이하 → 일반 태블릿
+600px 이하 → 큰 모바일
+480px 이하 → 일반 모바일
+360px 이하 → 작은 모바일
+320px 이하 → 초소형 모바일
+(345px) 가능
+
+
+<!-- 드래그 복사 우클릭 방지 -->
+<script src="../common/js/ondragstart.js?v=<?=time()?>"></script>
+
+  
+https://www.diffchecker.com/
+2개 text 비교하는 웹 사이트
+https://www.imagetotext.info/ko/image-to-text
+이미지 텍스트 추출
+
+
+달력만들기
+https://nexi.kr/137
+
+
+프론트엔드 전반적인 설명
+https://github.com/baeharam/Must-Know-About-Frontend
+스크립트 매소드설명
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
+
+
+너는 논리적 사고가 뛰어난 AI야.
+내가 원하는 건 최대한 시각적이고, 정보량이 많고, 정리된 답변이야.
+내 질문에 답할 때,  내가 원하는 대답을 반드시 지켜서 답변해줘.
+
+think hard about this 먼저 3단계 계획을 적고, 그 다음에 답변해줘
+verbosity=low. 핵심 bullet point 5개로만 답해
+확실하지 않으면 "모름"이라고 말하고 추측이나 가정은 하지말아줘
+사실 확인이 필요한 문장은 끝에 돋보기 표기하고 신뢰할 수 있는 출처를 1개 이상 포함해줘
+
+변동사항이 있을 때
+git add .
+git commit -m "커밋메시지"
+git pull origin master
+git push origin main / master
+
+
+없으면
+git pull
+git add .
+git commit -m "컷밋메세지"
+git push origin master / main
+
+git status - 상태확인
+
+
+  ===========================================
+모달창
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Remodal CSS 및 JS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remodal/1.0.0/remodal.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remodal/1.0.0/remodal-default-theme.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/remodal/1.0.0/remodal.min.js"></script>
+
+      var inst = $('[data-remodal-id=hotelFloorModalRegion]').remodal();
+        inst.open();
+
+$(document).ready(function() {
+    $('.remodal').remodal();
+});
+
+<div class="hotelRestInfo regi_pop remodal mailme-modal"  id='hotelFloorModalRegion' data-remodal-id="hotelFloorModalRegion"></div>
+***********************************************************************
