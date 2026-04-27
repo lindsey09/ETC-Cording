@@ -1,0 +1,47 @@
+easepick
+모바일에서 스타일 좋음
+
+<input type="text" id="mealDate" class="mealDate" placeholder="날짜 선택" autocomplete="off" inputmode="none"  readonly />
+
+  // 오늘날짜넣기
+const today = new Date();
+const year = today.getFullYear();
+const month = String(today.getMonth() + 1).padStart(2, '0');
+const day = String(today.getDate()).padStart(2, '0');
+
+const formattedDate = `${year}/${month}/${day}`;
+document.getElementById('mealDate').placeholder = formattedDate;
+
+// 맵필터달력
+var picker2 = null;
+var mealDateEl = document.getElementById("mealDate");
+if (mealDateEl) {
+  picker2 = new easepick.create({
+    element: mealDateEl,
+    container: document.body,
+    css: [
+      "https://cdn.jsdelivr.net/npm/@easepick/core@1.2.1/dist/index.css",
+      "https://cdn.jsdelivr.net/npm/@easepick/base-plugin@1.2.1/dist/index.css",
+      "https://cdn.jsdelivr.net/npm/@easepick/lock-plugin@1.2.1/dist/index.css",
+    ],
+    plugins: ["LockPlugin"],
+    LockPlugin: { minDate: new Date() },
+    format: "YYYY/MM/DD",
+    lang: "ko",
+    calendars: 1,
+    autoApply: true,
+  });
+
+  picker2.on('show', () => {
+    const wrapper = document.querySelector('#mealDate + .easepick-wrapper');
+    const input = document.getElementById('mealDate');
+    if (!wrapper || !input) return;
+    document.body.appendChild(wrapper);
+    const rect = input.getBoundingClientRect();
+    wrapper.style.position = 'fixed';
+    wrapper.style.pointerEvents = 'auto';
+    wrapper.style.zIndex = '99999';
+    wrapper.style.top = rect.bottom + 8 + 'px';
+    wrapper.style.left = rect.left + 'px';
+  });
+}
