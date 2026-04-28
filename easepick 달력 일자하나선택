@@ -1,3 +1,14 @@
+<!-- datepicker Core와 LockPlugin을 개별적으로 로드 --> 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@easepick/core@1.2.1/dist/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@easepick/range-plugin@1.2.1/dist/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@easepick/lock-plugin@1.2.1/dist/index.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@easepick/datetime@1.2.1/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@easepick/core@1.2.1/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@easepick/base-plugin@1.2.1/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@easepick/range-plugin@1.2.1/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@easepick/lock-plugin@1.2.1/dist/index.umd.min.js"></script>
+
 easepick
 모바일에서 스타일 좋음
 
