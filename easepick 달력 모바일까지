@@ -1,0 +1,99 @@
+
+<!-- datepicker Core와 LockPlugin을 개별적으로 로드 --> 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@easepick/core@1.2.1/dist/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@easepick/range-plugin@1.2.1/dist/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@easepick/lock-plugin@1.2.1/dist/index.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@easepick/datetime@1.2.1/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@easepick/core@1.2.1/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@easepick/base-plugin@1.2.1/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@easepick/range-plugin@1.2.1/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@easepick/lock-plugin@1.2.1/dist/index.umd.min.js"></script>
+
+
+
+<input type="text" id="robataGroup" placeholder="날짜 선택" autocomplete="off" inputmode="none"  readonly />
+                                       
+
+(function () {
+  const isMobile = window.innerWidth <= 768;
+  const overlay = document.querySelector(".overlay");
+  const elDaterange = document.getElementById("robataGroup");
+
+  if (!elDaterange) return;
+
+  // 오늘 날짜
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // picker 생성
+  const picker = new easepick.create({
+    element: elDaterange,
+    css: [
+      "https://cdn.jsdelivr.net/npm/@easepick/core@1.2.1/dist/index.css",
+      "https://cdn.jsdelivr.net/npm/@easepick/base-plugin@1.2.1/dist/index.css",
+      "https://cdn.jsdelivr.net/npm/@easepick/lock-plugin@1.2.1/dist/index.css",
+    ],
+    plugins: ["LockPlugin"],
+    LockPlugin: {
+      filter(date) {
+        const d = new Date(date);
+        d.setHours(0, 0, 0, 0);
+        return d.getTime() < today.getTime(); // 오늘 이전 잠금
+      },
+    },
+    format: "YYYY/MM/DD",
+    lang: "ko",
+    calendars: 1,
+    grid: 1,
+    autoApply: true,
+    firstDay: 0,
+  });
+  // 오늘 날짜 선택
+  picker.setDate(today);
+
+  // input에도 값 넣기
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const dd = String(today.getDate()).padStart(2, "0");
+  elDaterange.value = `${yyyy}/${mm}/${dd}`;
+
+  // 모바일
+  if (isMobile) {
+    picker.on("show", () => {
+      document.body.style.overflow = "hidden";
+      if (overlay) overlay.style.display = "block";
+
+      const wrapper = document.querySelector(".easepick-wrapper");
+      if (wrapper) wrapper.style.zIndex = "9999";
+
+      setTimeout(() => {
+        const wrapper = document.querySelector(".easepick-wrapper");
+        if (wrapper && wrapper.shadowRoot) {
+          const container = wrapper.shadowRoot.querySelector(".container");
+          if (container) {
+            container.style.position = "fixed";
+            container.style.bottom = "0";
+            container.style.left = "0";
+            container.style.top = "auto";
+            container.style.transform = "none";
+            container.style.width = "100vw";
+            container.style.maxWidth = "100vw";
+            container.style.borderRadius = "16px 16px 0 0";
+            container.style.boxShadow = "0 -5px 20px rgba(0,0,0,0.2)";
+            container.style.background = "#fff";
+          }
+        }
+      }, 10);
+    });
+
+    picker.on("hide", () => {
+      document.body.style.overflow = "";
+      if (overlay) overlay.style.display = "none";
+    });
+
+    if (overlay) {
+      overlay.addEventListener("click", () => picker.hide());
+    }
+  }
+})();
