@@ -49,3 +49,68 @@ $(document).ready(function(){
         }
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+이런 경우, 데이터로 받아올 때
+<div class="txt_box mb30 pb30 border_dashed_dd">
+    <?=$info['desc1']['KR']['val']; ?>
+  </div>
+//글씨 더보기 접기
+$(document).ready(function () {
+  $('.txt_box').each(function () {
+    var $box = $(this);
+    var rawHtml = $box.html().trim();
+    var fullText = rawHtml.replace(/<br\s*\/?>/gi, '\n');
+
+    // 펼친 화면용 full도 줄바꿈을 <br>로 변환해서 저장
+    var fullHtml = fullText.replace(/\n/g, '<br>');
+
+    if (fullText.length <= 400) return;
+
+    var shortText = fullText.substring(0, 400) + '...';
+    shortText = shortText.replace(/\n/g, "<br>");
+
+    $box.data('full', fullHtml);   // 변환된 버전 저장
+    $box.data('short', shortText);
+
+    $box.html(shortText + ' <a href="#" class="readmore">더보기</a>');
+  });
+
+    // 클릭 핸들러도 중복 바인딩 방지 (namespace로 off 후 on)
+  $(document).off('click.readmore').on('click.readmore', '.readmore', function (e) {
+    e.preventDefault();
+
+    var $box = $(this).closest('.txt_box');
+    var full = $box.data('full');
+    var short = $box.data('short');
+
+    console.log('full 값:', full); // 여기서 확인
+
+    if ($(this).hasClass('expanded')) {
+      $box.html(short + ' <a href="#" class="readmore">더보기</a>');
+    } else {
+      $box.html(full + ' <a href="#" class="readmore expanded">접기</a>');
+    }
+  });
+});
+
+
+
+
+
+
